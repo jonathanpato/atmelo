@@ -11,5 +11,5 @@ flotante:pi;
 {
 	pi = 3.1416;
 	numero = mifuncion(10);
-	cadena texto = "cadena de caracteres!";
+	cadena:texto = "cadena de caracteres!";
 }

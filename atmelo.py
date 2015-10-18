@@ -7,6 +7,9 @@
 #		   Jonathan Frias  A00810797
 # Date. 2015-10-13 18:46 hrs
 # -----------------------------------------------------------------------------
+
+fileName = "programa1"
+
 #list of tokens
 tokens = ['PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'EQUALS', 'COLON', 
 'COMMA', 'SEMICOLON', 'GT', 'LT', 'LCBRACE', 'RCBRACE', 
@@ -145,7 +148,7 @@ import sys
 lineNumber = 1;
 program = "";
 #read whole file in a string
-with open(sys.argv[1]) as sourceFile:
+with open(fileName) as sourceFile:
 	for line in sourceFile:
 		program = program + line
 		sys.stdout.write(str(lineNumber) + line) #print the source code
