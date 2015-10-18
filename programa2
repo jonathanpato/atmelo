@@ -1,0 +1,38 @@
+funcion prendeLED(entero numero):entero;
+{
+	#otro comentario
+	entero:temporal;
+	entero:estado;
+	temporal = numero andbit 0001H;
+	escribePuerto b temporal;
+	estado = 100;
+	regresa estado;
+}
+
+funcion leeSensor():entero;
+{
+	entero:lectura;
+	lectura = leePuerto c;
+	regresa lectura;
+}
+programa Puertos;
+#globales  este es un comentario
+entero:lectura;
+flotante:pi;
+{
+	caracter:SALTOLINEA = '\n';
+	flotante:periodo = 0.6;
+	flotante:calculo;
+	entero:numero;
+	pi = 3.1416;
+	calculo = (2*pi/periodo);
+	numero = entero(calculo); #conversion de flotante a entero
+	prendeLED(numero);
+	lectura = leeSensor();
+	cadena:texto;
+	texto = "la lectura del sensor es: ";
+	cadena:strNumero;
+	strNumero = cadena(lectura);
+	imprimeconsola texto, strNumero;
+	imprimeconsola SALTOLINEA;
+}
