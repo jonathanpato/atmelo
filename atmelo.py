@@ -207,7 +207,7 @@ def p_Estatuto(p):
 				| regresaDeFuncion'''
 
 def p_regresaDeFuncion(p):
-	'''regresaDeFuncion : REGRESA ID SEMICOLON'''
+	'''regresaDeFuncion : REGRESA Expresion SEMICOLON'''
 
 def p_LlamadaFuncion(p):
 	'''LlamadaFuncion : ID LPAREN MULTIARG RPAREN SEMICOLON

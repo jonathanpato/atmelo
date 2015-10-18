@@ -1,7 +1,7 @@
 funcion mifuncion(entero numero):entero;
 {
 	#otro comentario
-	return numero + 1;
+	regresa numero + 1;
 }
 
 programa imprimeNumero;
