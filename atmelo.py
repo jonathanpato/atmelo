@@ -8,7 +8,35 @@
 # Date. 2015-10-13 18:46 hrs
 # -----------------------------------------------------------------------------
 
+###########################################
+#global variables
 fileName = "programa1"
+globalVars = {}
+funcName = ""
+localVars = {}
+#utilities
+################################################
+#utility imports
+import sys
+#utility functions
+def variableDeclaration(varID, varType):
+	global funcName
+	global localVars
+
+	var = [varID, varType]
+	funcName = 'factorial'
+	if varExist(var, localVars):
+		sys.exit("Error!, var " + varID + ": " + varType + " already declared")
+	else:
+		addVar(var, localVars)
+
+def varExist(var, varList):
+	if (var[0] in varList.keys()):
+		if(var[1] in varList[var[0]]):
+			return True
+	return False
+##################################################
+
 
 #list of tokens
 tokens = ['PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'EQUALS', 'COLON', 
@@ -325,7 +353,8 @@ def p_TIPO(p):
 			| FLOTANTE
 			| CADENA
 			| CARACTER'''
-
+	p[0]=p[1];
+	
 
 			
 
