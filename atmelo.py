@@ -31,7 +31,6 @@ def addVar(var, varList):
 #if no, it adds the variable to the variables table
 def varDeclSemValid(varID, varType, varList):
 	global funcName
-	global localVars
 
 	var = [varID, varType]
 	funcName = 'factorial'
@@ -45,6 +44,10 @@ def varExist(var, varList):
 		if(var[1] in varList[var[0]]):
 			return True
 	return False
+
+def IDexist(ID, varList):
+	return ID in varList.keys()
+
 ##################################################
 
 
@@ -286,10 +289,16 @@ def p_LlamadaFuncion(p):
 						| ID LPAREN RPAREN SEMICOLON'''
 	
 def p_EstatutoAsignacion(p):
-	'''Estatuto_Asignacion : ID EQUALS Expresion SEMICOLON
-							| ID EQUALS LlamadaFuncion
-							| ID EQUALS TIPO LPAREN ARG RPAREN SEMICOLON''' #casting
+	'''Estatuto_Asignacion : ID EQUALS AssignOption'''
+	if not IDexist(p[1], localVars):
+		if not IDexist(p[1], globalVars):
+			sys.exit("var " + p[1] + " does not exist. Aborting..")
 
+def p_AssignOption(p):
+	'''AssignOption : Expresion SEMICOLON
+					| LlamadaFuncion
+					| TIPO LPAREN ARG RPAREN SEMICOLON''' #casting
+	
 def p_DeclaracionDeVariables(p):
 	'''Declaracion_de_variables : TIPO COLON ID seenIDdeclVar SEMICOLON
 									| TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON'''
@@ -389,15 +398,19 @@ def p_Variables_Globales(p):
 	'''Variables_Globales : R'''
 	
 def p_R(p):
-	'''R : TIPO COLON ID seenIDglobVar SEMICOLON R
-		    | TIPO COLON ID seenIDglobVar EQUALS Expresion SEMICOLON R
+	'''R : TIPO COLON ID seenIDglobVar globDeclOption SEMICOLON R
 			| NULL'''
+
+def p_globDeclOption(p):
+	'''globDeclOption : NULL
+		| Expresion'''
+
 			
 def p_seenIDglobVar(p):
 	'''seenIDglobVar : '''
 	global globalVars
 	varDeclSemValid(p[-1], p[-3], globalVars)			
-
+	
 
 def p_TIPO(p):
 	'''TIPO : ENTERO

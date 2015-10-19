@@ -1,0 +1,3324 @@
+Created by PLY version 3.4 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> ESTRUCTURA
+Rule 1     ESTRUCTURA -> Funciones PROGRAMA ID seenIDprograma SEMICOLON Variables_Globales LCBRACE Contenido RCBRACE programExit
+Rule 2     seenIDprograma -> <empty>
+Rule 3     programExit -> <empty>
+Rule 4     Funciones -> NULL
+Rule 5     Funciones -> EstructuraFuncion
+Rule 6     Funciones -> EstructuraFuncion Funciones
+Rule 7     EstructuraFuncion -> FUNCION ID seenIDfunc LPAREN Parametros RPAREN COLON TIPO SEMICOLON LCBRACE Contenido RCBRACE funcExit
+Rule 8     seenIDfunc -> <empty>
+Rule 9     funcExit -> <empty>
+Rule 10    Parametros -> Para
+Rule 11    Para -> NULL
+Rule 12    Para -> TIPO ID seenIDparam
+Rule 13    Para -> TIPO ID seenIDparam COMMA Para
+Rule 14    seenIDparam -> <empty>
+Rule 15    Estatuto -> Estatuto_Asignacion
+Rule 16    Estatuto -> Estatuto_Condicion
+Rule 17    Estatuto -> Estatuto_Escritura_de_puerto
+Rule 18    Estatuto -> Estatuto_Ciclo
+Rule 19    Estatuto -> Estatuto_Lectura_de_puerto
+Rule 20    Estatuto -> Imprimir
+Rule 21    Estatuto -> Declaracion_de_variables
+Rule 22    Estatuto -> LlamadaFuncion
+Rule 23    Estatuto -> regresaDeFuncion
+Rule 24    regresaDeFuncion -> REGRESA Expresion SEMICOLON
+Rule 25    LlamadaFuncion -> ID LPAREN MULTIARG RPAREN SEMICOLON
+Rule 26    LlamadaFuncion -> ID LPAREN RPAREN SEMICOLON
+Rule 27    Estatuto_Asignacion -> ID EQUALS AssignOption
+Rule 28    AssignOption -> Expresion SEMICOLON
+Rule 29    AssignOption -> LlamadaFuncion
+Rule 30    AssignOption -> TIPO LPAREN ARG RPAREN SEMICOLON
+Rule 31    Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar SEMICOLON
+Rule 32    Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON
+Rule 33    seenIDdeclVar -> <empty>
+Rule 34    Estatuto_Condicion -> SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE
+Rule 35    Imprimir -> IMPRIMECONSOLA MULTIARG SEMICOLON
+Rule 36    MULTIARG -> ARG COMMA MULTIARG
+Rule 37    MULTIARG -> ARG
+Rule 38    ARG -> ID
+Rule 39    ARG -> CTE
+Rule 40    Estatuto_Escritura_de_puerto -> ESCRIBEPUERTO PUERTO ID SEMICOLON
+Rule 41    Estatuto_Lectura_de_puerto -> ID EQUALS LEEPUERTO PUERTO SEMICOLON
+Rule 42    PUERTO -> B
+Rule 43    PUERTO -> C
+Rule 44    PUERTO -> D
+Rule 45    Estatuto_Ciclo -> CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE
+Rule 46    Expresion -> EX
+Rule 47    EX -> Exp Compara Exp
+Rule 48    EX -> NOT Exp Compara Exp
+Rule 49    EX -> Exp
+Rule 50    Compara -> GT
+Rule 51    Compara -> LT
+Rule 52    Compara -> DIFERENTEDE
+Rule 53    Compara -> MAYORQUE
+Rule 54    Compara -> MENORQUE
+Rule 55    Compara -> MAYORIGUALQUE
+Rule 56    Compara -> MENORIGUALQUE
+Rule 57    Compara -> AND
+Rule 58    Compara -> OR
+Rule 59    Exp -> Exp PLUS Termino
+Rule 60    Exp -> Exp MINUS Termino
+Rule 61    Exp -> Exp ORBIT Termino
+Rule 62    Exp -> Exp XORBIT Termino
+Rule 63    Exp -> Exp ANDBIT Termino
+Rule 64    Exp -> Termino
+Rule 65    Termino -> Termino TIMES Factor
+Rule 66    Termino -> Termino DIVIDE Factor
+Rule 67    Termino -> Termino AND Factor
+Rule 68    Termino -> Factor
+Rule 69    Factor -> LPAREN Expresion RPAREN
+Rule 70    Factor -> CTE
+Rule 71    Factor -> ID
+Rule 72    CTE -> Entero
+Rule 73    CTE -> ConstanteFlotante
+Rule 74    CTE -> ConstanteCadena
+Rule 75    CTE -> ConstanteCaracter
+Rule 76    Entero -> EnteroDecimal
+Rule 77    Entero -> EnteroHexadecimal
+Rule 78    Entero -> EnteroBinario
+Rule 79    NULL -> <empty>
+Rule 80    Contenido -> Estatuto Contenido
+Rule 81    Contenido -> NULL
+Rule 82    Variables_Globales -> R
+Rule 83    R -> TIPO COLON ID seenIDglobVar globDeclOption SEMICOLON R
+Rule 84    R -> NULL
+Rule 85    globDeclOption -> NULL
+Rule 86    globDeclOption -> Expresion
+Rule 87    seenIDglobVar -> <empty>
+Rule 88    TIPO -> ENTERO
+Rule 89    TIPO -> FLOTANTE
+Rule 90    TIPO -> CADENA
+Rule 91    TIPO -> CARACTER
+
+Terminals, with rules where they appear
+
+AND                  : 57 67
+ANDBIT               : 63
+B                    : 42
+C                    : 43
+CADENA               : 90
+CARACTER             : 91
+CICLO                : 45
+COLON                : 7 31 32 83
+COMMA                : 13 36
+ConstanteCadena      : 74
+ConstanteCaracter    : 75
+ConstanteFlotante    : 73
+D                    : 44
+DIFERENTEDE          : 52
+DIVIDE               : 66
+ENTERO               : 88
+EQUALS               : 27 32 41
+ESCRIBEPUERTO        : 40
+EnteroBinario        : 78
+EnteroDecimal        : 76
+EnteroHexadecimal    : 77
+FLOTANTE             : 89
+FUNCION              : 7
+GT                   : 50
+ID                   : 1 7 12 13 25 26 27 31 32 38 40 41 71 83
+IMPRIMECONSOLA       : 35
+LCBRACE              : 1 7 34 34 45
+LEEPUERTO            : 41
+LPAREN               : 7 25 26 30 34 45 69
+LT                   : 51
+MAYORIGUALQUE        : 55
+MAYORQUE             : 53
+MENORIGUALQUE        : 56
+MENORQUE             : 54
+MINUS                : 60
+NOT                  : 48
+OR                   : 58
+ORBIT                : 61
+PLUS                 : 59
+PROGRAMA             : 1
+RCBRACE              : 1 7 34 34 45
+REGRESA              : 24
+RPAREN               : 7 25 26 30 34 45 69
+SEMICOLON            : 1 7 24 25 26 28 30 31 32 35 40 41 83
+SI                   : 34
+SINO                 : 34
+TIMES                : 65
+XORBIT               : 62
+error                : 
+
+Nonterminals, with rules where they appear
+
+ARG                  : 30 36 37
+AssignOption         : 27
+CTE                  : 39 70
+Compara              : 47 48
+Contenido            : 1 7 34 34 45 80
+Declaracion_de_variables : 21
+ESTRUCTURA           : 0
+EX                   : 46
+Entero               : 72
+Estatuto             : 80
+Estatuto_Asignacion  : 15
+Estatuto_Ciclo       : 18
+Estatuto_Condicion   : 16
+Estatuto_Escritura_de_puerto : 17
+Estatuto_Lectura_de_puerto : 19
+EstructuraFuncion    : 5 6
+Exp                  : 47 47 48 48 49 59 60 61 62 63
+Expresion            : 24 28 32 34 45 69 86
+Factor               : 65 66 67 68
+Funciones            : 1 6
+Imprimir             : 20
+LlamadaFuncion       : 22 29
+MULTIARG             : 25 35 36
+NULL                 : 4 11 81 84 85
+PUERTO               : 40 41
+Para                 : 10 13
+Parametros           : 7
+R                    : 82 83
+TIPO                 : 7 12 13 30 31 32 83
+Termino              : 59 60 61 62 63 64 65 66 67
+Variables_Globales   : 1
+funcExit             : 7
+globDeclOption       : 83
+programExit          : 1
+regresaDeFuncion     : 23
+seenIDdeclVar        : 31 32
+seenIDfunc           : 7
+seenIDglobVar        : 83
+seenIDparam          : 12 13
+seenIDprograma       : 1
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . ESTRUCTURA
+    (1) ESTRUCTURA -> . Funciones PROGRAMA ID seenIDprograma SEMICOLON Variables_Globales LCBRACE Contenido RCBRACE programExit
+    (4) Funciones -> . NULL
+    (5) Funciones -> . EstructuraFuncion
+    (6) Funciones -> . EstructuraFuncion Funciones
+    (79) NULL -> .
+    (7) EstructuraFuncion -> . FUNCION ID seenIDfunc LPAREN Parametros RPAREN COLON TIPO SEMICOLON LCBRACE Contenido RCBRACE funcExit
+
+    PROGRAMA        reduce using rule 79 (NULL -> .)
+    FUNCION         shift and go to state 5
+
+    EstructuraFuncion              shift and go to state 2
+    ESTRUCTURA                     shift and go to state 3
+    NULL                           shift and go to state 1
+    Funciones                      shift and go to state 4
+
+state 1
+
+    (4) Funciones -> NULL .
+
+    PROGRAMA        reduce using rule 4 (Funciones -> NULL .)
+
+
+state 2
+
+    (5) Funciones -> EstructuraFuncion .
+    (6) Funciones -> EstructuraFuncion . Funciones
+    (4) Funciones -> . NULL
+    (5) Funciones -> . EstructuraFuncion
+    (6) Funciones -> . EstructuraFuncion Funciones
+    (79) NULL -> .
+    (7) EstructuraFuncion -> . FUNCION ID seenIDfunc LPAREN Parametros RPAREN COLON TIPO SEMICOLON LCBRACE Contenido RCBRACE funcExit
+
+  ! reduce/reduce conflict for PROGRAMA resolved using rule 5 (Funciones -> EstructuraFuncion .)
+    PROGRAMA        reduce using rule 5 (Funciones -> EstructuraFuncion .)
+    FUNCION         shift and go to state 5
+
+  ! PROGRAMA        [ reduce using rule 79 (NULL -> .) ]
+
+    EstructuraFuncion              shift and go to state 2
+    NULL                           shift and go to state 1
+    Funciones                      shift and go to state 6
+
+state 3
+
+    (0) S' -> ESTRUCTURA .
+
+
+
+state 4
+
+    (1) ESTRUCTURA -> Funciones . PROGRAMA ID seenIDprograma SEMICOLON Variables_Globales LCBRACE Contenido RCBRACE programExit
+
+    PROGRAMA        shift and go to state 7
+
+
+state 5
+
+    (7) EstructuraFuncion -> FUNCION . ID seenIDfunc LPAREN Parametros RPAREN COLON TIPO SEMICOLON LCBRACE Contenido RCBRACE funcExit
+
+    ID              shift and go to state 8
+
+
+state 6
+
+    (6) Funciones -> EstructuraFuncion Funciones .
+
+    PROGRAMA        reduce using rule 6 (Funciones -> EstructuraFuncion Funciones .)
+
+
+state 7
+
+    (1) ESTRUCTURA -> Funciones PROGRAMA . ID seenIDprograma SEMICOLON Variables_Globales LCBRACE Contenido RCBRACE programExit
+
+    ID              shift and go to state 9
+
+
+state 8
+
+    (7) EstructuraFuncion -> FUNCION ID . seenIDfunc LPAREN Parametros RPAREN COLON TIPO SEMICOLON LCBRACE Contenido RCBRACE funcExit
+    (8) seenIDfunc -> .
+
+    LPAREN          reduce using rule 8 (seenIDfunc -> .)
+
+    seenIDfunc                     shift and go to state 10
+
+state 9
+
+    (1) ESTRUCTURA -> Funciones PROGRAMA ID . seenIDprograma SEMICOLON Variables_Globales LCBRACE Contenido RCBRACE programExit
+    (2) seenIDprograma -> .
+
+    SEMICOLON       reduce using rule 2 (seenIDprograma -> .)
+
+    seenIDprograma                 shift and go to state 11
+
+state 10
+
+    (7) EstructuraFuncion -> FUNCION ID seenIDfunc . LPAREN Parametros RPAREN COLON TIPO SEMICOLON LCBRACE Contenido RCBRACE funcExit
+
+    LPAREN          shift and go to state 12
+
+
+state 11
+
+    (1) ESTRUCTURA -> Funciones PROGRAMA ID seenIDprograma . SEMICOLON Variables_Globales LCBRACE Contenido RCBRACE programExit
+
+    SEMICOLON       shift and go to state 13
+
+
+state 12
+
+    (7) EstructuraFuncion -> FUNCION ID seenIDfunc LPAREN . Parametros RPAREN COLON TIPO SEMICOLON LCBRACE Contenido RCBRACE funcExit
+    (10) Parametros -> . Para
+    (11) Para -> . NULL
+    (12) Para -> . TIPO ID seenIDparam
+    (13) Para -> . TIPO ID seenIDparam COMMA Para
+    (79) NULL -> .
+    (88) TIPO -> . ENTERO
+    (89) TIPO -> . FLOTANTE
+    (90) TIPO -> . CADENA
+    (91) TIPO -> . CARACTER
+
+    RPAREN          reduce using rule 79 (NULL -> .)
+    ENTERO          shift and go to state 18
+    FLOTANTE        shift and go to state 19
+    CADENA          shift and go to state 17
+    CARACTER        shift and go to state 16
+
+    TIPO                           shift and go to state 14
+    Para                           shift and go to state 15
+    Parametros                     shift and go to state 20
+    NULL                           shift and go to state 21
+
+state 13
+
+    (1) ESTRUCTURA -> Funciones PROGRAMA ID seenIDprograma SEMICOLON . Variables_Globales LCBRACE Contenido RCBRACE programExit
+    (82) Variables_Globales -> . R
+    (83) R -> . TIPO COLON ID seenIDglobVar globDeclOption SEMICOLON R
+    (84) R -> . NULL
+    (88) TIPO -> . ENTERO
+    (89) TIPO -> . FLOTANTE
+    (90) TIPO -> . CADENA
+    (91) TIPO -> . CARACTER
+    (79) NULL -> .
+
+    ENTERO          shift and go to state 18
+    FLOTANTE        shift and go to state 19
+    CADENA          shift and go to state 17
+    CARACTER        shift and go to state 16
+    LCBRACE         reduce using rule 79 (NULL -> .)
+
+    TIPO                           shift and go to state 25
+    Variables_Globales             shift and go to state 22
+    R                              shift and go to state 24
+    NULL                           shift and go to state 23
+
+state 14
+
+    (12) Para -> TIPO . ID seenIDparam
+    (13) Para -> TIPO . ID seenIDparam COMMA Para
+
+    ID              shift and go to state 26
+
+
+state 15
+
+    (10) Parametros -> Para .
+
+    RPAREN          reduce using rule 10 (Parametros -> Para .)
+
+
+state 16
+
+    (91) TIPO -> CARACTER .
+
+    COLON           reduce using rule 91 (TIPO -> CARACTER .)
+    SEMICOLON       reduce using rule 91 (TIPO -> CARACTER .)
+    ID              reduce using rule 91 (TIPO -> CARACTER .)
+    LPAREN          reduce using rule 91 (TIPO -> CARACTER .)
+
+
+state 17
+
+    (90) TIPO -> CADENA .
+
+    COLON           reduce using rule 90 (TIPO -> CADENA .)
+    SEMICOLON       reduce using rule 90 (TIPO -> CADENA .)
+    ID              reduce using rule 90 (TIPO -> CADENA .)
+    LPAREN          reduce using rule 90 (TIPO -> CADENA .)
+
+
+state 18
+
+    (88) TIPO -> ENTERO .
+
+    COLON           reduce using rule 88 (TIPO -> ENTERO .)
+    SEMICOLON       reduce using rule 88 (TIPO -> ENTERO .)
+    ID              reduce using rule 88 (TIPO -> ENTERO .)
+    LPAREN          reduce using rule 88 (TIPO -> ENTERO .)
+
+
+state 19
+
+    (89) TIPO -> FLOTANTE .
+
+    COLON           reduce using rule 89 (TIPO -> FLOTANTE .)
+    SEMICOLON       reduce using rule 89 (TIPO -> FLOTANTE .)
+    ID              reduce using rule 89 (TIPO -> FLOTANTE .)
+    LPAREN          reduce using rule 89 (TIPO -> FLOTANTE .)
+
+
+state 20
+
+    (7) EstructuraFuncion -> FUNCION ID seenIDfunc LPAREN Parametros . RPAREN COLON TIPO SEMICOLON LCBRACE Contenido RCBRACE funcExit
+
+    RPAREN          shift and go to state 27
+
+
+state 21
+
+    (11) Para -> NULL .
+
+    RPAREN          reduce using rule 11 (Para -> NULL .)
+
+
+state 22
+
+    (1) ESTRUCTURA -> Funciones PROGRAMA ID seenIDprograma SEMICOLON Variables_Globales . LCBRACE Contenido RCBRACE programExit
+
+    LCBRACE         shift and go to state 28
+
+
+state 23
+
+    (84) R -> NULL .
+
+    LCBRACE         reduce using rule 84 (R -> NULL .)
+
+
+state 24
+
+    (82) Variables_Globales -> R .
+
+    LCBRACE         reduce using rule 82 (Variables_Globales -> R .)
+
+
+state 25
+
+    (83) R -> TIPO . COLON ID seenIDglobVar globDeclOption SEMICOLON R
+
+    COLON           shift and go to state 29
+
+
+state 26
+
+    (12) Para -> TIPO ID . seenIDparam
+    (13) Para -> TIPO ID . seenIDparam COMMA Para
+    (14) seenIDparam -> .
+
+    COMMA           reduce using rule 14 (seenIDparam -> .)
+    RPAREN          reduce using rule 14 (seenIDparam -> .)
+
+    seenIDparam                    shift and go to state 30
+
+state 27
+
+    (7) EstructuraFuncion -> FUNCION ID seenIDfunc LPAREN Parametros RPAREN . COLON TIPO SEMICOLON LCBRACE Contenido RCBRACE funcExit
+
+    COLON           shift and go to state 31
+
+
+state 28
+
+    (1) ESTRUCTURA -> Funciones PROGRAMA ID seenIDprograma SEMICOLON Variables_Globales LCBRACE . Contenido RCBRACE programExit
+    (80) Contenido -> . Estatuto Contenido
+    (81) Contenido -> . NULL
+    (15) Estatuto -> . Estatuto_Asignacion
+    (16) Estatuto -> . Estatuto_Condicion
+    (17) Estatuto -> . Estatuto_Escritura_de_puerto
+    (18) Estatuto -> . Estatuto_Ciclo
+    (19) Estatuto -> . Estatuto_Lectura_de_puerto
+    (20) Estatuto -> . Imprimir
+    (21) Estatuto -> . Declaracion_de_variables
+    (22) Estatuto -> . LlamadaFuncion
+    (23) Estatuto -> . regresaDeFuncion
+    (79) NULL -> .
+    (27) Estatuto_Asignacion -> . ID EQUALS AssignOption
+    (34) Estatuto_Condicion -> . SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE
+    (40) Estatuto_Escritura_de_puerto -> . ESCRIBEPUERTO PUERTO ID SEMICOLON
+    (45) Estatuto_Ciclo -> . CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE
+    (41) Estatuto_Lectura_de_puerto -> . ID EQUALS LEEPUERTO PUERTO SEMICOLON
+    (35) Imprimir -> . IMPRIMECONSOLA MULTIARG SEMICOLON
+    (31) Declaracion_de_variables -> . TIPO COLON ID seenIDdeclVar SEMICOLON
+    (32) Declaracion_de_variables -> . TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON
+    (25) LlamadaFuncion -> . ID LPAREN MULTIARG RPAREN SEMICOLON
+    (26) LlamadaFuncion -> . ID LPAREN RPAREN SEMICOLON
+    (24) regresaDeFuncion -> . REGRESA Expresion SEMICOLON
+    (88) TIPO -> . ENTERO
+    (89) TIPO -> . FLOTANTE
+    (90) TIPO -> . CADENA
+    (91) TIPO -> . CARACTER
+
+    RCBRACE         reduce using rule 79 (NULL -> .)
+    ID              shift and go to state 46
+    SI              shift and go to state 48
+    ESCRIBEPUERTO   shift and go to state 45
+    CICLO           shift and go to state 33
+    IMPRIMECONSOLA  shift and go to state 32
+    REGRESA         shift and go to state 41
+    ENTERO          shift and go to state 18
+    FLOTANTE        shift and go to state 19
+    CADENA          shift and go to state 17
+    CARACTER        shift and go to state 16
+
+    Contenido                      shift and go to state 34
+    Estatuto                       shift and go to state 35
+    LlamadaFuncion                 shift and go to state 36
+    NULL                           shift and go to state 37
+    Declaracion_de_variables       shift and go to state 38
+    regresaDeFuncion               shift and go to state 39
+    TIPO                           shift and go to state 47
+    Imprimir                       shift and go to state 40
+    Estatuto_Lectura_de_puerto     shift and go to state 42
+    Estatuto_Escritura_de_puerto   shift and go to state 43
+    Estatuto_Ciclo                 shift and go to state 44
+    Estatuto_Asignacion            shift and go to state 50
+    Estatuto_Condicion             shift and go to state 49
+
+state 29
+
+    (83) R -> TIPO COLON . ID seenIDglobVar globDeclOption SEMICOLON R
+
+    ID              shift and go to state 51
+
+
+state 30
+
+    (12) Para -> TIPO ID seenIDparam .
+    (13) Para -> TIPO ID seenIDparam . COMMA Para
+
+    RPAREN          reduce using rule 12 (Para -> TIPO ID seenIDparam .)
+    COMMA           shift and go to state 52
+
+
+state 31
+
+    (7) EstructuraFuncion -> FUNCION ID seenIDfunc LPAREN Parametros RPAREN COLON . TIPO SEMICOLON LCBRACE Contenido RCBRACE funcExit
+    (88) TIPO -> . ENTERO
+    (89) TIPO -> . FLOTANTE
+    (90) TIPO -> . CADENA
+    (91) TIPO -> . CARACTER
+
+    ENTERO          shift and go to state 18
+    FLOTANTE        shift and go to state 19
+    CADENA          shift and go to state 17
+    CARACTER        shift and go to state 16
+
+    TIPO                           shift and go to state 53
+
+state 32
+
+    (35) Imprimir -> IMPRIMECONSOLA . MULTIARG SEMICOLON
+    (36) MULTIARG -> . ARG COMMA MULTIARG
+    (37) MULTIARG -> . ARG
+    (38) ARG -> . ID
+    (39) ARG -> . CTE
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    ID              shift and go to state 63
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    CTE                            shift and go to state 59
+    Entero                         shift and go to state 64
+    MULTIARG                       shift and go to state 55
+    ARG                            shift and go to state 60
+
+state 33
+
+    (45) Estatuto_Ciclo -> CICLO . LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE
+
+    LPAREN          shift and go to state 65
+
+
+state 34
+
+    (1) ESTRUCTURA -> Funciones PROGRAMA ID seenIDprograma SEMICOLON Variables_Globales LCBRACE Contenido . RCBRACE programExit
+
+    RCBRACE         shift and go to state 66
+
+
+state 35
+
+    (80) Contenido -> Estatuto . Contenido
+    (80) Contenido -> . Estatuto Contenido
+    (81) Contenido -> . NULL
+    (15) Estatuto -> . Estatuto_Asignacion
+    (16) Estatuto -> . Estatuto_Condicion
+    (17) Estatuto -> . Estatuto_Escritura_de_puerto
+    (18) Estatuto -> . Estatuto_Ciclo
+    (19) Estatuto -> . Estatuto_Lectura_de_puerto
+    (20) Estatuto -> . Imprimir
+    (21) Estatuto -> . Declaracion_de_variables
+    (22) Estatuto -> . LlamadaFuncion
+    (23) Estatuto -> . regresaDeFuncion
+    (79) NULL -> .
+    (27) Estatuto_Asignacion -> . ID EQUALS AssignOption
+    (34) Estatuto_Condicion -> . SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE
+    (40) Estatuto_Escritura_de_puerto -> . ESCRIBEPUERTO PUERTO ID SEMICOLON
+    (45) Estatuto_Ciclo -> . CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE
+    (41) Estatuto_Lectura_de_puerto -> . ID EQUALS LEEPUERTO PUERTO SEMICOLON
+    (35) Imprimir -> . IMPRIMECONSOLA MULTIARG SEMICOLON
+    (31) Declaracion_de_variables -> . TIPO COLON ID seenIDdeclVar SEMICOLON
+    (32) Declaracion_de_variables -> . TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON
+    (25) LlamadaFuncion -> . ID LPAREN MULTIARG RPAREN SEMICOLON
+    (26) LlamadaFuncion -> . ID LPAREN RPAREN SEMICOLON
+    (24) regresaDeFuncion -> . REGRESA Expresion SEMICOLON
+    (88) TIPO -> . ENTERO
+    (89) TIPO -> . FLOTANTE
+    (90) TIPO -> . CADENA
+    (91) TIPO -> . CARACTER
+
+    RCBRACE         reduce using rule 79 (NULL -> .)
+    ID              shift and go to state 46
+    SI              shift and go to state 48
+    ESCRIBEPUERTO   shift and go to state 45
+    CICLO           shift and go to state 33
+    IMPRIMECONSOLA  shift and go to state 32
+    REGRESA         shift and go to state 41
+    ENTERO          shift and go to state 18
+    FLOTANTE        shift and go to state 19
+    CADENA          shift and go to state 17
+    CARACTER        shift and go to state 16
+
+    Estatuto_Lectura_de_puerto     shift and go to state 42
+    regresaDeFuncion               shift and go to state 39
+    TIPO                           shift and go to state 47
+    Contenido                      shift and go to state 67
+    Estatuto_Escritura_de_puerto   shift and go to state 43
+    Estatuto                       shift and go to state 35
+    Estatuto_Ciclo                 shift and go to state 44
+    Estatuto_Condicion             shift and go to state 49
+    Imprimir                       shift and go to state 40
+    LlamadaFuncion                 shift and go to state 36
+    Estatuto_Asignacion            shift and go to state 50
+    NULL                           shift and go to state 37
+    Declaracion_de_variables       shift and go to state 38
+
+state 36
+
+    (22) Estatuto -> LlamadaFuncion .
+
+    ID              reduce using rule 22 (Estatuto -> LlamadaFuncion .)
+    SI              reduce using rule 22 (Estatuto -> LlamadaFuncion .)
+    ESCRIBEPUERTO   reduce using rule 22 (Estatuto -> LlamadaFuncion .)
+    CICLO           reduce using rule 22 (Estatuto -> LlamadaFuncion .)
+    IMPRIMECONSOLA  reduce using rule 22 (Estatuto -> LlamadaFuncion .)
+    REGRESA         reduce using rule 22 (Estatuto -> LlamadaFuncion .)
+    ENTERO          reduce using rule 22 (Estatuto -> LlamadaFuncion .)
+    FLOTANTE        reduce using rule 22 (Estatuto -> LlamadaFuncion .)
+    CADENA          reduce using rule 22 (Estatuto -> LlamadaFuncion .)
+    CARACTER        reduce using rule 22 (Estatuto -> LlamadaFuncion .)
+    RCBRACE         reduce using rule 22 (Estatuto -> LlamadaFuncion .)
+
+
+state 37
+
+    (81) Contenido -> NULL .
+
+    RCBRACE         reduce using rule 81 (Contenido -> NULL .)
+
+
+state 38
+
+    (21) Estatuto -> Declaracion_de_variables .
+
+    ID              reduce using rule 21 (Estatuto -> Declaracion_de_variables .)
+    SI              reduce using rule 21 (Estatuto -> Declaracion_de_variables .)
+    ESCRIBEPUERTO   reduce using rule 21 (Estatuto -> Declaracion_de_variables .)
+    CICLO           reduce using rule 21 (Estatuto -> Declaracion_de_variables .)
+    IMPRIMECONSOLA  reduce using rule 21 (Estatuto -> Declaracion_de_variables .)
+    REGRESA         reduce using rule 21 (Estatuto -> Declaracion_de_variables .)
+    ENTERO          reduce using rule 21 (Estatuto -> Declaracion_de_variables .)
+    FLOTANTE        reduce using rule 21 (Estatuto -> Declaracion_de_variables .)
+    CADENA          reduce using rule 21 (Estatuto -> Declaracion_de_variables .)
+    CARACTER        reduce using rule 21 (Estatuto -> Declaracion_de_variables .)
+    RCBRACE         reduce using rule 21 (Estatuto -> Declaracion_de_variables .)
+
+
+state 39
+
+    (23) Estatuto -> regresaDeFuncion .
+
+    ID              reduce using rule 23 (Estatuto -> regresaDeFuncion .)
+    SI              reduce using rule 23 (Estatuto -> regresaDeFuncion .)
+    ESCRIBEPUERTO   reduce using rule 23 (Estatuto -> regresaDeFuncion .)
+    CICLO           reduce using rule 23 (Estatuto -> regresaDeFuncion .)
+    IMPRIMECONSOLA  reduce using rule 23 (Estatuto -> regresaDeFuncion .)
+    REGRESA         reduce using rule 23 (Estatuto -> regresaDeFuncion .)
+    ENTERO          reduce using rule 23 (Estatuto -> regresaDeFuncion .)
+    FLOTANTE        reduce using rule 23 (Estatuto -> regresaDeFuncion .)
+    CADENA          reduce using rule 23 (Estatuto -> regresaDeFuncion .)
+    CARACTER        reduce using rule 23 (Estatuto -> regresaDeFuncion .)
+    RCBRACE         reduce using rule 23 (Estatuto -> regresaDeFuncion .)
+
+
+state 40
+
+    (20) Estatuto -> Imprimir .
+
+    ID              reduce using rule 20 (Estatuto -> Imprimir .)
+    SI              reduce using rule 20 (Estatuto -> Imprimir .)
+    ESCRIBEPUERTO   reduce using rule 20 (Estatuto -> Imprimir .)
+    CICLO           reduce using rule 20 (Estatuto -> Imprimir .)
+    IMPRIMECONSOLA  reduce using rule 20 (Estatuto -> Imprimir .)
+    REGRESA         reduce using rule 20 (Estatuto -> Imprimir .)
+    ENTERO          reduce using rule 20 (Estatuto -> Imprimir .)
+    FLOTANTE        reduce using rule 20 (Estatuto -> Imprimir .)
+    CADENA          reduce using rule 20 (Estatuto -> Imprimir .)
+    CARACTER        reduce using rule 20 (Estatuto -> Imprimir .)
+    RCBRACE         reduce using rule 20 (Estatuto -> Imprimir .)
+
+
+state 41
+
+    (24) regresaDeFuncion -> REGRESA . Expresion SEMICOLON
+    (46) Expresion -> . EX
+    (47) EX -> . Exp Compara Exp
+    (48) EX -> . NOT Exp Compara Exp
+    (49) EX -> . Exp
+    (59) Exp -> . Exp PLUS Termino
+    (60) Exp -> . Exp MINUS Termino
+    (61) Exp -> . Exp ORBIT Termino
+    (62) Exp -> . Exp XORBIT Termino
+    (63) Exp -> . Exp ANDBIT Termino
+    (64) Exp -> . Termino
+    (65) Termino -> . Termino TIMES Factor
+    (66) Termino -> . Termino DIVIDE Factor
+    (67) Termino -> . Termino AND Factor
+    (68) Termino -> . Factor
+    (69) Factor -> . LPAREN Expresion RPAREN
+    (70) Factor -> . CTE
+    (71) Factor -> . ID
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    NOT             shift and go to state 76
+    LPAREN          shift and go to state 73
+    ID              shift and go to state 74
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    Expresion                      shift and go to state 71
+    CTE                            shift and go to state 69
+    EX                             shift and go to state 72
+    Exp                            shift and go to state 68
+    Factor                         shift and go to state 70
+    Entero                         shift and go to state 64
+    Termino                        shift and go to state 75
+
+state 42
+
+    (19) Estatuto -> Estatuto_Lectura_de_puerto .
+
+    ID              reduce using rule 19 (Estatuto -> Estatuto_Lectura_de_puerto .)
+    SI              reduce using rule 19 (Estatuto -> Estatuto_Lectura_de_puerto .)
+    ESCRIBEPUERTO   reduce using rule 19 (Estatuto -> Estatuto_Lectura_de_puerto .)
+    CICLO           reduce using rule 19 (Estatuto -> Estatuto_Lectura_de_puerto .)
+    IMPRIMECONSOLA  reduce using rule 19 (Estatuto -> Estatuto_Lectura_de_puerto .)
+    REGRESA         reduce using rule 19 (Estatuto -> Estatuto_Lectura_de_puerto .)
+    ENTERO          reduce using rule 19 (Estatuto -> Estatuto_Lectura_de_puerto .)
+    FLOTANTE        reduce using rule 19 (Estatuto -> Estatuto_Lectura_de_puerto .)
+    CADENA          reduce using rule 19 (Estatuto -> Estatuto_Lectura_de_puerto .)
+    CARACTER        reduce using rule 19 (Estatuto -> Estatuto_Lectura_de_puerto .)
+    RCBRACE         reduce using rule 19 (Estatuto -> Estatuto_Lectura_de_puerto .)
+
+
+state 43
+
+    (17) Estatuto -> Estatuto_Escritura_de_puerto .
+
+    ID              reduce using rule 17 (Estatuto -> Estatuto_Escritura_de_puerto .)
+    SI              reduce using rule 17 (Estatuto -> Estatuto_Escritura_de_puerto .)
+    ESCRIBEPUERTO   reduce using rule 17 (Estatuto -> Estatuto_Escritura_de_puerto .)
+    CICLO           reduce using rule 17 (Estatuto -> Estatuto_Escritura_de_puerto .)
+    IMPRIMECONSOLA  reduce using rule 17 (Estatuto -> Estatuto_Escritura_de_puerto .)
+    REGRESA         reduce using rule 17 (Estatuto -> Estatuto_Escritura_de_puerto .)
+    ENTERO          reduce using rule 17 (Estatuto -> Estatuto_Escritura_de_puerto .)
+    FLOTANTE        reduce using rule 17 (Estatuto -> Estatuto_Escritura_de_puerto .)
+    CADENA          reduce using rule 17 (Estatuto -> Estatuto_Escritura_de_puerto .)
+    CARACTER        reduce using rule 17 (Estatuto -> Estatuto_Escritura_de_puerto .)
+    RCBRACE         reduce using rule 17 (Estatuto -> Estatuto_Escritura_de_puerto .)
+
+
+state 44
+
+    (18) Estatuto -> Estatuto_Ciclo .
+
+    ID              reduce using rule 18 (Estatuto -> Estatuto_Ciclo .)
+    SI              reduce using rule 18 (Estatuto -> Estatuto_Ciclo .)
+    ESCRIBEPUERTO   reduce using rule 18 (Estatuto -> Estatuto_Ciclo .)
+    CICLO           reduce using rule 18 (Estatuto -> Estatuto_Ciclo .)
+    IMPRIMECONSOLA  reduce using rule 18 (Estatuto -> Estatuto_Ciclo .)
+    REGRESA         reduce using rule 18 (Estatuto -> Estatuto_Ciclo .)
+    ENTERO          reduce using rule 18 (Estatuto -> Estatuto_Ciclo .)
+    FLOTANTE        reduce using rule 18 (Estatuto -> Estatuto_Ciclo .)
+    CADENA          reduce using rule 18 (Estatuto -> Estatuto_Ciclo .)
+    CARACTER        reduce using rule 18 (Estatuto -> Estatuto_Ciclo .)
+    RCBRACE         reduce using rule 18 (Estatuto -> Estatuto_Ciclo .)
+
+
+state 45
+
+    (40) Estatuto_Escritura_de_puerto -> ESCRIBEPUERTO . PUERTO ID SEMICOLON
+    (42) PUERTO -> . B
+    (43) PUERTO -> . C
+    (44) PUERTO -> . D
+
+    B               shift and go to state 78
+    C               shift and go to state 77
+    D               shift and go to state 79
+
+    PUERTO                         shift and go to state 80
+
+state 46
+
+    (27) Estatuto_Asignacion -> ID . EQUALS AssignOption
+    (41) Estatuto_Lectura_de_puerto -> ID . EQUALS LEEPUERTO PUERTO SEMICOLON
+    (25) LlamadaFuncion -> ID . LPAREN MULTIARG RPAREN SEMICOLON
+    (26) LlamadaFuncion -> ID . LPAREN RPAREN SEMICOLON
+
+    EQUALS          shift and go to state 81
+    LPAREN          shift and go to state 82
+
+
+state 47
+
+    (31) Declaracion_de_variables -> TIPO . COLON ID seenIDdeclVar SEMICOLON
+    (32) Declaracion_de_variables -> TIPO . COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON
+
+    COLON           shift and go to state 83
+
+
+state 48
+
+    (34) Estatuto_Condicion -> SI . LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE
+
+    LPAREN          shift and go to state 84
+
+
+state 49
+
+    (16) Estatuto -> Estatuto_Condicion .
+
+    ID              reduce using rule 16 (Estatuto -> Estatuto_Condicion .)
+    SI              reduce using rule 16 (Estatuto -> Estatuto_Condicion .)
+    ESCRIBEPUERTO   reduce using rule 16 (Estatuto -> Estatuto_Condicion .)
+    CICLO           reduce using rule 16 (Estatuto -> Estatuto_Condicion .)
+    IMPRIMECONSOLA  reduce using rule 16 (Estatuto -> Estatuto_Condicion .)
+    REGRESA         reduce using rule 16 (Estatuto -> Estatuto_Condicion .)
+    ENTERO          reduce using rule 16 (Estatuto -> Estatuto_Condicion .)
+    FLOTANTE        reduce using rule 16 (Estatuto -> Estatuto_Condicion .)
+    CADENA          reduce using rule 16 (Estatuto -> Estatuto_Condicion .)
+    CARACTER        reduce using rule 16 (Estatuto -> Estatuto_Condicion .)
+    RCBRACE         reduce using rule 16 (Estatuto -> Estatuto_Condicion .)
+
+
+state 50
+
+    (15) Estatuto -> Estatuto_Asignacion .
+
+    ID              reduce using rule 15 (Estatuto -> Estatuto_Asignacion .)
+    SI              reduce using rule 15 (Estatuto -> Estatuto_Asignacion .)
+    ESCRIBEPUERTO   reduce using rule 15 (Estatuto -> Estatuto_Asignacion .)
+    CICLO           reduce using rule 15 (Estatuto -> Estatuto_Asignacion .)
+    IMPRIMECONSOLA  reduce using rule 15 (Estatuto -> Estatuto_Asignacion .)
+    REGRESA         reduce using rule 15 (Estatuto -> Estatuto_Asignacion .)
+    ENTERO          reduce using rule 15 (Estatuto -> Estatuto_Asignacion .)
+    FLOTANTE        reduce using rule 15 (Estatuto -> Estatuto_Asignacion .)
+    CADENA          reduce using rule 15 (Estatuto -> Estatuto_Asignacion .)
+    CARACTER        reduce using rule 15 (Estatuto -> Estatuto_Asignacion .)
+    RCBRACE         reduce using rule 15 (Estatuto -> Estatuto_Asignacion .)
+
+
+state 51
+
+    (83) R -> TIPO COLON ID . seenIDglobVar globDeclOption SEMICOLON R
+    (87) seenIDglobVar -> .
+
+    NOT             reduce using rule 87 (seenIDglobVar -> .)
+    LPAREN          reduce using rule 87 (seenIDglobVar -> .)
+    ID              reduce using rule 87 (seenIDglobVar -> .)
+    ConstanteFlotante reduce using rule 87 (seenIDglobVar -> .)
+    ConstanteCadena reduce using rule 87 (seenIDglobVar -> .)
+    ConstanteCaracter reduce using rule 87 (seenIDglobVar -> .)
+    EnteroDecimal   reduce using rule 87 (seenIDglobVar -> .)
+    EnteroHexadecimal reduce using rule 87 (seenIDglobVar -> .)
+    EnteroBinario   reduce using rule 87 (seenIDglobVar -> .)
+    SEMICOLON       reduce using rule 87 (seenIDglobVar -> .)
+
+    seenIDglobVar                  shift and go to state 85
+
+state 52
+
+    (13) Para -> TIPO ID seenIDparam COMMA . Para
+    (11) Para -> . NULL
+    (12) Para -> . TIPO ID seenIDparam
+    (13) Para -> . TIPO ID seenIDparam COMMA Para
+    (79) NULL -> .
+    (88) TIPO -> . ENTERO
+    (89) TIPO -> . FLOTANTE
+    (90) TIPO -> . CADENA
+    (91) TIPO -> . CARACTER
+
+    RPAREN          reduce using rule 79 (NULL -> .)
+    ENTERO          shift and go to state 18
+    FLOTANTE        shift and go to state 19
+    CADENA          shift and go to state 17
+    CARACTER        shift and go to state 16
+
+    NULL                           shift and go to state 21
+    Para                           shift and go to state 86
+    TIPO                           shift and go to state 14
+
+state 53
+
+    (7) EstructuraFuncion -> FUNCION ID seenIDfunc LPAREN Parametros RPAREN COLON TIPO . SEMICOLON LCBRACE Contenido RCBRACE funcExit
+
+    SEMICOLON       shift and go to state 87
+
+
+state 54
+
+    (77) Entero -> EnteroHexadecimal .
+
+    TIMES           reduce using rule 77 (Entero -> EnteroHexadecimal .)
+    DIVIDE          reduce using rule 77 (Entero -> EnteroHexadecimal .)
+    AND             reduce using rule 77 (Entero -> EnteroHexadecimal .)
+    PLUS            reduce using rule 77 (Entero -> EnteroHexadecimal .)
+    MINUS           reduce using rule 77 (Entero -> EnteroHexadecimal .)
+    ORBIT           reduce using rule 77 (Entero -> EnteroHexadecimal .)
+    XORBIT          reduce using rule 77 (Entero -> EnteroHexadecimal .)
+    ANDBIT          reduce using rule 77 (Entero -> EnteroHexadecimal .)
+    GT              reduce using rule 77 (Entero -> EnteroHexadecimal .)
+    LT              reduce using rule 77 (Entero -> EnteroHexadecimal .)
+    DIFERENTEDE     reduce using rule 77 (Entero -> EnteroHexadecimal .)
+    MAYORQUE        reduce using rule 77 (Entero -> EnteroHexadecimal .)
+    MENORQUE        reduce using rule 77 (Entero -> EnteroHexadecimal .)
+    MAYORIGUALQUE   reduce using rule 77 (Entero -> EnteroHexadecimal .)
+    MENORIGUALQUE   reduce using rule 77 (Entero -> EnteroHexadecimal .)
+    OR              reduce using rule 77 (Entero -> EnteroHexadecimal .)
+    SEMICOLON       reduce using rule 77 (Entero -> EnteroHexadecimal .)
+    RPAREN          reduce using rule 77 (Entero -> EnteroHexadecimal .)
+    COMMA           reduce using rule 77 (Entero -> EnteroHexadecimal .)
+
+
+state 55
+
+    (35) Imprimir -> IMPRIMECONSOLA MULTIARG . SEMICOLON
+
+    SEMICOLON       shift and go to state 88
+
+
+state 56
+
+    (73) CTE -> ConstanteFlotante .
+
+    TIMES           reduce using rule 73 (CTE -> ConstanteFlotante .)
+    DIVIDE          reduce using rule 73 (CTE -> ConstanteFlotante .)
+    AND             reduce using rule 73 (CTE -> ConstanteFlotante .)
+    PLUS            reduce using rule 73 (CTE -> ConstanteFlotante .)
+    MINUS           reduce using rule 73 (CTE -> ConstanteFlotante .)
+    ORBIT           reduce using rule 73 (CTE -> ConstanteFlotante .)
+    XORBIT          reduce using rule 73 (CTE -> ConstanteFlotante .)
+    ANDBIT          reduce using rule 73 (CTE -> ConstanteFlotante .)
+    GT              reduce using rule 73 (CTE -> ConstanteFlotante .)
+    LT              reduce using rule 73 (CTE -> ConstanteFlotante .)
+    DIFERENTEDE     reduce using rule 73 (CTE -> ConstanteFlotante .)
+    MAYORQUE        reduce using rule 73 (CTE -> ConstanteFlotante .)
+    MENORQUE        reduce using rule 73 (CTE -> ConstanteFlotante .)
+    MAYORIGUALQUE   reduce using rule 73 (CTE -> ConstanteFlotante .)
+    MENORIGUALQUE   reduce using rule 73 (CTE -> ConstanteFlotante .)
+    OR              reduce using rule 73 (CTE -> ConstanteFlotante .)
+    SEMICOLON       reduce using rule 73 (CTE -> ConstanteFlotante .)
+    RPAREN          reduce using rule 73 (CTE -> ConstanteFlotante .)
+    COMMA           reduce using rule 73 (CTE -> ConstanteFlotante .)
+
+
+state 57
+
+    (76) Entero -> EnteroDecimal .
+
+    TIMES           reduce using rule 76 (Entero -> EnteroDecimal .)
+    DIVIDE          reduce using rule 76 (Entero -> EnteroDecimal .)
+    AND             reduce using rule 76 (Entero -> EnteroDecimal .)
+    PLUS            reduce using rule 76 (Entero -> EnteroDecimal .)
+    MINUS           reduce using rule 76 (Entero -> EnteroDecimal .)
+    ORBIT           reduce using rule 76 (Entero -> EnteroDecimal .)
+    XORBIT          reduce using rule 76 (Entero -> EnteroDecimal .)
+    ANDBIT          reduce using rule 76 (Entero -> EnteroDecimal .)
+    GT              reduce using rule 76 (Entero -> EnteroDecimal .)
+    LT              reduce using rule 76 (Entero -> EnteroDecimal .)
+    DIFERENTEDE     reduce using rule 76 (Entero -> EnteroDecimal .)
+    MAYORQUE        reduce using rule 76 (Entero -> EnteroDecimal .)
+    MENORQUE        reduce using rule 76 (Entero -> EnteroDecimal .)
+    MAYORIGUALQUE   reduce using rule 76 (Entero -> EnteroDecimal .)
+    MENORIGUALQUE   reduce using rule 76 (Entero -> EnteroDecimal .)
+    OR              reduce using rule 76 (Entero -> EnteroDecimal .)
+    SEMICOLON       reduce using rule 76 (Entero -> EnteroDecimal .)
+    RPAREN          reduce using rule 76 (Entero -> EnteroDecimal .)
+    COMMA           reduce using rule 76 (Entero -> EnteroDecimal .)
+
+
+state 58
+
+    (75) CTE -> ConstanteCaracter .
+
+    TIMES           reduce using rule 75 (CTE -> ConstanteCaracter .)
+    DIVIDE          reduce using rule 75 (CTE -> ConstanteCaracter .)
+    AND             reduce using rule 75 (CTE -> ConstanteCaracter .)
+    PLUS            reduce using rule 75 (CTE -> ConstanteCaracter .)
+    MINUS           reduce using rule 75 (CTE -> ConstanteCaracter .)
+    ORBIT           reduce using rule 75 (CTE -> ConstanteCaracter .)
+    XORBIT          reduce using rule 75 (CTE -> ConstanteCaracter .)
+    ANDBIT          reduce using rule 75 (CTE -> ConstanteCaracter .)
+    GT              reduce using rule 75 (CTE -> ConstanteCaracter .)
+    LT              reduce using rule 75 (CTE -> ConstanteCaracter .)
+    DIFERENTEDE     reduce using rule 75 (CTE -> ConstanteCaracter .)
+    MAYORQUE        reduce using rule 75 (CTE -> ConstanteCaracter .)
+    MENORQUE        reduce using rule 75 (CTE -> ConstanteCaracter .)
+    MAYORIGUALQUE   reduce using rule 75 (CTE -> ConstanteCaracter .)
+    MENORIGUALQUE   reduce using rule 75 (CTE -> ConstanteCaracter .)
+    OR              reduce using rule 75 (CTE -> ConstanteCaracter .)
+    SEMICOLON       reduce using rule 75 (CTE -> ConstanteCaracter .)
+    RPAREN          reduce using rule 75 (CTE -> ConstanteCaracter .)
+    COMMA           reduce using rule 75 (CTE -> ConstanteCaracter .)
+
+
+state 59
+
+    (39) ARG -> CTE .
+
+    RPAREN          reduce using rule 39 (ARG -> CTE .)
+    COMMA           reduce using rule 39 (ARG -> CTE .)
+    SEMICOLON       reduce using rule 39 (ARG -> CTE .)
+
+
+state 60
+
+    (36) MULTIARG -> ARG . COMMA MULTIARG
+    (37) MULTIARG -> ARG .
+
+    COMMA           shift and go to state 89
+    SEMICOLON       reduce using rule 37 (MULTIARG -> ARG .)
+    RPAREN          reduce using rule 37 (MULTIARG -> ARG .)
+
+
+state 61
+
+    (74) CTE -> ConstanteCadena .
+
+    TIMES           reduce using rule 74 (CTE -> ConstanteCadena .)
+    DIVIDE          reduce using rule 74 (CTE -> ConstanteCadena .)
+    AND             reduce using rule 74 (CTE -> ConstanteCadena .)
+    PLUS            reduce using rule 74 (CTE -> ConstanteCadena .)
+    MINUS           reduce using rule 74 (CTE -> ConstanteCadena .)
+    ORBIT           reduce using rule 74 (CTE -> ConstanteCadena .)
+    XORBIT          reduce using rule 74 (CTE -> ConstanteCadena .)
+    ANDBIT          reduce using rule 74 (CTE -> ConstanteCadena .)
+    GT              reduce using rule 74 (CTE -> ConstanteCadena .)
+    LT              reduce using rule 74 (CTE -> ConstanteCadena .)
+    DIFERENTEDE     reduce using rule 74 (CTE -> ConstanteCadena .)
+    MAYORQUE        reduce using rule 74 (CTE -> ConstanteCadena .)
+    MENORQUE        reduce using rule 74 (CTE -> ConstanteCadena .)
+    MAYORIGUALQUE   reduce using rule 74 (CTE -> ConstanteCadena .)
+    MENORIGUALQUE   reduce using rule 74 (CTE -> ConstanteCadena .)
+    OR              reduce using rule 74 (CTE -> ConstanteCadena .)
+    SEMICOLON       reduce using rule 74 (CTE -> ConstanteCadena .)
+    RPAREN          reduce using rule 74 (CTE -> ConstanteCadena .)
+    COMMA           reduce using rule 74 (CTE -> ConstanteCadena .)
+
+
+state 62
+
+    (78) Entero -> EnteroBinario .
+
+    TIMES           reduce using rule 78 (Entero -> EnteroBinario .)
+    DIVIDE          reduce using rule 78 (Entero -> EnteroBinario .)
+    AND             reduce using rule 78 (Entero -> EnteroBinario .)
+    PLUS            reduce using rule 78 (Entero -> EnteroBinario .)
+    MINUS           reduce using rule 78 (Entero -> EnteroBinario .)
+    ORBIT           reduce using rule 78 (Entero -> EnteroBinario .)
+    XORBIT          reduce using rule 78 (Entero -> EnteroBinario .)
+    ANDBIT          reduce using rule 78 (Entero -> EnteroBinario .)
+    GT              reduce using rule 78 (Entero -> EnteroBinario .)
+    LT              reduce using rule 78 (Entero -> EnteroBinario .)
+    DIFERENTEDE     reduce using rule 78 (Entero -> EnteroBinario .)
+    MAYORQUE        reduce using rule 78 (Entero -> EnteroBinario .)
+    MENORQUE        reduce using rule 78 (Entero -> EnteroBinario .)
+    MAYORIGUALQUE   reduce using rule 78 (Entero -> EnteroBinario .)
+    MENORIGUALQUE   reduce using rule 78 (Entero -> EnteroBinario .)
+    OR              reduce using rule 78 (Entero -> EnteroBinario .)
+    SEMICOLON       reduce using rule 78 (Entero -> EnteroBinario .)
+    RPAREN          reduce using rule 78 (Entero -> EnteroBinario .)
+    COMMA           reduce using rule 78 (Entero -> EnteroBinario .)
+
+
+state 63
+
+    (38) ARG -> ID .
+
+    RPAREN          reduce using rule 38 (ARG -> ID .)
+    COMMA           reduce using rule 38 (ARG -> ID .)
+    SEMICOLON       reduce using rule 38 (ARG -> ID .)
+
+
+state 64
+
+    (72) CTE -> Entero .
+
+    TIMES           reduce using rule 72 (CTE -> Entero .)
+    DIVIDE          reduce using rule 72 (CTE -> Entero .)
+    AND             reduce using rule 72 (CTE -> Entero .)
+    PLUS            reduce using rule 72 (CTE -> Entero .)
+    MINUS           reduce using rule 72 (CTE -> Entero .)
+    ORBIT           reduce using rule 72 (CTE -> Entero .)
+    XORBIT          reduce using rule 72 (CTE -> Entero .)
+    ANDBIT          reduce using rule 72 (CTE -> Entero .)
+    GT              reduce using rule 72 (CTE -> Entero .)
+    LT              reduce using rule 72 (CTE -> Entero .)
+    DIFERENTEDE     reduce using rule 72 (CTE -> Entero .)
+    MAYORQUE        reduce using rule 72 (CTE -> Entero .)
+    MENORQUE        reduce using rule 72 (CTE -> Entero .)
+    MAYORIGUALQUE   reduce using rule 72 (CTE -> Entero .)
+    MENORIGUALQUE   reduce using rule 72 (CTE -> Entero .)
+    OR              reduce using rule 72 (CTE -> Entero .)
+    SEMICOLON       reduce using rule 72 (CTE -> Entero .)
+    RPAREN          reduce using rule 72 (CTE -> Entero .)
+    COMMA           reduce using rule 72 (CTE -> Entero .)
+
+
+state 65
+
+    (45) Estatuto_Ciclo -> CICLO LPAREN . Expresion RPAREN LCBRACE Contenido RCBRACE
+    (46) Expresion -> . EX
+    (47) EX -> . Exp Compara Exp
+    (48) EX -> . NOT Exp Compara Exp
+    (49) EX -> . Exp
+    (59) Exp -> . Exp PLUS Termino
+    (60) Exp -> . Exp MINUS Termino
+    (61) Exp -> . Exp ORBIT Termino
+    (62) Exp -> . Exp XORBIT Termino
+    (63) Exp -> . Exp ANDBIT Termino
+    (64) Exp -> . Termino
+    (65) Termino -> . Termino TIMES Factor
+    (66) Termino -> . Termino DIVIDE Factor
+    (67) Termino -> . Termino AND Factor
+    (68) Termino -> . Factor
+    (69) Factor -> . LPAREN Expresion RPAREN
+    (70) Factor -> . CTE
+    (71) Factor -> . ID
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    NOT             shift and go to state 76
+    LPAREN          shift and go to state 73
+    ID              shift and go to state 74
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    Expresion                      shift and go to state 90
+    CTE                            shift and go to state 69
+    EX                             shift and go to state 72
+    Exp                            shift and go to state 68
+    Factor                         shift and go to state 70
+    Entero                         shift and go to state 64
+    Termino                        shift and go to state 75
+
+state 66
+
+    (1) ESTRUCTURA -> Funciones PROGRAMA ID seenIDprograma SEMICOLON Variables_Globales LCBRACE Contenido RCBRACE . programExit
+    (3) programExit -> .
+
+    $end            reduce using rule 3 (programExit -> .)
+
+    programExit                    shift and go to state 91
+
+state 67
+
+    (80) Contenido -> Estatuto Contenido .
+
+    RCBRACE         reduce using rule 80 (Contenido -> Estatuto Contenido .)
+
+
+state 68
+
+    (47) EX -> Exp . Compara Exp
+    (49) EX -> Exp .
+    (59) Exp -> Exp . PLUS Termino
+    (60) Exp -> Exp . MINUS Termino
+    (61) Exp -> Exp . ORBIT Termino
+    (62) Exp -> Exp . XORBIT Termino
+    (63) Exp -> Exp . ANDBIT Termino
+    (50) Compara -> . GT
+    (51) Compara -> . LT
+    (52) Compara -> . DIFERENTEDE
+    (53) Compara -> . MAYORQUE
+    (54) Compara -> . MENORQUE
+    (55) Compara -> . MAYORIGUALQUE
+    (56) Compara -> . MENORIGUALQUE
+    (57) Compara -> . AND
+    (58) Compara -> . OR
+
+    SEMICOLON       reduce using rule 49 (EX -> Exp .)
+    RPAREN          reduce using rule 49 (EX -> Exp .)
+    PLUS            shift and go to state 102
+    MINUS           shift and go to state 105
+    ORBIT           shift and go to state 99
+    XORBIT          shift and go to state 94
+    ANDBIT          shift and go to state 98
+    GT              shift and go to state 93
+    LT              shift and go to state 101
+    DIFERENTEDE     shift and go to state 96
+    MAYORQUE        shift and go to state 103
+    MENORQUE        shift and go to state 104
+    MAYORIGUALQUE   shift and go to state 97
+    MENORIGUALQUE   shift and go to state 100
+    AND             shift and go to state 92
+    OR              shift and go to state 106
+
+    Compara                        shift and go to state 95
+
+state 69
+
+    (70) Factor -> CTE .
+
+    TIMES           reduce using rule 70 (Factor -> CTE .)
+    DIVIDE          reduce using rule 70 (Factor -> CTE .)
+    AND             reduce using rule 70 (Factor -> CTE .)
+    PLUS            reduce using rule 70 (Factor -> CTE .)
+    MINUS           reduce using rule 70 (Factor -> CTE .)
+    ORBIT           reduce using rule 70 (Factor -> CTE .)
+    XORBIT          reduce using rule 70 (Factor -> CTE .)
+    ANDBIT          reduce using rule 70 (Factor -> CTE .)
+    GT              reduce using rule 70 (Factor -> CTE .)
+    LT              reduce using rule 70 (Factor -> CTE .)
+    DIFERENTEDE     reduce using rule 70 (Factor -> CTE .)
+    MAYORQUE        reduce using rule 70 (Factor -> CTE .)
+    MENORQUE        reduce using rule 70 (Factor -> CTE .)
+    MAYORIGUALQUE   reduce using rule 70 (Factor -> CTE .)
+    MENORIGUALQUE   reduce using rule 70 (Factor -> CTE .)
+    OR              reduce using rule 70 (Factor -> CTE .)
+    SEMICOLON       reduce using rule 70 (Factor -> CTE .)
+    RPAREN          reduce using rule 70 (Factor -> CTE .)
+
+
+state 70
+
+    (68) Termino -> Factor .
+
+    TIMES           reduce using rule 68 (Termino -> Factor .)
+    DIVIDE          reduce using rule 68 (Termino -> Factor .)
+    AND             reduce using rule 68 (Termino -> Factor .)
+    PLUS            reduce using rule 68 (Termino -> Factor .)
+    MINUS           reduce using rule 68 (Termino -> Factor .)
+    ORBIT           reduce using rule 68 (Termino -> Factor .)
+    XORBIT          reduce using rule 68 (Termino -> Factor .)
+    ANDBIT          reduce using rule 68 (Termino -> Factor .)
+    GT              reduce using rule 68 (Termino -> Factor .)
+    LT              reduce using rule 68 (Termino -> Factor .)
+    DIFERENTEDE     reduce using rule 68 (Termino -> Factor .)
+    MAYORQUE        reduce using rule 68 (Termino -> Factor .)
+    MENORQUE        reduce using rule 68 (Termino -> Factor .)
+    MAYORIGUALQUE   reduce using rule 68 (Termino -> Factor .)
+    MENORIGUALQUE   reduce using rule 68 (Termino -> Factor .)
+    OR              reduce using rule 68 (Termino -> Factor .)
+    SEMICOLON       reduce using rule 68 (Termino -> Factor .)
+    RPAREN          reduce using rule 68 (Termino -> Factor .)
+
+
+state 71
+
+    (24) regresaDeFuncion -> REGRESA Expresion . SEMICOLON
+
+    SEMICOLON       shift and go to state 107
+
+
+state 72
+
+    (46) Expresion -> EX .
+
+    RPAREN          reduce using rule 46 (Expresion -> EX .)
+    SEMICOLON       reduce using rule 46 (Expresion -> EX .)
+
+
+state 73
+
+    (69) Factor -> LPAREN . Expresion RPAREN
+    (46) Expresion -> . EX
+    (47) EX -> . Exp Compara Exp
+    (48) EX -> . NOT Exp Compara Exp
+    (49) EX -> . Exp
+    (59) Exp -> . Exp PLUS Termino
+    (60) Exp -> . Exp MINUS Termino
+    (61) Exp -> . Exp ORBIT Termino
+    (62) Exp -> . Exp XORBIT Termino
+    (63) Exp -> . Exp ANDBIT Termino
+    (64) Exp -> . Termino
+    (65) Termino -> . Termino TIMES Factor
+    (66) Termino -> . Termino DIVIDE Factor
+    (67) Termino -> . Termino AND Factor
+    (68) Termino -> . Factor
+    (69) Factor -> . LPAREN Expresion RPAREN
+    (70) Factor -> . CTE
+    (71) Factor -> . ID
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    NOT             shift and go to state 76
+    LPAREN          shift and go to state 73
+    ID              shift and go to state 74
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    Expresion                      shift and go to state 108
+    CTE                            shift and go to state 69
+    EX                             shift and go to state 72
+    Exp                            shift and go to state 68
+    Factor                         shift and go to state 70
+    Entero                         shift and go to state 64
+    Termino                        shift and go to state 75
+
+state 74
+
+    (71) Factor -> ID .
+
+    TIMES           reduce using rule 71 (Factor -> ID .)
+    DIVIDE          reduce using rule 71 (Factor -> ID .)
+    AND             reduce using rule 71 (Factor -> ID .)
+    PLUS            reduce using rule 71 (Factor -> ID .)
+    MINUS           reduce using rule 71 (Factor -> ID .)
+    ORBIT           reduce using rule 71 (Factor -> ID .)
+    XORBIT          reduce using rule 71 (Factor -> ID .)
+    ANDBIT          reduce using rule 71 (Factor -> ID .)
+    GT              reduce using rule 71 (Factor -> ID .)
+    LT              reduce using rule 71 (Factor -> ID .)
+    DIFERENTEDE     reduce using rule 71 (Factor -> ID .)
+    MAYORQUE        reduce using rule 71 (Factor -> ID .)
+    MENORQUE        reduce using rule 71 (Factor -> ID .)
+    MAYORIGUALQUE   reduce using rule 71 (Factor -> ID .)
+    MENORIGUALQUE   reduce using rule 71 (Factor -> ID .)
+    OR              reduce using rule 71 (Factor -> ID .)
+    SEMICOLON       reduce using rule 71 (Factor -> ID .)
+    RPAREN          reduce using rule 71 (Factor -> ID .)
+
+
+state 75
+
+    (64) Exp -> Termino .
+    (65) Termino -> Termino . TIMES Factor
+    (66) Termino -> Termino . DIVIDE Factor
+    (67) Termino -> Termino . AND Factor
+
+  ! shift/reduce conflict for AND resolved as shift
+    PLUS            reduce using rule 64 (Exp -> Termino .)
+    MINUS           reduce using rule 64 (Exp -> Termino .)
+    ORBIT           reduce using rule 64 (Exp -> Termino .)
+    XORBIT          reduce using rule 64 (Exp -> Termino .)
+    ANDBIT          reduce using rule 64 (Exp -> Termino .)
+    GT              reduce using rule 64 (Exp -> Termino .)
+    LT              reduce using rule 64 (Exp -> Termino .)
+    DIFERENTEDE     reduce using rule 64 (Exp -> Termino .)
+    MAYORQUE        reduce using rule 64 (Exp -> Termino .)
+    MENORQUE        reduce using rule 64 (Exp -> Termino .)
+    MAYORIGUALQUE   reduce using rule 64 (Exp -> Termino .)
+    MENORIGUALQUE   reduce using rule 64 (Exp -> Termino .)
+    OR              reduce using rule 64 (Exp -> Termino .)
+    RPAREN          reduce using rule 64 (Exp -> Termino .)
+    SEMICOLON       reduce using rule 64 (Exp -> Termino .)
+    TIMES           shift and go to state 111
+    DIVIDE          shift and go to state 110
+    AND             shift and go to state 109
+
+  ! AND             [ reduce using rule 64 (Exp -> Termino .) ]
+
+
+state 76
+
+    (48) EX -> NOT . Exp Compara Exp
+    (59) Exp -> . Exp PLUS Termino
+    (60) Exp -> . Exp MINUS Termino
+    (61) Exp -> . Exp ORBIT Termino
+    (62) Exp -> . Exp XORBIT Termino
+    (63) Exp -> . Exp ANDBIT Termino
+    (64) Exp -> . Termino
+    (65) Termino -> . Termino TIMES Factor
+    (66) Termino -> . Termino DIVIDE Factor
+    (67) Termino -> . Termino AND Factor
+    (68) Termino -> . Factor
+    (69) Factor -> . LPAREN Expresion RPAREN
+    (70) Factor -> . CTE
+    (71) Factor -> . ID
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    LPAREN          shift and go to state 73
+    ID              shift and go to state 74
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    CTE                            shift and go to state 69
+    Termino                        shift and go to state 75
+    Exp                            shift and go to state 112
+    Factor                         shift and go to state 70
+    Entero                         shift and go to state 64
+
+state 77
+
+    (43) PUERTO -> C .
+
+    ID              reduce using rule 43 (PUERTO -> C .)
+    SEMICOLON       reduce using rule 43 (PUERTO -> C .)
+
+
+state 78
+
+    (42) PUERTO -> B .
+
+    ID              reduce using rule 42 (PUERTO -> B .)
+    SEMICOLON       reduce using rule 42 (PUERTO -> B .)
+
+
+state 79
+
+    (44) PUERTO -> D .
+
+    ID              reduce using rule 44 (PUERTO -> D .)
+    SEMICOLON       reduce using rule 44 (PUERTO -> D .)
+
+
+state 80
+
+    (40) Estatuto_Escritura_de_puerto -> ESCRIBEPUERTO PUERTO . ID SEMICOLON
+
+    ID              shift and go to state 113
+
+
+state 81
+
+    (27) Estatuto_Asignacion -> ID EQUALS . AssignOption
+    (41) Estatuto_Lectura_de_puerto -> ID EQUALS . LEEPUERTO PUERTO SEMICOLON
+    (28) AssignOption -> . Expresion SEMICOLON
+    (29) AssignOption -> . LlamadaFuncion
+    (30) AssignOption -> . TIPO LPAREN ARG RPAREN SEMICOLON
+    (46) Expresion -> . EX
+    (25) LlamadaFuncion -> . ID LPAREN MULTIARG RPAREN SEMICOLON
+    (26) LlamadaFuncion -> . ID LPAREN RPAREN SEMICOLON
+    (88) TIPO -> . ENTERO
+    (89) TIPO -> . FLOTANTE
+    (90) TIPO -> . CADENA
+    (91) TIPO -> . CARACTER
+    (47) EX -> . Exp Compara Exp
+    (48) EX -> . NOT Exp Compara Exp
+    (49) EX -> . Exp
+    (59) Exp -> . Exp PLUS Termino
+    (60) Exp -> . Exp MINUS Termino
+    (61) Exp -> . Exp ORBIT Termino
+    (62) Exp -> . Exp XORBIT Termino
+    (63) Exp -> . Exp ANDBIT Termino
+    (64) Exp -> . Termino
+    (65) Termino -> . Termino TIMES Factor
+    (66) Termino -> . Termino DIVIDE Factor
+    (67) Termino -> . Termino AND Factor
+    (68) Termino -> . Factor
+    (69) Factor -> . LPAREN Expresion RPAREN
+    (70) Factor -> . CTE
+    (71) Factor -> . ID
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    LEEPUERTO       shift and go to state 118
+    ID              shift and go to state 119
+    ENTERO          shift and go to state 18
+    FLOTANTE        shift and go to state 19
+    CADENA          shift and go to state 17
+    CARACTER        shift and go to state 16
+    NOT             shift and go to state 76
+    LPAREN          shift and go to state 73
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    Expresion                      shift and go to state 117
+    TIPO                           shift and go to state 115
+    Factor                         shift and go to state 70
+    CTE                            shift and go to state 69
+    EX                             shift and go to state 72
+    Exp                            shift and go to state 68
+    LlamadaFuncion                 shift and go to state 114
+    Entero                         shift and go to state 64
+    AssignOption                   shift and go to state 116
+    Termino                        shift and go to state 75
+
+state 82
+
+    (25) LlamadaFuncion -> ID LPAREN . MULTIARG RPAREN SEMICOLON
+    (26) LlamadaFuncion -> ID LPAREN . RPAREN SEMICOLON
+    (36) MULTIARG -> . ARG COMMA MULTIARG
+    (37) MULTIARG -> . ARG
+    (38) ARG -> . ID
+    (39) ARG -> . CTE
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    RPAREN          shift and go to state 120
+    ID              shift and go to state 63
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    CTE                            shift and go to state 59
+    Entero                         shift and go to state 64
+    MULTIARG                       shift and go to state 121
+    ARG                            shift and go to state 60
+
+state 83
+
+    (31) Declaracion_de_variables -> TIPO COLON . ID seenIDdeclVar SEMICOLON
+    (32) Declaracion_de_variables -> TIPO COLON . ID seenIDdeclVar EQUALS Expresion SEMICOLON
+
+    ID              shift and go to state 122
+
+
+state 84
+
+    (34) Estatuto_Condicion -> SI LPAREN . Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE
+    (46) Expresion -> . EX
+    (47) EX -> . Exp Compara Exp
+    (48) EX -> . NOT Exp Compara Exp
+    (49) EX -> . Exp
+    (59) Exp -> . Exp PLUS Termino
+    (60) Exp -> . Exp MINUS Termino
+    (61) Exp -> . Exp ORBIT Termino
+    (62) Exp -> . Exp XORBIT Termino
+    (63) Exp -> . Exp ANDBIT Termino
+    (64) Exp -> . Termino
+    (65) Termino -> . Termino TIMES Factor
+    (66) Termino -> . Termino DIVIDE Factor
+    (67) Termino -> . Termino AND Factor
+    (68) Termino -> . Factor
+    (69) Factor -> . LPAREN Expresion RPAREN
+    (70) Factor -> . CTE
+    (71) Factor -> . ID
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    NOT             shift and go to state 76
+    LPAREN          shift and go to state 73
+    ID              shift and go to state 74
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    Expresion                      shift and go to state 123
+    CTE                            shift and go to state 69
+    EX                             shift and go to state 72
+    Exp                            shift and go to state 68
+    Factor                         shift and go to state 70
+    Entero                         shift and go to state 64
+    Termino                        shift and go to state 75
+
+state 85
+
+    (83) R -> TIPO COLON ID seenIDglobVar . globDeclOption SEMICOLON R
+    (85) globDeclOption -> . NULL
+    (86) globDeclOption -> . Expresion
+    (79) NULL -> .
+    (46) Expresion -> . EX
+    (47) EX -> . Exp Compara Exp
+    (48) EX -> . NOT Exp Compara Exp
+    (49) EX -> . Exp
+    (59) Exp -> . Exp PLUS Termino
+    (60) Exp -> . Exp MINUS Termino
+    (61) Exp -> . Exp ORBIT Termino
+    (62) Exp -> . Exp XORBIT Termino
+    (63) Exp -> . Exp ANDBIT Termino
+    (64) Exp -> . Termino
+    (65) Termino -> . Termino TIMES Factor
+    (66) Termino -> . Termino DIVIDE Factor
+    (67) Termino -> . Termino AND Factor
+    (68) Termino -> . Factor
+    (69) Factor -> . LPAREN Expresion RPAREN
+    (70) Factor -> . CTE
+    (71) Factor -> . ID
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    SEMICOLON       reduce using rule 79 (NULL -> .)
+    NOT             shift and go to state 76
+    LPAREN          shift and go to state 73
+    ID              shift and go to state 74
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    Expresion                      shift and go to state 126
+    Entero                         shift and go to state 64
+    CTE                            shift and go to state 69
+    EX                             shift and go to state 72
+    Exp                            shift and go to state 68
+    Factor                         shift and go to state 70
+    NULL                           shift and go to state 124
+    globDeclOption                 shift and go to state 125
+    Termino                        shift and go to state 75
+
+state 86
+
+    (13) Para -> TIPO ID seenIDparam COMMA Para .
+
+    RPAREN          reduce using rule 13 (Para -> TIPO ID seenIDparam COMMA Para .)
+
+
+state 87
+
+    (7) EstructuraFuncion -> FUNCION ID seenIDfunc LPAREN Parametros RPAREN COLON TIPO SEMICOLON . LCBRACE Contenido RCBRACE funcExit
+
+    LCBRACE         shift and go to state 127
+
+
+state 88
+
+    (35) Imprimir -> IMPRIMECONSOLA MULTIARG SEMICOLON .
+
+    ID              reduce using rule 35 (Imprimir -> IMPRIMECONSOLA MULTIARG SEMICOLON .)
+    SI              reduce using rule 35 (Imprimir -> IMPRIMECONSOLA MULTIARG SEMICOLON .)
+    ESCRIBEPUERTO   reduce using rule 35 (Imprimir -> IMPRIMECONSOLA MULTIARG SEMICOLON .)
+    CICLO           reduce using rule 35 (Imprimir -> IMPRIMECONSOLA MULTIARG SEMICOLON .)
+    IMPRIMECONSOLA  reduce using rule 35 (Imprimir -> IMPRIMECONSOLA MULTIARG SEMICOLON .)
+    REGRESA         reduce using rule 35 (Imprimir -> IMPRIMECONSOLA MULTIARG SEMICOLON .)
+    ENTERO          reduce using rule 35 (Imprimir -> IMPRIMECONSOLA MULTIARG SEMICOLON .)
+    FLOTANTE        reduce using rule 35 (Imprimir -> IMPRIMECONSOLA MULTIARG SEMICOLON .)
+    CADENA          reduce using rule 35 (Imprimir -> IMPRIMECONSOLA MULTIARG SEMICOLON .)
+    CARACTER        reduce using rule 35 (Imprimir -> IMPRIMECONSOLA MULTIARG SEMICOLON .)
+    RCBRACE         reduce using rule 35 (Imprimir -> IMPRIMECONSOLA MULTIARG SEMICOLON .)
+
+
+state 89
+
+    (36) MULTIARG -> ARG COMMA . MULTIARG
+    (36) MULTIARG -> . ARG COMMA MULTIARG
+    (37) MULTIARG -> . ARG
+    (38) ARG -> . ID
+    (39) ARG -> . CTE
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    ID              shift and go to state 63
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    CTE                            shift and go to state 59
+    Entero                         shift and go to state 64
+    MULTIARG                       shift and go to state 128
+    ARG                            shift and go to state 60
+
+state 90
+
+    (45) Estatuto_Ciclo -> CICLO LPAREN Expresion . RPAREN LCBRACE Contenido RCBRACE
+
+    RPAREN          shift and go to state 129
+
+
+state 91
+
+    (1) ESTRUCTURA -> Funciones PROGRAMA ID seenIDprograma SEMICOLON Variables_Globales LCBRACE Contenido RCBRACE programExit .
+
+    $end            reduce using rule 1 (ESTRUCTURA -> Funciones PROGRAMA ID seenIDprograma SEMICOLON Variables_Globales LCBRACE Contenido RCBRACE programExit .)
+
+
+state 92
+
+    (57) Compara -> AND .
+
+    LPAREN          reduce using rule 57 (Compara -> AND .)
+    ID              reduce using rule 57 (Compara -> AND .)
+    ConstanteFlotante reduce using rule 57 (Compara -> AND .)
+    ConstanteCadena reduce using rule 57 (Compara -> AND .)
+    ConstanteCaracter reduce using rule 57 (Compara -> AND .)
+    EnteroDecimal   reduce using rule 57 (Compara -> AND .)
+    EnteroHexadecimal reduce using rule 57 (Compara -> AND .)
+    EnteroBinario   reduce using rule 57 (Compara -> AND .)
+
+
+state 93
+
+    (50) Compara -> GT .
+
+    LPAREN          reduce using rule 50 (Compara -> GT .)
+    ID              reduce using rule 50 (Compara -> GT .)
+    ConstanteFlotante reduce using rule 50 (Compara -> GT .)
+    ConstanteCadena reduce using rule 50 (Compara -> GT .)
+    ConstanteCaracter reduce using rule 50 (Compara -> GT .)
+    EnteroDecimal   reduce using rule 50 (Compara -> GT .)
+    EnteroHexadecimal reduce using rule 50 (Compara -> GT .)
+    EnteroBinario   reduce using rule 50 (Compara -> GT .)
+
+
+state 94
+
+    (62) Exp -> Exp XORBIT . Termino
+    (65) Termino -> . Termino TIMES Factor
+    (66) Termino -> . Termino DIVIDE Factor
+    (67) Termino -> . Termino AND Factor
+    (68) Termino -> . Factor
+    (69) Factor -> . LPAREN Expresion RPAREN
+    (70) Factor -> . CTE
+    (71) Factor -> . ID
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    LPAREN          shift and go to state 73
+    ID              shift and go to state 74
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    CTE                            shift and go to state 69
+    Termino                        shift and go to state 130
+    Factor                         shift and go to state 70
+    Entero                         shift and go to state 64
+
+state 95
+
+    (47) EX -> Exp Compara . Exp
+    (59) Exp -> . Exp PLUS Termino
+    (60) Exp -> . Exp MINUS Termino
+    (61) Exp -> . Exp ORBIT Termino
+    (62) Exp -> . Exp XORBIT Termino
+    (63) Exp -> . Exp ANDBIT Termino
+    (64) Exp -> . Termino
+    (65) Termino -> . Termino TIMES Factor
+    (66) Termino -> . Termino DIVIDE Factor
+    (67) Termino -> . Termino AND Factor
+    (68) Termino -> . Factor
+    (69) Factor -> . LPAREN Expresion RPAREN
+    (70) Factor -> . CTE
+    (71) Factor -> . ID
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    LPAREN          shift and go to state 73
+    ID              shift and go to state 74
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    CTE                            shift and go to state 69
+    Termino                        shift and go to state 75
+    Exp                            shift and go to state 131
+    Factor                         shift and go to state 70
+    Entero                         shift and go to state 64
+
+state 96
+
+    (52) Compara -> DIFERENTEDE .
+
+    LPAREN          reduce using rule 52 (Compara -> DIFERENTEDE .)
+    ID              reduce using rule 52 (Compara -> DIFERENTEDE .)
+    ConstanteFlotante reduce using rule 52 (Compara -> DIFERENTEDE .)
+    ConstanteCadena reduce using rule 52 (Compara -> DIFERENTEDE .)
+    ConstanteCaracter reduce using rule 52 (Compara -> DIFERENTEDE .)
+    EnteroDecimal   reduce using rule 52 (Compara -> DIFERENTEDE .)
+    EnteroHexadecimal reduce using rule 52 (Compara -> DIFERENTEDE .)
+    EnteroBinario   reduce using rule 52 (Compara -> DIFERENTEDE .)
+
+
+state 97
+
+    (55) Compara -> MAYORIGUALQUE .
+
+    LPAREN          reduce using rule 55 (Compara -> MAYORIGUALQUE .)
+    ID              reduce using rule 55 (Compara -> MAYORIGUALQUE .)
+    ConstanteFlotante reduce using rule 55 (Compara -> MAYORIGUALQUE .)
+    ConstanteCadena reduce using rule 55 (Compara -> MAYORIGUALQUE .)
+    ConstanteCaracter reduce using rule 55 (Compara -> MAYORIGUALQUE .)
+    EnteroDecimal   reduce using rule 55 (Compara -> MAYORIGUALQUE .)
+    EnteroHexadecimal reduce using rule 55 (Compara -> MAYORIGUALQUE .)
+    EnteroBinario   reduce using rule 55 (Compara -> MAYORIGUALQUE .)
+
+
+state 98
+
+    (63) Exp -> Exp ANDBIT . Termino
+    (65) Termino -> . Termino TIMES Factor
+    (66) Termino -> . Termino DIVIDE Factor
+    (67) Termino -> . Termino AND Factor
+    (68) Termino -> . Factor
+    (69) Factor -> . LPAREN Expresion RPAREN
+    (70) Factor -> . CTE
+    (71) Factor -> . ID
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    LPAREN          shift and go to state 73
+    ID              shift and go to state 74
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    CTE                            shift and go to state 69
+    Termino                        shift and go to state 132
+    Factor                         shift and go to state 70
+    Entero                         shift and go to state 64
+
+state 99
+
+    (61) Exp -> Exp ORBIT . Termino
+    (65) Termino -> . Termino TIMES Factor
+    (66) Termino -> . Termino DIVIDE Factor
+    (67) Termino -> . Termino AND Factor
+    (68) Termino -> . Factor
+    (69) Factor -> . LPAREN Expresion RPAREN
+    (70) Factor -> . CTE
+    (71) Factor -> . ID
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    LPAREN          shift and go to state 73
+    ID              shift and go to state 74
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    CTE                            shift and go to state 69
+    Termino                        shift and go to state 133
+    Factor                         shift and go to state 70
+    Entero                         shift and go to state 64
+
+state 100
+
+    (56) Compara -> MENORIGUALQUE .
+
+    LPAREN          reduce using rule 56 (Compara -> MENORIGUALQUE .)
+    ID              reduce using rule 56 (Compara -> MENORIGUALQUE .)
+    ConstanteFlotante reduce using rule 56 (Compara -> MENORIGUALQUE .)
+    ConstanteCadena reduce using rule 56 (Compara -> MENORIGUALQUE .)
+    ConstanteCaracter reduce using rule 56 (Compara -> MENORIGUALQUE .)
+    EnteroDecimal   reduce using rule 56 (Compara -> MENORIGUALQUE .)
+    EnteroHexadecimal reduce using rule 56 (Compara -> MENORIGUALQUE .)
+    EnteroBinario   reduce using rule 56 (Compara -> MENORIGUALQUE .)
+
+
+state 101
+
+    (51) Compara -> LT .
+
+    LPAREN          reduce using rule 51 (Compara -> LT .)
+    ID              reduce using rule 51 (Compara -> LT .)
+    ConstanteFlotante reduce using rule 51 (Compara -> LT .)
+    ConstanteCadena reduce using rule 51 (Compara -> LT .)
+    ConstanteCaracter reduce using rule 51 (Compara -> LT .)
+    EnteroDecimal   reduce using rule 51 (Compara -> LT .)
+    EnteroHexadecimal reduce using rule 51 (Compara -> LT .)
+    EnteroBinario   reduce using rule 51 (Compara -> LT .)
+
+
+state 102
+
+    (59) Exp -> Exp PLUS . Termino
+    (65) Termino -> . Termino TIMES Factor
+    (66) Termino -> . Termino DIVIDE Factor
+    (67) Termino -> . Termino AND Factor
+    (68) Termino -> . Factor
+    (69) Factor -> . LPAREN Expresion RPAREN
+    (70) Factor -> . CTE
+    (71) Factor -> . ID
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    LPAREN          shift and go to state 73
+    ID              shift and go to state 74
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    CTE                            shift and go to state 69
+    Termino                        shift and go to state 134
+    Factor                         shift and go to state 70
+    Entero                         shift and go to state 64
+
+state 103
+
+    (53) Compara -> MAYORQUE .
+
+    LPAREN          reduce using rule 53 (Compara -> MAYORQUE .)
+    ID              reduce using rule 53 (Compara -> MAYORQUE .)
+    ConstanteFlotante reduce using rule 53 (Compara -> MAYORQUE .)
+    ConstanteCadena reduce using rule 53 (Compara -> MAYORQUE .)
+    ConstanteCaracter reduce using rule 53 (Compara -> MAYORQUE .)
+    EnteroDecimal   reduce using rule 53 (Compara -> MAYORQUE .)
+    EnteroHexadecimal reduce using rule 53 (Compara -> MAYORQUE .)
+    EnteroBinario   reduce using rule 53 (Compara -> MAYORQUE .)
+
+
+state 104
+
+    (54) Compara -> MENORQUE .
+
+    LPAREN          reduce using rule 54 (Compara -> MENORQUE .)
+    ID              reduce using rule 54 (Compara -> MENORQUE .)
+    ConstanteFlotante reduce using rule 54 (Compara -> MENORQUE .)
+    ConstanteCadena reduce using rule 54 (Compara -> MENORQUE .)
+    ConstanteCaracter reduce using rule 54 (Compara -> MENORQUE .)
+    EnteroDecimal   reduce using rule 54 (Compara -> MENORQUE .)
+    EnteroHexadecimal reduce using rule 54 (Compara -> MENORQUE .)
+    EnteroBinario   reduce using rule 54 (Compara -> MENORQUE .)
+
+
+state 105
+
+    (60) Exp -> Exp MINUS . Termino
+    (65) Termino -> . Termino TIMES Factor
+    (66) Termino -> . Termino DIVIDE Factor
+    (67) Termino -> . Termino AND Factor
+    (68) Termino -> . Factor
+    (69) Factor -> . LPAREN Expresion RPAREN
+    (70) Factor -> . CTE
+    (71) Factor -> . ID
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    LPAREN          shift and go to state 73
+    ID              shift and go to state 74
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    CTE                            shift and go to state 69
+    Termino                        shift and go to state 135
+    Factor                         shift and go to state 70
+    Entero                         shift and go to state 64
+
+state 106
+
+    (58) Compara -> OR .
+
+    LPAREN          reduce using rule 58 (Compara -> OR .)
+    ID              reduce using rule 58 (Compara -> OR .)
+    ConstanteFlotante reduce using rule 58 (Compara -> OR .)
+    ConstanteCadena reduce using rule 58 (Compara -> OR .)
+    ConstanteCaracter reduce using rule 58 (Compara -> OR .)
+    EnteroDecimal   reduce using rule 58 (Compara -> OR .)
+    EnteroHexadecimal reduce using rule 58 (Compara -> OR .)
+    EnteroBinario   reduce using rule 58 (Compara -> OR .)
+
+
+state 107
+
+    (24) regresaDeFuncion -> REGRESA Expresion SEMICOLON .
+
+    ID              reduce using rule 24 (regresaDeFuncion -> REGRESA Expresion SEMICOLON .)
+    SI              reduce using rule 24 (regresaDeFuncion -> REGRESA Expresion SEMICOLON .)
+    ESCRIBEPUERTO   reduce using rule 24 (regresaDeFuncion -> REGRESA Expresion SEMICOLON .)
+    CICLO           reduce using rule 24 (regresaDeFuncion -> REGRESA Expresion SEMICOLON .)
+    IMPRIMECONSOLA  reduce using rule 24 (regresaDeFuncion -> REGRESA Expresion SEMICOLON .)
+    REGRESA         reduce using rule 24 (regresaDeFuncion -> REGRESA Expresion SEMICOLON .)
+    ENTERO          reduce using rule 24 (regresaDeFuncion -> REGRESA Expresion SEMICOLON .)
+    FLOTANTE        reduce using rule 24 (regresaDeFuncion -> REGRESA Expresion SEMICOLON .)
+    CADENA          reduce using rule 24 (regresaDeFuncion -> REGRESA Expresion SEMICOLON .)
+    CARACTER        reduce using rule 24 (regresaDeFuncion -> REGRESA Expresion SEMICOLON .)
+    RCBRACE         reduce using rule 24 (regresaDeFuncion -> REGRESA Expresion SEMICOLON .)
+
+
+state 108
+
+    (69) Factor -> LPAREN Expresion . RPAREN
+
+    RPAREN          shift and go to state 136
+
+
+state 109
+
+    (67) Termino -> Termino AND . Factor
+    (69) Factor -> . LPAREN Expresion RPAREN
+    (70) Factor -> . CTE
+    (71) Factor -> . ID
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    LPAREN          shift and go to state 73
+    ID              shift and go to state 74
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    CTE                            shift and go to state 69
+    Entero                         shift and go to state 64
+    Factor                         shift and go to state 137
+
+state 110
+
+    (66) Termino -> Termino DIVIDE . Factor
+    (69) Factor -> . LPAREN Expresion RPAREN
+    (70) Factor -> . CTE
+    (71) Factor -> . ID
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    LPAREN          shift and go to state 73
+    ID              shift and go to state 74
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    CTE                            shift and go to state 69
+    Entero                         shift and go to state 64
+    Factor                         shift and go to state 138
+
+state 111
+
+    (65) Termino -> Termino TIMES . Factor
+    (69) Factor -> . LPAREN Expresion RPAREN
+    (70) Factor -> . CTE
+    (71) Factor -> . ID
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    LPAREN          shift and go to state 73
+    ID              shift and go to state 74
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    CTE                            shift and go to state 69
+    Entero                         shift and go to state 64
+    Factor                         shift and go to state 139
+
+state 112
+
+    (48) EX -> NOT Exp . Compara Exp
+    (59) Exp -> Exp . PLUS Termino
+    (60) Exp -> Exp . MINUS Termino
+    (61) Exp -> Exp . ORBIT Termino
+    (62) Exp -> Exp . XORBIT Termino
+    (63) Exp -> Exp . ANDBIT Termino
+    (50) Compara -> . GT
+    (51) Compara -> . LT
+    (52) Compara -> . DIFERENTEDE
+    (53) Compara -> . MAYORQUE
+    (54) Compara -> . MENORQUE
+    (55) Compara -> . MAYORIGUALQUE
+    (56) Compara -> . MENORIGUALQUE
+    (57) Compara -> . AND
+    (58) Compara -> . OR
+
+    PLUS            shift and go to state 102
+    MINUS           shift and go to state 105
+    ORBIT           shift and go to state 99
+    XORBIT          shift and go to state 94
+    ANDBIT          shift and go to state 98
+    GT              shift and go to state 93
+    LT              shift and go to state 101
+    DIFERENTEDE     shift and go to state 96
+    MAYORQUE        shift and go to state 103
+    MENORQUE        shift and go to state 104
+    MAYORIGUALQUE   shift and go to state 97
+    MENORIGUALQUE   shift and go to state 100
+    AND             shift and go to state 92
+    OR              shift and go to state 106
+
+    Compara                        shift and go to state 140
+
+state 113
+
+    (40) Estatuto_Escritura_de_puerto -> ESCRIBEPUERTO PUERTO ID . SEMICOLON
+
+    SEMICOLON       shift and go to state 141
+
+
+state 114
+
+    (29) AssignOption -> LlamadaFuncion .
+
+    ID              reduce using rule 29 (AssignOption -> LlamadaFuncion .)
+    SI              reduce using rule 29 (AssignOption -> LlamadaFuncion .)
+    ESCRIBEPUERTO   reduce using rule 29 (AssignOption -> LlamadaFuncion .)
+    CICLO           reduce using rule 29 (AssignOption -> LlamadaFuncion .)
+    IMPRIMECONSOLA  reduce using rule 29 (AssignOption -> LlamadaFuncion .)
+    REGRESA         reduce using rule 29 (AssignOption -> LlamadaFuncion .)
+    ENTERO          reduce using rule 29 (AssignOption -> LlamadaFuncion .)
+    FLOTANTE        reduce using rule 29 (AssignOption -> LlamadaFuncion .)
+    CADENA          reduce using rule 29 (AssignOption -> LlamadaFuncion .)
+    CARACTER        reduce using rule 29 (AssignOption -> LlamadaFuncion .)
+    RCBRACE         reduce using rule 29 (AssignOption -> LlamadaFuncion .)
+
+
+state 115
+
+    (30) AssignOption -> TIPO . LPAREN ARG RPAREN SEMICOLON
+
+    LPAREN          shift and go to state 142
+
+
+state 116
+
+    (27) Estatuto_Asignacion -> ID EQUALS AssignOption .
+
+    ID              reduce using rule 27 (Estatuto_Asignacion -> ID EQUALS AssignOption .)
+    SI              reduce using rule 27 (Estatuto_Asignacion -> ID EQUALS AssignOption .)
+    ESCRIBEPUERTO   reduce using rule 27 (Estatuto_Asignacion -> ID EQUALS AssignOption .)
+    CICLO           reduce using rule 27 (Estatuto_Asignacion -> ID EQUALS AssignOption .)
+    IMPRIMECONSOLA  reduce using rule 27 (Estatuto_Asignacion -> ID EQUALS AssignOption .)
+    REGRESA         reduce using rule 27 (Estatuto_Asignacion -> ID EQUALS AssignOption .)
+    ENTERO          reduce using rule 27 (Estatuto_Asignacion -> ID EQUALS AssignOption .)
+    FLOTANTE        reduce using rule 27 (Estatuto_Asignacion -> ID EQUALS AssignOption .)
+    CADENA          reduce using rule 27 (Estatuto_Asignacion -> ID EQUALS AssignOption .)
+    CARACTER        reduce using rule 27 (Estatuto_Asignacion -> ID EQUALS AssignOption .)
+    RCBRACE         reduce using rule 27 (Estatuto_Asignacion -> ID EQUALS AssignOption .)
+
+
+state 117
+
+    (28) AssignOption -> Expresion . SEMICOLON
+
+    SEMICOLON       shift and go to state 143
+
+
+state 118
+
+    (41) Estatuto_Lectura_de_puerto -> ID EQUALS LEEPUERTO . PUERTO SEMICOLON
+    (42) PUERTO -> . B
+    (43) PUERTO -> . C
+    (44) PUERTO -> . D
+
+    B               shift and go to state 78
+    C               shift and go to state 77
+    D               shift and go to state 79
+
+    PUERTO                         shift and go to state 144
+
+state 119
+
+    (25) LlamadaFuncion -> ID . LPAREN MULTIARG RPAREN SEMICOLON
+    (26) LlamadaFuncion -> ID . LPAREN RPAREN SEMICOLON
+    (71) Factor -> ID .
+
+    LPAREN          shift and go to state 82
+    TIMES           reduce using rule 71 (Factor -> ID .)
+    DIVIDE          reduce using rule 71 (Factor -> ID .)
+    AND             reduce using rule 71 (Factor -> ID .)
+    PLUS            reduce using rule 71 (Factor -> ID .)
+    MINUS           reduce using rule 71 (Factor -> ID .)
+    ORBIT           reduce using rule 71 (Factor -> ID .)
+    XORBIT          reduce using rule 71 (Factor -> ID .)
+    ANDBIT          reduce using rule 71 (Factor -> ID .)
+    GT              reduce using rule 71 (Factor -> ID .)
+    LT              reduce using rule 71 (Factor -> ID .)
+    DIFERENTEDE     reduce using rule 71 (Factor -> ID .)
+    MAYORQUE        reduce using rule 71 (Factor -> ID .)
+    MENORQUE        reduce using rule 71 (Factor -> ID .)
+    MAYORIGUALQUE   reduce using rule 71 (Factor -> ID .)
+    MENORIGUALQUE   reduce using rule 71 (Factor -> ID .)
+    OR              reduce using rule 71 (Factor -> ID .)
+    SEMICOLON       reduce using rule 71 (Factor -> ID .)
+
+
+state 120
+
+    (26) LlamadaFuncion -> ID LPAREN RPAREN . SEMICOLON
+
+    SEMICOLON       shift and go to state 145
+
+
+state 121
+
+    (25) LlamadaFuncion -> ID LPAREN MULTIARG . RPAREN SEMICOLON
+
+    RPAREN          shift and go to state 146
+
+
+state 122
+
+    (31) Declaracion_de_variables -> TIPO COLON ID . seenIDdeclVar SEMICOLON
+    (32) Declaracion_de_variables -> TIPO COLON ID . seenIDdeclVar EQUALS Expresion SEMICOLON
+    (33) seenIDdeclVar -> .
+
+    SEMICOLON       reduce using rule 33 (seenIDdeclVar -> .)
+    EQUALS          reduce using rule 33 (seenIDdeclVar -> .)
+
+    seenIDdeclVar                  shift and go to state 147
+
+state 123
+
+    (34) Estatuto_Condicion -> SI LPAREN Expresion . RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE
+
+    RPAREN          shift and go to state 148
+
+
+state 124
+
+    (85) globDeclOption -> NULL .
+
+    SEMICOLON       reduce using rule 85 (globDeclOption -> NULL .)
+
+
+state 125
+
+    (83) R -> TIPO COLON ID seenIDglobVar globDeclOption . SEMICOLON R
+
+    SEMICOLON       shift and go to state 149
+
+
+state 126
+
+    (86) globDeclOption -> Expresion .
+
+    SEMICOLON       reduce using rule 86 (globDeclOption -> Expresion .)
+
+
+state 127
+
+    (7) EstructuraFuncion -> FUNCION ID seenIDfunc LPAREN Parametros RPAREN COLON TIPO SEMICOLON LCBRACE . Contenido RCBRACE funcExit
+    (80) Contenido -> . Estatuto Contenido
+    (81) Contenido -> . NULL
+    (15) Estatuto -> . Estatuto_Asignacion
+    (16) Estatuto -> . Estatuto_Condicion
+    (17) Estatuto -> . Estatuto_Escritura_de_puerto
+    (18) Estatuto -> . Estatuto_Ciclo
+    (19) Estatuto -> . Estatuto_Lectura_de_puerto
+    (20) Estatuto -> . Imprimir
+    (21) Estatuto -> . Declaracion_de_variables
+    (22) Estatuto -> . LlamadaFuncion
+    (23) Estatuto -> . regresaDeFuncion
+    (79) NULL -> .
+    (27) Estatuto_Asignacion -> . ID EQUALS AssignOption
+    (34) Estatuto_Condicion -> . SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE
+    (40) Estatuto_Escritura_de_puerto -> . ESCRIBEPUERTO PUERTO ID SEMICOLON
+    (45) Estatuto_Ciclo -> . CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE
+    (41) Estatuto_Lectura_de_puerto -> . ID EQUALS LEEPUERTO PUERTO SEMICOLON
+    (35) Imprimir -> . IMPRIMECONSOLA MULTIARG SEMICOLON
+    (31) Declaracion_de_variables -> . TIPO COLON ID seenIDdeclVar SEMICOLON
+    (32) Declaracion_de_variables -> . TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON
+    (25) LlamadaFuncion -> . ID LPAREN MULTIARG RPAREN SEMICOLON
+    (26) LlamadaFuncion -> . ID LPAREN RPAREN SEMICOLON
+    (24) regresaDeFuncion -> . REGRESA Expresion SEMICOLON
+    (88) TIPO -> . ENTERO
+    (89) TIPO -> . FLOTANTE
+    (90) TIPO -> . CADENA
+    (91) TIPO -> . CARACTER
+
+    RCBRACE         reduce using rule 79 (NULL -> .)
+    ID              shift and go to state 46
+    SI              shift and go to state 48
+    ESCRIBEPUERTO   shift and go to state 45
+    CICLO           shift and go to state 33
+    IMPRIMECONSOLA  shift and go to state 32
+    REGRESA         shift and go to state 41
+    ENTERO          shift and go to state 18
+    FLOTANTE        shift and go to state 19
+    CADENA          shift and go to state 17
+    CARACTER        shift and go to state 16
+
+    Estatuto_Lectura_de_puerto     shift and go to state 42
+    regresaDeFuncion               shift and go to state 39
+    TIPO                           shift and go to state 47
+    Contenido                      shift and go to state 150
+    Estatuto_Escritura_de_puerto   shift and go to state 43
+    Estatuto                       shift and go to state 35
+    Estatuto_Ciclo                 shift and go to state 44
+    Estatuto_Condicion             shift and go to state 49
+    Imprimir                       shift and go to state 40
+    LlamadaFuncion                 shift and go to state 36
+    Estatuto_Asignacion            shift and go to state 50
+    NULL                           shift and go to state 37
+    Declaracion_de_variables       shift and go to state 38
+
+state 128
+
+    (36) MULTIARG -> ARG COMMA MULTIARG .
+
+    SEMICOLON       reduce using rule 36 (MULTIARG -> ARG COMMA MULTIARG .)
+    RPAREN          reduce using rule 36 (MULTIARG -> ARG COMMA MULTIARG .)
+
+
+state 129
+
+    (45) Estatuto_Ciclo -> CICLO LPAREN Expresion RPAREN . LCBRACE Contenido RCBRACE
+
+    LCBRACE         shift and go to state 151
+
+
+state 130
+
+    (62) Exp -> Exp XORBIT Termino .
+    (65) Termino -> Termino . TIMES Factor
+    (66) Termino -> Termino . DIVIDE Factor
+    (67) Termino -> Termino . AND Factor
+
+  ! shift/reduce conflict for AND resolved as shift
+    PLUS            reduce using rule 62 (Exp -> Exp XORBIT Termino .)
+    MINUS           reduce using rule 62 (Exp -> Exp XORBIT Termino .)
+    ORBIT           reduce using rule 62 (Exp -> Exp XORBIT Termino .)
+    XORBIT          reduce using rule 62 (Exp -> Exp XORBIT Termino .)
+    ANDBIT          reduce using rule 62 (Exp -> Exp XORBIT Termino .)
+    GT              reduce using rule 62 (Exp -> Exp XORBIT Termino .)
+    LT              reduce using rule 62 (Exp -> Exp XORBIT Termino .)
+    DIFERENTEDE     reduce using rule 62 (Exp -> Exp XORBIT Termino .)
+    MAYORQUE        reduce using rule 62 (Exp -> Exp XORBIT Termino .)
+    MENORQUE        reduce using rule 62 (Exp -> Exp XORBIT Termino .)
+    MAYORIGUALQUE   reduce using rule 62 (Exp -> Exp XORBIT Termino .)
+    MENORIGUALQUE   reduce using rule 62 (Exp -> Exp XORBIT Termino .)
+    OR              reduce using rule 62 (Exp -> Exp XORBIT Termino .)
+    RPAREN          reduce using rule 62 (Exp -> Exp XORBIT Termino .)
+    SEMICOLON       reduce using rule 62 (Exp -> Exp XORBIT Termino .)
+    TIMES           shift and go to state 111
+    DIVIDE          shift and go to state 110
+    AND             shift and go to state 109
+
+  ! AND             [ reduce using rule 62 (Exp -> Exp XORBIT Termino .) ]
+
+
+state 131
+
+    (47) EX -> Exp Compara Exp .
+    (59) Exp -> Exp . PLUS Termino
+    (60) Exp -> Exp . MINUS Termino
+    (61) Exp -> Exp . ORBIT Termino
+    (62) Exp -> Exp . XORBIT Termino
+    (63) Exp -> Exp . ANDBIT Termino
+
+    SEMICOLON       reduce using rule 47 (EX -> Exp Compara Exp .)
+    RPAREN          reduce using rule 47 (EX -> Exp Compara Exp .)
+    PLUS            shift and go to state 102
+    MINUS           shift and go to state 105
+    ORBIT           shift and go to state 99
+    XORBIT          shift and go to state 94
+    ANDBIT          shift and go to state 98
+
+
+state 132
+
+    (63) Exp -> Exp ANDBIT Termino .
+    (65) Termino -> Termino . TIMES Factor
+    (66) Termino -> Termino . DIVIDE Factor
+    (67) Termino -> Termino . AND Factor
+
+  ! shift/reduce conflict for AND resolved as shift
+    PLUS            reduce using rule 63 (Exp -> Exp ANDBIT Termino .)
+    MINUS           reduce using rule 63 (Exp -> Exp ANDBIT Termino .)
+    ORBIT           reduce using rule 63 (Exp -> Exp ANDBIT Termino .)
+    XORBIT          reduce using rule 63 (Exp -> Exp ANDBIT Termino .)
+    ANDBIT          reduce using rule 63 (Exp -> Exp ANDBIT Termino .)
+    GT              reduce using rule 63 (Exp -> Exp ANDBIT Termino .)
+    LT              reduce using rule 63 (Exp -> Exp ANDBIT Termino .)
+    DIFERENTEDE     reduce using rule 63 (Exp -> Exp ANDBIT Termino .)
+    MAYORQUE        reduce using rule 63 (Exp -> Exp ANDBIT Termino .)
+    MENORQUE        reduce using rule 63 (Exp -> Exp ANDBIT Termino .)
+    MAYORIGUALQUE   reduce using rule 63 (Exp -> Exp ANDBIT Termino .)
+    MENORIGUALQUE   reduce using rule 63 (Exp -> Exp ANDBIT Termino .)
+    OR              reduce using rule 63 (Exp -> Exp ANDBIT Termino .)
+    RPAREN          reduce using rule 63 (Exp -> Exp ANDBIT Termino .)
+    SEMICOLON       reduce using rule 63 (Exp -> Exp ANDBIT Termino .)
+    TIMES           shift and go to state 111
+    DIVIDE          shift and go to state 110
+    AND             shift and go to state 109
+
+  ! AND             [ reduce using rule 63 (Exp -> Exp ANDBIT Termino .) ]
+
+
+state 133
+
+    (61) Exp -> Exp ORBIT Termino .
+    (65) Termino -> Termino . TIMES Factor
+    (66) Termino -> Termino . DIVIDE Factor
+    (67) Termino -> Termino . AND Factor
+
+  ! shift/reduce conflict for AND resolved as shift
+    PLUS            reduce using rule 61 (Exp -> Exp ORBIT Termino .)
+    MINUS           reduce using rule 61 (Exp -> Exp ORBIT Termino .)
+    ORBIT           reduce using rule 61 (Exp -> Exp ORBIT Termino .)
+    XORBIT          reduce using rule 61 (Exp -> Exp ORBIT Termino .)
+    ANDBIT          reduce using rule 61 (Exp -> Exp ORBIT Termino .)
+    GT              reduce using rule 61 (Exp -> Exp ORBIT Termino .)
+    LT              reduce using rule 61 (Exp -> Exp ORBIT Termino .)
+    DIFERENTEDE     reduce using rule 61 (Exp -> Exp ORBIT Termino .)
+    MAYORQUE        reduce using rule 61 (Exp -> Exp ORBIT Termino .)
+    MENORQUE        reduce using rule 61 (Exp -> Exp ORBIT Termino .)
+    MAYORIGUALQUE   reduce using rule 61 (Exp -> Exp ORBIT Termino .)
+    MENORIGUALQUE   reduce using rule 61 (Exp -> Exp ORBIT Termino .)
+    OR              reduce using rule 61 (Exp -> Exp ORBIT Termino .)
+    RPAREN          reduce using rule 61 (Exp -> Exp ORBIT Termino .)
+    SEMICOLON       reduce using rule 61 (Exp -> Exp ORBIT Termino .)
+    TIMES           shift and go to state 111
+    DIVIDE          shift and go to state 110
+    AND             shift and go to state 109
+
+  ! AND             [ reduce using rule 61 (Exp -> Exp ORBIT Termino .) ]
+
+
+state 134
+
+    (59) Exp -> Exp PLUS Termino .
+    (65) Termino -> Termino . TIMES Factor
+    (66) Termino -> Termino . DIVIDE Factor
+    (67) Termino -> Termino . AND Factor
+
+    PLUS            reduce using rule 59 (Exp -> Exp PLUS Termino .)
+    MINUS           reduce using rule 59 (Exp -> Exp PLUS Termino .)
+    ORBIT           reduce using rule 59 (Exp -> Exp PLUS Termino .)
+    XORBIT          reduce using rule 59 (Exp -> Exp PLUS Termino .)
+    ANDBIT          reduce using rule 59 (Exp -> Exp PLUS Termino .)
+    GT              reduce using rule 59 (Exp -> Exp PLUS Termino .)
+    LT              reduce using rule 59 (Exp -> Exp PLUS Termino .)
+    DIFERENTEDE     reduce using rule 59 (Exp -> Exp PLUS Termino .)
+    MAYORQUE        reduce using rule 59 (Exp -> Exp PLUS Termino .)
+    MENORQUE        reduce using rule 59 (Exp -> Exp PLUS Termino .)
+    MAYORIGUALQUE   reduce using rule 59 (Exp -> Exp PLUS Termino .)
+    MENORIGUALQUE   reduce using rule 59 (Exp -> Exp PLUS Termino .)
+    AND             reduce using rule 59 (Exp -> Exp PLUS Termino .)
+    OR              reduce using rule 59 (Exp -> Exp PLUS Termino .)
+    RPAREN          reduce using rule 59 (Exp -> Exp PLUS Termino .)
+    SEMICOLON       reduce using rule 59 (Exp -> Exp PLUS Termino .)
+    TIMES           shift and go to state 111
+    DIVIDE          shift and go to state 110
+
+  ! AND             [ shift and go to state 109 ]
+
+
+state 135
+
+    (60) Exp -> Exp MINUS Termino .
+    (65) Termino -> Termino . TIMES Factor
+    (66) Termino -> Termino . DIVIDE Factor
+    (67) Termino -> Termino . AND Factor
+
+    PLUS            reduce using rule 60 (Exp -> Exp MINUS Termino .)
+    MINUS           reduce using rule 60 (Exp -> Exp MINUS Termino .)
+    ORBIT           reduce using rule 60 (Exp -> Exp MINUS Termino .)
+    XORBIT          reduce using rule 60 (Exp -> Exp MINUS Termino .)
+    ANDBIT          reduce using rule 60 (Exp -> Exp MINUS Termino .)
+    GT              reduce using rule 60 (Exp -> Exp MINUS Termino .)
+    LT              reduce using rule 60 (Exp -> Exp MINUS Termino .)
+    DIFERENTEDE     reduce using rule 60 (Exp -> Exp MINUS Termino .)
+    MAYORQUE        reduce using rule 60 (Exp -> Exp MINUS Termino .)
+    MENORQUE        reduce using rule 60 (Exp -> Exp MINUS Termino .)
+    MAYORIGUALQUE   reduce using rule 60 (Exp -> Exp MINUS Termino .)
+    MENORIGUALQUE   reduce using rule 60 (Exp -> Exp MINUS Termino .)
+    AND             reduce using rule 60 (Exp -> Exp MINUS Termino .)
+    OR              reduce using rule 60 (Exp -> Exp MINUS Termino .)
+    RPAREN          reduce using rule 60 (Exp -> Exp MINUS Termino .)
+    SEMICOLON       reduce using rule 60 (Exp -> Exp MINUS Termino .)
+    TIMES           shift and go to state 111
+    DIVIDE          shift and go to state 110
+
+  ! AND             [ shift and go to state 109 ]
+
+
+state 136
+
+    (69) Factor -> LPAREN Expresion RPAREN .
+
+    TIMES           reduce using rule 69 (Factor -> LPAREN Expresion RPAREN .)
+    DIVIDE          reduce using rule 69 (Factor -> LPAREN Expresion RPAREN .)
+    AND             reduce using rule 69 (Factor -> LPAREN Expresion RPAREN .)
+    PLUS            reduce using rule 69 (Factor -> LPAREN Expresion RPAREN .)
+    MINUS           reduce using rule 69 (Factor -> LPAREN Expresion RPAREN .)
+    ORBIT           reduce using rule 69 (Factor -> LPAREN Expresion RPAREN .)
+    XORBIT          reduce using rule 69 (Factor -> LPAREN Expresion RPAREN .)
+    ANDBIT          reduce using rule 69 (Factor -> LPAREN Expresion RPAREN .)
+    GT              reduce using rule 69 (Factor -> LPAREN Expresion RPAREN .)
+    LT              reduce using rule 69 (Factor -> LPAREN Expresion RPAREN .)
+    DIFERENTEDE     reduce using rule 69 (Factor -> LPAREN Expresion RPAREN .)
+    MAYORQUE        reduce using rule 69 (Factor -> LPAREN Expresion RPAREN .)
+    MENORQUE        reduce using rule 69 (Factor -> LPAREN Expresion RPAREN .)
+    MAYORIGUALQUE   reduce using rule 69 (Factor -> LPAREN Expresion RPAREN .)
+    MENORIGUALQUE   reduce using rule 69 (Factor -> LPAREN Expresion RPAREN .)
+    OR              reduce using rule 69 (Factor -> LPAREN Expresion RPAREN .)
+    SEMICOLON       reduce using rule 69 (Factor -> LPAREN Expresion RPAREN .)
+    RPAREN          reduce using rule 69 (Factor -> LPAREN Expresion RPAREN .)
+
+
+state 137
+
+    (67) Termino -> Termino AND Factor .
+
+    TIMES           reduce using rule 67 (Termino -> Termino AND Factor .)
+    DIVIDE          reduce using rule 67 (Termino -> Termino AND Factor .)
+    AND             reduce using rule 67 (Termino -> Termino AND Factor .)
+    PLUS            reduce using rule 67 (Termino -> Termino AND Factor .)
+    MINUS           reduce using rule 67 (Termino -> Termino AND Factor .)
+    ORBIT           reduce using rule 67 (Termino -> Termino AND Factor .)
+    XORBIT          reduce using rule 67 (Termino -> Termino AND Factor .)
+    ANDBIT          reduce using rule 67 (Termino -> Termino AND Factor .)
+    GT              reduce using rule 67 (Termino -> Termino AND Factor .)
+    LT              reduce using rule 67 (Termino -> Termino AND Factor .)
+    DIFERENTEDE     reduce using rule 67 (Termino -> Termino AND Factor .)
+    MAYORQUE        reduce using rule 67 (Termino -> Termino AND Factor .)
+    MENORQUE        reduce using rule 67 (Termino -> Termino AND Factor .)
+    MAYORIGUALQUE   reduce using rule 67 (Termino -> Termino AND Factor .)
+    MENORIGUALQUE   reduce using rule 67 (Termino -> Termino AND Factor .)
+    OR              reduce using rule 67 (Termino -> Termino AND Factor .)
+    SEMICOLON       reduce using rule 67 (Termino -> Termino AND Factor .)
+    RPAREN          reduce using rule 67 (Termino -> Termino AND Factor .)
+
+
+state 138
+
+    (66) Termino -> Termino DIVIDE Factor .
+
+    TIMES           reduce using rule 66 (Termino -> Termino DIVIDE Factor .)
+    DIVIDE          reduce using rule 66 (Termino -> Termino DIVIDE Factor .)
+    AND             reduce using rule 66 (Termino -> Termino DIVIDE Factor .)
+    PLUS            reduce using rule 66 (Termino -> Termino DIVIDE Factor .)
+    MINUS           reduce using rule 66 (Termino -> Termino DIVIDE Factor .)
+    ORBIT           reduce using rule 66 (Termino -> Termino DIVIDE Factor .)
+    XORBIT          reduce using rule 66 (Termino -> Termino DIVIDE Factor .)
+    ANDBIT          reduce using rule 66 (Termino -> Termino DIVIDE Factor .)
+    GT              reduce using rule 66 (Termino -> Termino DIVIDE Factor .)
+    LT              reduce using rule 66 (Termino -> Termino DIVIDE Factor .)
+    DIFERENTEDE     reduce using rule 66 (Termino -> Termino DIVIDE Factor .)
+    MAYORQUE        reduce using rule 66 (Termino -> Termino DIVIDE Factor .)
+    MENORQUE        reduce using rule 66 (Termino -> Termino DIVIDE Factor .)
+    MAYORIGUALQUE   reduce using rule 66 (Termino -> Termino DIVIDE Factor .)
+    MENORIGUALQUE   reduce using rule 66 (Termino -> Termino DIVIDE Factor .)
+    OR              reduce using rule 66 (Termino -> Termino DIVIDE Factor .)
+    SEMICOLON       reduce using rule 66 (Termino -> Termino DIVIDE Factor .)
+    RPAREN          reduce using rule 66 (Termino -> Termino DIVIDE Factor .)
+
+
+state 139
+
+    (65) Termino -> Termino TIMES Factor .
+
+    TIMES           reduce using rule 65 (Termino -> Termino TIMES Factor .)
+    DIVIDE          reduce using rule 65 (Termino -> Termino TIMES Factor .)
+    AND             reduce using rule 65 (Termino -> Termino TIMES Factor .)
+    PLUS            reduce using rule 65 (Termino -> Termino TIMES Factor .)
+    MINUS           reduce using rule 65 (Termino -> Termino TIMES Factor .)
+    ORBIT           reduce using rule 65 (Termino -> Termino TIMES Factor .)
+    XORBIT          reduce using rule 65 (Termino -> Termino TIMES Factor .)
+    ANDBIT          reduce using rule 65 (Termino -> Termino TIMES Factor .)
+    GT              reduce using rule 65 (Termino -> Termino TIMES Factor .)
+    LT              reduce using rule 65 (Termino -> Termino TIMES Factor .)
+    DIFERENTEDE     reduce using rule 65 (Termino -> Termino TIMES Factor .)
+    MAYORQUE        reduce using rule 65 (Termino -> Termino TIMES Factor .)
+    MENORQUE        reduce using rule 65 (Termino -> Termino TIMES Factor .)
+    MAYORIGUALQUE   reduce using rule 65 (Termino -> Termino TIMES Factor .)
+    MENORIGUALQUE   reduce using rule 65 (Termino -> Termino TIMES Factor .)
+    OR              reduce using rule 65 (Termino -> Termino TIMES Factor .)
+    SEMICOLON       reduce using rule 65 (Termino -> Termino TIMES Factor .)
+    RPAREN          reduce using rule 65 (Termino -> Termino TIMES Factor .)
+
+
+state 140
+
+    (48) EX -> NOT Exp Compara . Exp
+    (59) Exp -> . Exp PLUS Termino
+    (60) Exp -> . Exp MINUS Termino
+    (61) Exp -> . Exp ORBIT Termino
+    (62) Exp -> . Exp XORBIT Termino
+    (63) Exp -> . Exp ANDBIT Termino
+    (64) Exp -> . Termino
+    (65) Termino -> . Termino TIMES Factor
+    (66) Termino -> . Termino DIVIDE Factor
+    (67) Termino -> . Termino AND Factor
+    (68) Termino -> . Factor
+    (69) Factor -> . LPAREN Expresion RPAREN
+    (70) Factor -> . CTE
+    (71) Factor -> . ID
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    LPAREN          shift and go to state 73
+    ID              shift and go to state 74
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    CTE                            shift and go to state 69
+    Termino                        shift and go to state 75
+    Exp                            shift and go to state 152
+    Factor                         shift and go to state 70
+    Entero                         shift and go to state 64
+
+state 141
+
+    (40) Estatuto_Escritura_de_puerto -> ESCRIBEPUERTO PUERTO ID SEMICOLON .
+
+    ID              reduce using rule 40 (Estatuto_Escritura_de_puerto -> ESCRIBEPUERTO PUERTO ID SEMICOLON .)
+    SI              reduce using rule 40 (Estatuto_Escritura_de_puerto -> ESCRIBEPUERTO PUERTO ID SEMICOLON .)
+    ESCRIBEPUERTO   reduce using rule 40 (Estatuto_Escritura_de_puerto -> ESCRIBEPUERTO PUERTO ID SEMICOLON .)
+    CICLO           reduce using rule 40 (Estatuto_Escritura_de_puerto -> ESCRIBEPUERTO PUERTO ID SEMICOLON .)
+    IMPRIMECONSOLA  reduce using rule 40 (Estatuto_Escritura_de_puerto -> ESCRIBEPUERTO PUERTO ID SEMICOLON .)
+    REGRESA         reduce using rule 40 (Estatuto_Escritura_de_puerto -> ESCRIBEPUERTO PUERTO ID SEMICOLON .)
+    ENTERO          reduce using rule 40 (Estatuto_Escritura_de_puerto -> ESCRIBEPUERTO PUERTO ID SEMICOLON .)
+    FLOTANTE        reduce using rule 40 (Estatuto_Escritura_de_puerto -> ESCRIBEPUERTO PUERTO ID SEMICOLON .)
+    CADENA          reduce using rule 40 (Estatuto_Escritura_de_puerto -> ESCRIBEPUERTO PUERTO ID SEMICOLON .)
+    CARACTER        reduce using rule 40 (Estatuto_Escritura_de_puerto -> ESCRIBEPUERTO PUERTO ID SEMICOLON .)
+    RCBRACE         reduce using rule 40 (Estatuto_Escritura_de_puerto -> ESCRIBEPUERTO PUERTO ID SEMICOLON .)
+
+
+state 142
+
+    (30) AssignOption -> TIPO LPAREN . ARG RPAREN SEMICOLON
+    (38) ARG -> . ID
+    (39) ARG -> . CTE
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    ID              shift and go to state 63
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    CTE                            shift and go to state 59
+    Entero                         shift and go to state 64
+    ARG                            shift and go to state 153
+
+state 143
+
+    (28) AssignOption -> Expresion SEMICOLON .
+
+    ID              reduce using rule 28 (AssignOption -> Expresion SEMICOLON .)
+    SI              reduce using rule 28 (AssignOption -> Expresion SEMICOLON .)
+    ESCRIBEPUERTO   reduce using rule 28 (AssignOption -> Expresion SEMICOLON .)
+    CICLO           reduce using rule 28 (AssignOption -> Expresion SEMICOLON .)
+    IMPRIMECONSOLA  reduce using rule 28 (AssignOption -> Expresion SEMICOLON .)
+    REGRESA         reduce using rule 28 (AssignOption -> Expresion SEMICOLON .)
+    ENTERO          reduce using rule 28 (AssignOption -> Expresion SEMICOLON .)
+    FLOTANTE        reduce using rule 28 (AssignOption -> Expresion SEMICOLON .)
+    CADENA          reduce using rule 28 (AssignOption -> Expresion SEMICOLON .)
+    CARACTER        reduce using rule 28 (AssignOption -> Expresion SEMICOLON .)
+    RCBRACE         reduce using rule 28 (AssignOption -> Expresion SEMICOLON .)
+
+
+state 144
+
+    (41) Estatuto_Lectura_de_puerto -> ID EQUALS LEEPUERTO PUERTO . SEMICOLON
+
+    SEMICOLON       shift and go to state 154
+
+
+state 145
+
+    (26) LlamadaFuncion -> ID LPAREN RPAREN SEMICOLON .
+
+    ID              reduce using rule 26 (LlamadaFuncion -> ID LPAREN RPAREN SEMICOLON .)
+    SI              reduce using rule 26 (LlamadaFuncion -> ID LPAREN RPAREN SEMICOLON .)
+    ESCRIBEPUERTO   reduce using rule 26 (LlamadaFuncion -> ID LPAREN RPAREN SEMICOLON .)
+    CICLO           reduce using rule 26 (LlamadaFuncion -> ID LPAREN RPAREN SEMICOLON .)
+    IMPRIMECONSOLA  reduce using rule 26 (LlamadaFuncion -> ID LPAREN RPAREN SEMICOLON .)
+    REGRESA         reduce using rule 26 (LlamadaFuncion -> ID LPAREN RPAREN SEMICOLON .)
+    ENTERO          reduce using rule 26 (LlamadaFuncion -> ID LPAREN RPAREN SEMICOLON .)
+    FLOTANTE        reduce using rule 26 (LlamadaFuncion -> ID LPAREN RPAREN SEMICOLON .)
+    CADENA          reduce using rule 26 (LlamadaFuncion -> ID LPAREN RPAREN SEMICOLON .)
+    CARACTER        reduce using rule 26 (LlamadaFuncion -> ID LPAREN RPAREN SEMICOLON .)
+    RCBRACE         reduce using rule 26 (LlamadaFuncion -> ID LPAREN RPAREN SEMICOLON .)
+
+
+state 146
+
+    (25) LlamadaFuncion -> ID LPAREN MULTIARG RPAREN . SEMICOLON
+
+    SEMICOLON       shift and go to state 155
+
+
+state 147
+
+    (31) Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar . SEMICOLON
+    (32) Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar . EQUALS Expresion SEMICOLON
+
+    SEMICOLON       shift and go to state 156
+    EQUALS          shift and go to state 157
+
+
+state 148
+
+    (34) Estatuto_Condicion -> SI LPAREN Expresion RPAREN . LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE
+
+    LCBRACE         shift and go to state 158
+
+
+state 149
+
+    (83) R -> TIPO COLON ID seenIDglobVar globDeclOption SEMICOLON . R
+    (83) R -> . TIPO COLON ID seenIDglobVar globDeclOption SEMICOLON R
+    (84) R -> . NULL
+    (88) TIPO -> . ENTERO
+    (89) TIPO -> . FLOTANTE
+    (90) TIPO -> . CADENA
+    (91) TIPO -> . CARACTER
+    (79) NULL -> .
+
+    ENTERO          shift and go to state 18
+    FLOTANTE        shift and go to state 19
+    CADENA          shift and go to state 17
+    CARACTER        shift and go to state 16
+    LCBRACE         reduce using rule 79 (NULL -> .)
+
+    R                              shift and go to state 159
+    NULL                           shift and go to state 23
+    TIPO                           shift and go to state 25
+
+state 150
+
+    (7) EstructuraFuncion -> FUNCION ID seenIDfunc LPAREN Parametros RPAREN COLON TIPO SEMICOLON LCBRACE Contenido . RCBRACE funcExit
+
+    RCBRACE         shift and go to state 160
+
+
+state 151
+
+    (45) Estatuto_Ciclo -> CICLO LPAREN Expresion RPAREN LCBRACE . Contenido RCBRACE
+    (80) Contenido -> . Estatuto Contenido
+    (81) Contenido -> . NULL
+    (15) Estatuto -> . Estatuto_Asignacion
+    (16) Estatuto -> . Estatuto_Condicion
+    (17) Estatuto -> . Estatuto_Escritura_de_puerto
+    (18) Estatuto -> . Estatuto_Ciclo
+    (19) Estatuto -> . Estatuto_Lectura_de_puerto
+    (20) Estatuto -> . Imprimir
+    (21) Estatuto -> . Declaracion_de_variables
+    (22) Estatuto -> . LlamadaFuncion
+    (23) Estatuto -> . regresaDeFuncion
+    (79) NULL -> .
+    (27) Estatuto_Asignacion -> . ID EQUALS AssignOption
+    (34) Estatuto_Condicion -> . SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE
+    (40) Estatuto_Escritura_de_puerto -> . ESCRIBEPUERTO PUERTO ID SEMICOLON
+    (45) Estatuto_Ciclo -> . CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE
+    (41) Estatuto_Lectura_de_puerto -> . ID EQUALS LEEPUERTO PUERTO SEMICOLON
+    (35) Imprimir -> . IMPRIMECONSOLA MULTIARG SEMICOLON
+    (31) Declaracion_de_variables -> . TIPO COLON ID seenIDdeclVar SEMICOLON
+    (32) Declaracion_de_variables -> . TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON
+    (25) LlamadaFuncion -> . ID LPAREN MULTIARG RPAREN SEMICOLON
+    (26) LlamadaFuncion -> . ID LPAREN RPAREN SEMICOLON
+    (24) regresaDeFuncion -> . REGRESA Expresion SEMICOLON
+    (88) TIPO -> . ENTERO
+    (89) TIPO -> . FLOTANTE
+    (90) TIPO -> . CADENA
+    (91) TIPO -> . CARACTER
+
+    RCBRACE         reduce using rule 79 (NULL -> .)
+    ID              shift and go to state 46
+    SI              shift and go to state 48
+    ESCRIBEPUERTO   shift and go to state 45
+    CICLO           shift and go to state 33
+    IMPRIMECONSOLA  shift and go to state 32
+    REGRESA         shift and go to state 41
+    ENTERO          shift and go to state 18
+    FLOTANTE        shift and go to state 19
+    CADENA          shift and go to state 17
+    CARACTER        shift and go to state 16
+
+    Estatuto_Lectura_de_puerto     shift and go to state 42
+    regresaDeFuncion               shift and go to state 39
+    TIPO                           shift and go to state 47
+    Contenido                      shift and go to state 161
+    Estatuto_Escritura_de_puerto   shift and go to state 43
+    Estatuto                       shift and go to state 35
+    Estatuto_Ciclo                 shift and go to state 44
+    Estatuto_Condicion             shift and go to state 49
+    Imprimir                       shift and go to state 40
+    LlamadaFuncion                 shift and go to state 36
+    Estatuto_Asignacion            shift and go to state 50
+    NULL                           shift and go to state 37
+    Declaracion_de_variables       shift and go to state 38
+
+state 152
+
+    (48) EX -> NOT Exp Compara Exp .
+    (59) Exp -> Exp . PLUS Termino
+    (60) Exp -> Exp . MINUS Termino
+    (61) Exp -> Exp . ORBIT Termino
+    (62) Exp -> Exp . XORBIT Termino
+    (63) Exp -> Exp . ANDBIT Termino
+
+    SEMICOLON       reduce using rule 48 (EX -> NOT Exp Compara Exp .)
+    RPAREN          reduce using rule 48 (EX -> NOT Exp Compara Exp .)
+    PLUS            shift and go to state 102
+    MINUS           shift and go to state 105
+    ORBIT           shift and go to state 99
+    XORBIT          shift and go to state 94
+    ANDBIT          shift and go to state 98
+
+
+state 153
+
+    (30) AssignOption -> TIPO LPAREN ARG . RPAREN SEMICOLON
+
+    RPAREN          shift and go to state 162
+
+
+state 154
+
+    (41) Estatuto_Lectura_de_puerto -> ID EQUALS LEEPUERTO PUERTO SEMICOLON .
+
+    ID              reduce using rule 41 (Estatuto_Lectura_de_puerto -> ID EQUALS LEEPUERTO PUERTO SEMICOLON .)
+    SI              reduce using rule 41 (Estatuto_Lectura_de_puerto -> ID EQUALS LEEPUERTO PUERTO SEMICOLON .)
+    ESCRIBEPUERTO   reduce using rule 41 (Estatuto_Lectura_de_puerto -> ID EQUALS LEEPUERTO PUERTO SEMICOLON .)
+    CICLO           reduce using rule 41 (Estatuto_Lectura_de_puerto -> ID EQUALS LEEPUERTO PUERTO SEMICOLON .)
+    IMPRIMECONSOLA  reduce using rule 41 (Estatuto_Lectura_de_puerto -> ID EQUALS LEEPUERTO PUERTO SEMICOLON .)
+    REGRESA         reduce using rule 41 (Estatuto_Lectura_de_puerto -> ID EQUALS LEEPUERTO PUERTO SEMICOLON .)
+    ENTERO          reduce using rule 41 (Estatuto_Lectura_de_puerto -> ID EQUALS LEEPUERTO PUERTO SEMICOLON .)
+    FLOTANTE        reduce using rule 41 (Estatuto_Lectura_de_puerto -> ID EQUALS LEEPUERTO PUERTO SEMICOLON .)
+    CADENA          reduce using rule 41 (Estatuto_Lectura_de_puerto -> ID EQUALS LEEPUERTO PUERTO SEMICOLON .)
+    CARACTER        reduce using rule 41 (Estatuto_Lectura_de_puerto -> ID EQUALS LEEPUERTO PUERTO SEMICOLON .)
+    RCBRACE         reduce using rule 41 (Estatuto_Lectura_de_puerto -> ID EQUALS LEEPUERTO PUERTO SEMICOLON .)
+
+
+state 155
+
+    (25) LlamadaFuncion -> ID LPAREN MULTIARG RPAREN SEMICOLON .
+
+    ID              reduce using rule 25 (LlamadaFuncion -> ID LPAREN MULTIARG RPAREN SEMICOLON .)
+    SI              reduce using rule 25 (LlamadaFuncion -> ID LPAREN MULTIARG RPAREN SEMICOLON .)
+    ESCRIBEPUERTO   reduce using rule 25 (LlamadaFuncion -> ID LPAREN MULTIARG RPAREN SEMICOLON .)
+    CICLO           reduce using rule 25 (LlamadaFuncion -> ID LPAREN MULTIARG RPAREN SEMICOLON .)
+    IMPRIMECONSOLA  reduce using rule 25 (LlamadaFuncion -> ID LPAREN MULTIARG RPAREN SEMICOLON .)
+    REGRESA         reduce using rule 25 (LlamadaFuncion -> ID LPAREN MULTIARG RPAREN SEMICOLON .)
+    ENTERO          reduce using rule 25 (LlamadaFuncion -> ID LPAREN MULTIARG RPAREN SEMICOLON .)
+    FLOTANTE        reduce using rule 25 (LlamadaFuncion -> ID LPAREN MULTIARG RPAREN SEMICOLON .)
+    CADENA          reduce using rule 25 (LlamadaFuncion -> ID LPAREN MULTIARG RPAREN SEMICOLON .)
+    CARACTER        reduce using rule 25 (LlamadaFuncion -> ID LPAREN MULTIARG RPAREN SEMICOLON .)
+    RCBRACE         reduce using rule 25 (LlamadaFuncion -> ID LPAREN MULTIARG RPAREN SEMICOLON .)
+
+
+state 156
+
+    (31) Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar SEMICOLON .
+
+    ID              reduce using rule 31 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar SEMICOLON .)
+    SI              reduce using rule 31 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar SEMICOLON .)
+    ESCRIBEPUERTO   reduce using rule 31 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar SEMICOLON .)
+    CICLO           reduce using rule 31 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar SEMICOLON .)
+    IMPRIMECONSOLA  reduce using rule 31 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar SEMICOLON .)
+    REGRESA         reduce using rule 31 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar SEMICOLON .)
+    ENTERO          reduce using rule 31 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar SEMICOLON .)
+    FLOTANTE        reduce using rule 31 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar SEMICOLON .)
+    CADENA          reduce using rule 31 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar SEMICOLON .)
+    CARACTER        reduce using rule 31 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar SEMICOLON .)
+    RCBRACE         reduce using rule 31 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar SEMICOLON .)
+
+
+state 157
+
+    (32) Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar EQUALS . Expresion SEMICOLON
+    (46) Expresion -> . EX
+    (47) EX -> . Exp Compara Exp
+    (48) EX -> . NOT Exp Compara Exp
+    (49) EX -> . Exp
+    (59) Exp -> . Exp PLUS Termino
+    (60) Exp -> . Exp MINUS Termino
+    (61) Exp -> . Exp ORBIT Termino
+    (62) Exp -> . Exp XORBIT Termino
+    (63) Exp -> . Exp ANDBIT Termino
+    (64) Exp -> . Termino
+    (65) Termino -> . Termino TIMES Factor
+    (66) Termino -> . Termino DIVIDE Factor
+    (67) Termino -> . Termino AND Factor
+    (68) Termino -> . Factor
+    (69) Factor -> . LPAREN Expresion RPAREN
+    (70) Factor -> . CTE
+    (71) Factor -> . ID
+    (72) CTE -> . Entero
+    (73) CTE -> . ConstanteFlotante
+    (74) CTE -> . ConstanteCadena
+    (75) CTE -> . ConstanteCaracter
+    (76) Entero -> . EnteroDecimal
+    (77) Entero -> . EnteroHexadecimal
+    (78) Entero -> . EnteroBinario
+
+    NOT             shift and go to state 76
+    LPAREN          shift and go to state 73
+    ID              shift and go to state 74
+    ConstanteFlotante shift and go to state 56
+    ConstanteCadena shift and go to state 61
+    ConstanteCaracter shift and go to state 58
+    EnteroDecimal   shift and go to state 57
+    EnteroHexadecimal shift and go to state 54
+    EnteroBinario   shift and go to state 62
+
+    Expresion                      shift and go to state 163
+    CTE                            shift and go to state 69
+    EX                             shift and go to state 72
+    Exp                            shift and go to state 68
+    Factor                         shift and go to state 70
+    Entero                         shift and go to state 64
+    Termino                        shift and go to state 75
+
+state 158
+
+    (34) Estatuto_Condicion -> SI LPAREN Expresion RPAREN LCBRACE . Contenido RCBRACE SINO LCBRACE Contenido RCBRACE
+    (80) Contenido -> . Estatuto Contenido
+    (81) Contenido -> . NULL
+    (15) Estatuto -> . Estatuto_Asignacion
+    (16) Estatuto -> . Estatuto_Condicion
+    (17) Estatuto -> . Estatuto_Escritura_de_puerto
+    (18) Estatuto -> . Estatuto_Ciclo
+    (19) Estatuto -> . Estatuto_Lectura_de_puerto
+    (20) Estatuto -> . Imprimir
+    (21) Estatuto -> . Declaracion_de_variables
+    (22) Estatuto -> . LlamadaFuncion
+    (23) Estatuto -> . regresaDeFuncion
+    (79) NULL -> .
+    (27) Estatuto_Asignacion -> . ID EQUALS AssignOption
+    (34) Estatuto_Condicion -> . SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE
+    (40) Estatuto_Escritura_de_puerto -> . ESCRIBEPUERTO PUERTO ID SEMICOLON
+    (45) Estatuto_Ciclo -> . CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE
+    (41) Estatuto_Lectura_de_puerto -> . ID EQUALS LEEPUERTO PUERTO SEMICOLON
+    (35) Imprimir -> . IMPRIMECONSOLA MULTIARG SEMICOLON
+    (31) Declaracion_de_variables -> . TIPO COLON ID seenIDdeclVar SEMICOLON
+    (32) Declaracion_de_variables -> . TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON
+    (25) LlamadaFuncion -> . ID LPAREN MULTIARG RPAREN SEMICOLON
+    (26) LlamadaFuncion -> . ID LPAREN RPAREN SEMICOLON
+    (24) regresaDeFuncion -> . REGRESA Expresion SEMICOLON
+    (88) TIPO -> . ENTERO
+    (89) TIPO -> . FLOTANTE
+    (90) TIPO -> . CADENA
+    (91) TIPO -> . CARACTER
+
+    RCBRACE         reduce using rule 79 (NULL -> .)
+    ID              shift and go to state 46
+    SI              shift and go to state 48
+    ESCRIBEPUERTO   shift and go to state 45
+    CICLO           shift and go to state 33
+    IMPRIMECONSOLA  shift and go to state 32
+    REGRESA         shift and go to state 41
+    ENTERO          shift and go to state 18
+    FLOTANTE        shift and go to state 19
+    CADENA          shift and go to state 17
+    CARACTER        shift and go to state 16
+
+    Estatuto_Lectura_de_puerto     shift and go to state 42
+    regresaDeFuncion               shift and go to state 39
+    TIPO                           shift and go to state 47
+    Contenido                      shift and go to state 164
+    Estatuto_Escritura_de_puerto   shift and go to state 43
+    Estatuto                       shift and go to state 35
+    Estatuto_Ciclo                 shift and go to state 44
+    Estatuto_Condicion             shift and go to state 49
+    Imprimir                       shift and go to state 40
+    LlamadaFuncion                 shift and go to state 36
+    Estatuto_Asignacion            shift and go to state 50
+    NULL                           shift and go to state 37
+    Declaracion_de_variables       shift and go to state 38
+
+state 159
+
+    (83) R -> TIPO COLON ID seenIDglobVar globDeclOption SEMICOLON R .
+
+    LCBRACE         reduce using rule 83 (R -> TIPO COLON ID seenIDglobVar globDeclOption SEMICOLON R .)
+
+
+state 160
+
+    (7) EstructuraFuncion -> FUNCION ID seenIDfunc LPAREN Parametros RPAREN COLON TIPO SEMICOLON LCBRACE Contenido RCBRACE . funcExit
+    (9) funcExit -> .
+
+    FUNCION         reduce using rule 9 (funcExit -> .)
+    PROGRAMA        reduce using rule 9 (funcExit -> .)
+
+    funcExit                       shift and go to state 165
+
+state 161
+
+    (45) Estatuto_Ciclo -> CICLO LPAREN Expresion RPAREN LCBRACE Contenido . RCBRACE
+
+    RCBRACE         shift and go to state 166
+
+
+state 162
+
+    (30) AssignOption -> TIPO LPAREN ARG RPAREN . SEMICOLON
+
+    SEMICOLON       shift and go to state 167
+
+
+state 163
+
+    (32) Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar EQUALS Expresion . SEMICOLON
+
+    SEMICOLON       shift and go to state 168
+
+
+state 164
+
+    (34) Estatuto_Condicion -> SI LPAREN Expresion RPAREN LCBRACE Contenido . RCBRACE SINO LCBRACE Contenido RCBRACE
+
+    RCBRACE         shift and go to state 169
+
+
+state 165
+
+    (7) EstructuraFuncion -> FUNCION ID seenIDfunc LPAREN Parametros RPAREN COLON TIPO SEMICOLON LCBRACE Contenido RCBRACE funcExit .
+
+    FUNCION         reduce using rule 7 (EstructuraFuncion -> FUNCION ID seenIDfunc LPAREN Parametros RPAREN COLON TIPO SEMICOLON LCBRACE Contenido RCBRACE funcExit .)
+    PROGRAMA        reduce using rule 7 (EstructuraFuncion -> FUNCION ID seenIDfunc LPAREN Parametros RPAREN COLON TIPO SEMICOLON LCBRACE Contenido RCBRACE funcExit .)
+
+
+state 166
+
+    (45) Estatuto_Ciclo -> CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE .
+
+    ID              reduce using rule 45 (Estatuto_Ciclo -> CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE .)
+    SI              reduce using rule 45 (Estatuto_Ciclo -> CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE .)
+    ESCRIBEPUERTO   reduce using rule 45 (Estatuto_Ciclo -> CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE .)
+    CICLO           reduce using rule 45 (Estatuto_Ciclo -> CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE .)
+    IMPRIMECONSOLA  reduce using rule 45 (Estatuto_Ciclo -> CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE .)
+    REGRESA         reduce using rule 45 (Estatuto_Ciclo -> CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE .)
+    ENTERO          reduce using rule 45 (Estatuto_Ciclo -> CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE .)
+    FLOTANTE        reduce using rule 45 (Estatuto_Ciclo -> CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE .)
+    CADENA          reduce using rule 45 (Estatuto_Ciclo -> CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE .)
+    CARACTER        reduce using rule 45 (Estatuto_Ciclo -> CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE .)
+    RCBRACE         reduce using rule 45 (Estatuto_Ciclo -> CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE .)
+
+
+state 167
+
+    (30) AssignOption -> TIPO LPAREN ARG RPAREN SEMICOLON .
+
+    ID              reduce using rule 30 (AssignOption -> TIPO LPAREN ARG RPAREN SEMICOLON .)
+    SI              reduce using rule 30 (AssignOption -> TIPO LPAREN ARG RPAREN SEMICOLON .)
+    ESCRIBEPUERTO   reduce using rule 30 (AssignOption -> TIPO LPAREN ARG RPAREN SEMICOLON .)
+    CICLO           reduce using rule 30 (AssignOption -> TIPO LPAREN ARG RPAREN SEMICOLON .)
+    IMPRIMECONSOLA  reduce using rule 30 (AssignOption -> TIPO LPAREN ARG RPAREN SEMICOLON .)
+    REGRESA         reduce using rule 30 (AssignOption -> TIPO LPAREN ARG RPAREN SEMICOLON .)
+    ENTERO          reduce using rule 30 (AssignOption -> TIPO LPAREN ARG RPAREN SEMICOLON .)
+    FLOTANTE        reduce using rule 30 (AssignOption -> TIPO LPAREN ARG RPAREN SEMICOLON .)
+    CADENA          reduce using rule 30 (AssignOption -> TIPO LPAREN ARG RPAREN SEMICOLON .)
+    CARACTER        reduce using rule 30 (AssignOption -> TIPO LPAREN ARG RPAREN SEMICOLON .)
+    RCBRACE         reduce using rule 30 (AssignOption -> TIPO LPAREN ARG RPAREN SEMICOLON .)
+
+
+state 168
+
+    (32) Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON .
+
+    ID              reduce using rule 32 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON .)
+    SI              reduce using rule 32 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON .)
+    ESCRIBEPUERTO   reduce using rule 32 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON .)
+    CICLO           reduce using rule 32 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON .)
+    IMPRIMECONSOLA  reduce using rule 32 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON .)
+    REGRESA         reduce using rule 32 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON .)
+    ENTERO          reduce using rule 32 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON .)
+    FLOTANTE        reduce using rule 32 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON .)
+    CADENA          reduce using rule 32 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON .)
+    CARACTER        reduce using rule 32 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON .)
+    RCBRACE         reduce using rule 32 (Declaracion_de_variables -> TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON .)
+
+
+state 169
+
+    (34) Estatuto_Condicion -> SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE . SINO LCBRACE Contenido RCBRACE
+
+    SINO            shift and go to state 170
+
+
+state 170
+
+    (34) Estatuto_Condicion -> SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO . LCBRACE Contenido RCBRACE
+
+    LCBRACE         shift and go to state 171
+
+
+state 171
+
+    (34) Estatuto_Condicion -> SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE . Contenido RCBRACE
+    (80) Contenido -> . Estatuto Contenido
+    (81) Contenido -> . NULL
+    (15) Estatuto -> . Estatuto_Asignacion
+    (16) Estatuto -> . Estatuto_Condicion
+    (17) Estatuto -> . Estatuto_Escritura_de_puerto
+    (18) Estatuto -> . Estatuto_Ciclo
+    (19) Estatuto -> . Estatuto_Lectura_de_puerto
+    (20) Estatuto -> . Imprimir
+    (21) Estatuto -> . Declaracion_de_variables
+    (22) Estatuto -> . LlamadaFuncion
+    (23) Estatuto -> . regresaDeFuncion
+    (79) NULL -> .
+    (27) Estatuto_Asignacion -> . ID EQUALS AssignOption
+    (34) Estatuto_Condicion -> . SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE
+    (40) Estatuto_Escritura_de_puerto -> . ESCRIBEPUERTO PUERTO ID SEMICOLON
+    (45) Estatuto_Ciclo -> . CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE
+    (41) Estatuto_Lectura_de_puerto -> . ID EQUALS LEEPUERTO PUERTO SEMICOLON
+    (35) Imprimir -> . IMPRIMECONSOLA MULTIARG SEMICOLON
+    (31) Declaracion_de_variables -> . TIPO COLON ID seenIDdeclVar SEMICOLON
+    (32) Declaracion_de_variables -> . TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON
+    (25) LlamadaFuncion -> . ID LPAREN MULTIARG RPAREN SEMICOLON
+    (26) LlamadaFuncion -> . ID LPAREN RPAREN SEMICOLON
+    (24) regresaDeFuncion -> . REGRESA Expresion SEMICOLON
+    (88) TIPO -> . ENTERO
+    (89) TIPO -> . FLOTANTE
+    (90) TIPO -> . CADENA
+    (91) TIPO -> . CARACTER
+
+    RCBRACE         reduce using rule 79 (NULL -> .)
+    ID              shift and go to state 46
+    SI              shift and go to state 48
+    ESCRIBEPUERTO   shift and go to state 45
+    CICLO           shift and go to state 33
+    IMPRIMECONSOLA  shift and go to state 32
+    REGRESA         shift and go to state 41
+    ENTERO          shift and go to state 18
+    FLOTANTE        shift and go to state 19
+    CADENA          shift and go to state 17
+    CARACTER        shift and go to state 16
+
+    Estatuto_Lectura_de_puerto     shift and go to state 42
+    regresaDeFuncion               shift and go to state 39
+    TIPO                           shift and go to state 47
+    Contenido                      shift and go to state 172
+    Estatuto_Escritura_de_puerto   shift and go to state 43
+    Estatuto                       shift and go to state 35
+    Estatuto_Ciclo                 shift and go to state 44
+    Estatuto_Condicion             shift and go to state 49
+    Imprimir                       shift and go to state 40
+    LlamadaFuncion                 shift and go to state 36
+    Estatuto_Asignacion            shift and go to state 50
+    NULL                           shift and go to state 37
+    Declaracion_de_variables       shift and go to state 38
+
+state 172
+
+    (34) Estatuto_Condicion -> SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido . RCBRACE
+
+    RCBRACE         shift and go to state 173
+
+
+state 173
+
+    (34) Estatuto_Condicion -> SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE .
+
+    ID              reduce using rule 34 (Estatuto_Condicion -> SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE .)
+    SI              reduce using rule 34 (Estatuto_Condicion -> SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE .)
+    ESCRIBEPUERTO   reduce using rule 34 (Estatuto_Condicion -> SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE .)
+    CICLO           reduce using rule 34 (Estatuto_Condicion -> SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE .)
+    IMPRIMECONSOLA  reduce using rule 34 (Estatuto_Condicion -> SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE .)
+    REGRESA         reduce using rule 34 (Estatuto_Condicion -> SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE .)
+    ENTERO          reduce using rule 34 (Estatuto_Condicion -> SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE .)
+    FLOTANTE        reduce using rule 34 (Estatuto_Condicion -> SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE .)
+    CADENA          reduce using rule 34 (Estatuto_Condicion -> SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE .)
+    CARACTER        reduce using rule 34 (Estatuto_Condicion -> SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE .)
+    RCBRACE         reduce using rule 34 (Estatuto_Condicion -> SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for AND in state 75 resolved as shift
+WARNING: shift/reduce conflict for AND in state 130 resolved as shift
+WARNING: shift/reduce conflict for AND in state 132 resolved as shift
+WARNING: shift/reduce conflict for AND in state 133 resolved as shift
+WARNING: reduce/reduce conflict in state 2 resolved using rule (Funciones -> EstructuraFuncion)
+WARNING: rejected rule (NULL -> <empty>) in state 2
