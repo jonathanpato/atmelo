@@ -19,16 +19,16 @@ localVars = {}
 #utility imports
 import sys
 #utility functions
-def variableDeclaration(varID, varType):
+def variableDeclaration(varID, varType, varList):
 	global funcName
 	global localVars
 
 	var = [varID, varType]
 	funcName = 'factorial'
-	if varExist(var, localVars):
+	if varExist(var, varList):
 		sys.exit("Error!, var " + varID + ": " + varType + " already declared")
 	else:
-		addVar(var, localVars)
+		addVar(var, varList)
 
 def varExist(var, varList):
 	if (var[0] in varList.keys()):
