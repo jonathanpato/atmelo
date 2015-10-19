@@ -8,6 +8,7 @@ programa imprimeNumero;
 #globales  este es un comentario
 entero:numero;
 flotante:pi;
+flotante:pi;
 {
 	pi = 3.1416;
 	numero = mifuncion(10);

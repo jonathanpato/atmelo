@@ -26,8 +26,10 @@ def addVar(var, varList):
 	else:
 		varList[var[0]] = []
 		varList[var[0]].append(var[1])
-
-def variableDeclaration(varID, varType, varList):
+#this function validates if a variable is already declared
+#if yes, it ends the program and returns an error message
+#if no, it adds the variable to the variables table
+def varDeclSemValid(varID, varType, varList):
 	global funcName
 	global localVars
 
@@ -209,10 +211,25 @@ lexer.lineno = 1  #reiniciar lineno
 #parsing grammar rules
 #starting rule: program structure
 def p_ESTRUCTURA(p):
-	'''ESTRUCTURA : Funciones PROGRAMA ID SEMICOLON Variables_Globales LCBRACE Contenido RCBRACE'''
+	'''ESTRUCTURA : Funciones PROGRAMA ID seenIDprograma SEMICOLON Variables_Globales LCBRACE Contenido RCBRACE programExit'''
 	p[0] = "Analisis de Sintaxis completado!"
 	print(p[0])
 
+def p_seenIDprograma(p):
+	'''seenIDprograma : '''
+	global localVars
+	global funcName
+	funcName = p[-1]
+	localVars = {}
+
+def p_programExit(p):
+	'''programExit : '''
+	global funcName
+	global globalVars
+	global localVars
+	del localVars
+	del globalVars
+	del funcName
 
 def p_Funciones(p):
 	'''Funciones : NULL
@@ -221,15 +238,34 @@ def p_Funciones(p):
 					
 #next grammar rules are components of the program
 def p_EstructuraFuncion(p):
-	'''EstructuraFuncion : FUNCION ID LPAREN Parametros RPAREN COLON TIPO SEMICOLON LCBRACE Contenido RCBRACE'''
+	'''EstructuraFuncion : FUNCION ID seenIDfunc LPAREN Parametros RPAREN COLON TIPO SEMICOLON LCBRACE Contenido RCBRACE funcExit'''
+
+def p_seenIDfunc(p):
+	'''seenIDfunc : '''
+	global localVars
+	global funcName
+	funcName = p[-1]
+	localVars = {}
+
+def p_funcExit(p):
+	'''funcExit : '''
+	global funcName
+	global localVars
+	del localVars
+	funcName = ""
 
 def p_Parametros(p):
 	'''Parametros : Para'''
 
 def p_Para(p):
 	'''Para : NULL 
-			| TIPO ID 
-			| TIPO ID COMMA Para'''
+			| TIPO ID seenIDparam
+			| TIPO ID seenIDparam COMMA Para'''
+
+def p_seenIDparam(p):
+	'''seenIDparam : '''
+	global localVars
+	varDeclSemValid(p[-1], p[-2], localVars)
 
 def p_Estatuto(p):
 	'''Estatuto :  Estatuto_Asignacion
@@ -255,9 +291,13 @@ def p_EstatutoAsignacion(p):
 							| ID EQUALS TIPO LPAREN ARG RPAREN SEMICOLON''' #casting
 
 def p_DeclaracionDeVariables(p):
-	'''Declaracion_de_variables : TIPO COLON ID SEMICOLON
-									| TIPO COLON ID EQUALS Expresion SEMICOLON'''
-	
+	'''Declaracion_de_variables : TIPO COLON ID seenIDdeclVar SEMICOLON
+									| TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON'''
+
+def p_seenIDdeclVar(p):
+	'''seenIDdeclVar : '''
+	global localVars
+	varDeclSemValid(p[-1], p[-3], localVars)
 
 def p_EstatutoCondicion(p):
 	'''Estatuto_Condicion : SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE'''
@@ -349,11 +389,14 @@ def p_Variables_Globales(p):
 	'''Variables_Globales : R'''
 	
 def p_R(p):
-	'''R : TIPO COLON ID SEMICOLON R
-		    | TIPO COLON ID EQUALS Expresion SEMICOLON R
+	'''R : TIPO COLON ID seenIDglobVar SEMICOLON R
+		    | TIPO COLON ID seenIDglobVar EQUALS Expresion SEMICOLON R
 			| NULL'''
 			
-			
+def p_seenIDglobVar(p):
+	'''seenIDglobVar : '''
+	global globalVars
+	varDeclSemValid(p[-1], p[-3], globalVars)			
 
 
 def p_TIPO(p):
