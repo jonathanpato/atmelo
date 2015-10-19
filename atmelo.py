@@ -19,6 +19,14 @@ localVars = {}
 #utility imports
 import sys
 #utility functions
+
+def addVar(var, varList):
+	if var[0] in varList.keys():
+		varList[var[0]].append(var[1])
+	else:
+		varList[var[0]] = []
+		varList[var[0]].append(var[1])
+
 def variableDeclaration(varID, varType, varList):
 	global funcName
 	global localVars
