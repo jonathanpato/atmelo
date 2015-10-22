@@ -14,18 +14,16 @@ fileName = "programa1"
 globalVars = {}
 funcName = ""
 localVars = {}
+cuadruplos = []
 #utilities
 ################################################
 #utility imports
 import sys
+from cuboSemantico import cubo
 #utility functions
-
 def addVar(var, varList):
-	if var[0] in varList.keys():
-		varList[var[0]].append(var[1])
-	else:
-		varList[var[0]] = []
-		varList[var[0]].append(var[1])
+	varList[var[0]] = var[1]
+
 #this function validates if a variable is already declared
 #if yes, it ends the program and returns an error message
 #if no, it adds the variable to the variables table
@@ -49,7 +47,17 @@ def IDexist(ID, varList):
 	return ID in varList.keys()
 
 ##################################################
+#utility classes
+###################################################
+class cuadruplo:
+	def __init__(self, operacion, operando1, operando2, resultado):
+		self.operacion = operacion
+		self.operando1 = operando1
+		self.operando2 = operando2
+		selft.resultado = resultado
 
+
+###################################################
 
 #list of tokens
 tokens = ['PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'EQUALS', 'COLON', 
@@ -57,7 +65,7 @@ tokens = ['PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'EQUALS', 'COLON',
 	'LPAREN', 'RPAREN', 'ID', 'EnteroDecimal', 
 	'EnteroHexadecimal', 'EnteroBinario',
 	'ConstanteFlotante', 'ConstanteCadena', 
-	'ConstanteCaracter',
+	'ConstanteCaracter', 'ConstanteByte',
 	]
 
 reserved = {
@@ -79,6 +87,7 @@ reserved = {
 	'flotante' : 'FLOTANTE',
 	'cadena' : 'CADENA',
 	'caracter' : 'CARACTER',
+	'byte' : 'BYTE',
 	'diferentede' : 'DIFERENTEDE',
 	'mayorque' : 'MAYORQUE',
 	'menorque' : 'MENORQUE',
@@ -111,6 +120,10 @@ t_RPAREN = r'\)'
 
 
 #declare regular expressions and actions to tokens, it is checked in the order it is type input
+
+def t_Byte(t):
+	r'[0-1]{8}B'
+	return t
 
 def t_EnteroBinario(t):
 	r'[0-1]+B'
@@ -214,7 +227,7 @@ lexer.lineno = 1  #reiniciar lineno
 #parsing grammar rules
 #starting rule: program structure
 def p_ESTRUCTURA(p):
-	'''ESTRUCTURA : Funciones PROGRAMA ID seenIDprograma SEMICOLON Variables_Globales LCBRACE Contenido RCBRACE programExit'''
+	'''ESTRUCTURA : Funciones PROGRAMA ID seenIDprograma SEMICOLON Variables_Globales LCBRACE Declaracion_de_variables Contenido RCBRACE programExit'''
 	p[0] = "Analisis de Sintaxis completado!"
 	print(p[0])
 
@@ -241,7 +254,7 @@ def p_Funciones(p):
 					
 #next grammar rules are components of the program
 def p_EstructuraFuncion(p):
-	'''EstructuraFuncion : FUNCION ID seenIDfunc LPAREN Parametros RPAREN COLON TIPO SEMICOLON LCBRACE Contenido RCBRACE funcExit'''
+	'''EstructuraFuncion : FUNCION ID seenIDfunc LPAREN Parametros RPAREN COLON TIPO SEMICOLON LCBRACE Declaracion_de_variables Contenido RCBRACE funcExit'''
 
 def p_seenIDfunc(p):
 	'''seenIDfunc : '''
@@ -277,7 +290,6 @@ def p_Estatuto(p):
 				| Estatuto_Ciclo 
 				| Estatuto_Lectura_de_puerto
 				| Imprimir
-				| Declaracion_de_variables
 				| LlamadaFuncion
 				| regresaDeFuncion'''
 
@@ -293,15 +305,41 @@ def p_EstatutoAsignacion(p):
 	if not IDexist(p[1], localVars):
 		if not IDexist(p[1], globalVars):
 			sys.exit("var " + p[1] + " does not exist. Aborting..")
-
+	typeMismatch = False
+	if not (IDexist(p[1], localVars):
+		if(globalVars[p[1] != p[3]):
+			typeMismatch = True
+		elif(localVars[p[1]] != p[3]):
+				typeMismatch = True
+				
+	if typeMismatch:
+		sys.exit("Error!, type mismatch..")
 def p_AssignOption(p):
 	'''AssignOption : Expresion SEMICOLON
 					| LlamadaFuncion
 					| TIPO LPAREN ARG RPAREN SEMICOLON''' #casting
-	
+	typeMismatch = False
+	if len(p) == 3:
+		if (p[1] == 'x'):
+			typeMismatch = True
+		p[0] = p[1]
+	if typeMismatch:
+		sys.exit("Error!, type mismatch..")
+
 def p_DeclaracionDeVariables(p):
 	'''Declaracion_de_variables : TIPO COLON ID seenIDdeclVar SEMICOLON
 									| TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON'''
+	typeMismatch = False
+	if len(p) == 8:
+		if (p[6] == 'x'):
+			typeMismatch = True
+		elif not (IDexist(p[3], localVars):
+			if(globalVars[p[3]] != p[6]):
+				typeMismatch = True
+		elif(localVars[p[3]] != p[6]):
+				typeMismatch = True
+	if typeMismatch:
+		sys.exit("Error!, type mismatch..")
 
 def p_seenIDdeclVar(p):
 	'''seenIDdeclVar : '''
@@ -323,10 +361,14 @@ def p_ARG(p):
 			| CTE'''
 			
 def p_EstatutoEscrituraDePuerto(p):
-	'''Estatuto_Escritura_de_puerto : ESCRIBEPUERTO PUERTO ID SEMICOLON'''
+	'''Estatuto_Escritura_de_puerto : ESCRIBEPUERTO PUERTO argPuerto SEMICOLON'''
+
+def p_ArgPuerto(p):
+	'''argPuerto : ID
+				| ConstanteByte'''
 
 def p_EstatutoLecturaDePuerto(p):
-	'''Estatuto_Lectura_de_puerto : ID EQUALS LEEPUERTO PUERTO SEMICOLON'''
+	'''Estatuto_Lectura_de_puerto : LEEPUERTO PUERTO ID SEMICOLON'''
 	
 def p_PUERTO(p):
 	'''PUERTO : B 
@@ -337,12 +379,24 @@ def p_EstatutoCiclo(p):
 	'''Estatuto_Ciclo : CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE'''
 	
 def p_Expresion(p):
-	'''Expresion : EX'''
+	'''Expresion : superExp'''
+	p[0] = p[1]
+
+def p_superExp(p):
+	'''superExp : EX logica EX
+				| EX'''
+
+def p_logica(p):
+	'''logica : AND
+			| OR'''
 
 def p_EX(p):
 	'''EX : Exp Compara Exp
-			| NOT Exp Compara Exp
 			| Exp'''
+	if len(p) == 4:
+		p[0] = cubo(p[1], p[3], p[2])
+	else:
+		p[0] = p[1]
 	
 def p_Compara(p):
 	'''Compara : 	  GT
@@ -351,40 +405,81 @@ def p_Compara(p):
 					| MAYORQUE
 					| MENORQUE
 					| MAYORIGUALQUE
-					| MENORIGUALQUE
-					| AND
-					| OR'''
+					| MENORIGUALQUE'''
+	p[0] = p[1]
+
+
+def bitOp(p):
+	'''bitOp : bitOp ORBIT Factor
+			| bitOp XORBIT Factor
+			| bitOp ANDBIT Factor
+			| Factor'''
 
 def p_Exp(p):
 	'''Exp : Exp PLUS Termino
 			| Exp MINUS Termino
-			| Exp ORBIT Termino
-			| Exp XORBIT Termino
-			| Exp ANDBIT Termino
 			| Termino'''
+	if len(p) == 4:
+		p[0] = cubo(p[1], p[3], p[2])
+	else:
+		p[0] = p[1]
 
 def p_Termino(p):
-	'''Termino : Termino TIMES Factor
-			| Termino DIVIDE Factor
-			| Termino AND Factor
-			| Factor'''
+	'''Termino : Termino TIMES bitOp
+			| Termino DIVIDE bitOp
+			| bitOp'''
+	if len(p) == 4:
+		p[0] = cubo(p[1], p[3], p[2])
+	else:
+		p[0] = p[1]
 
 def p_Factor(p):
 	'''Factor : LPAREN Expresion RPAREN
 			| CTE
-			| ID'''
-			
+			| IDoperand'''
+	if len(p) == 4:
+		p[0] = p[2]
+	else:
+		p[0] = p[1]
+
+def p_IDoperand(p):
+	'''IDoperand : ID'''
+	if not IDexist(p[1], localVars):
+		if not IDexist(p[1], globalVars):
+			sys.exit("Error!, trying to operate with " + p[1] + " but it does note exist..")
+		else:
+			p[0] = globalVars[p[1]]
+	p[0] = localVars[p[1]]
+
 def p_CTE(p):
 	'''CTE : Entero
-				| ConstanteFlotante
-				| ConstanteCadena
-				| ConstanteCaracter'''
+				| CteFlotante
+				| CteCadena
+				| CteCaracter
+				| CteByte'''
+	p[0] = p[1]
+
+def p_CteByte(p):
+	'''CteByte : ConstanteByte'''
+	
+
+def p_CteCaracter(p):
+	'''CteCaracter : ConstanteCaracter'''
+	p[0] = 'char'
+
+def p_CteCadena(p):
+	'''CteCadena : ConstanteCadena'''
+	p[0] = 'string'
+
+def p_CteFlotante(p):
+	'''CteFlotante : ConstanteFlotante'''
+	p[0] = 'float'
 
 def p_Entero(p):
 	'''Entero : EnteroDecimal
 				| EnteroHexadecimal
 				| EnteroBinario'''
-
+	p[0] = 'int'
 
 
 
@@ -416,7 +511,8 @@ def p_TIPO(p):
 	'''TIPO : ENTERO
 			| FLOTANTE
 			| CADENA
-			| CARACTER'''
+			| CARACTER
+			| BYTE'''
 	p[0]=p[1];
 	
 
