@@ -3,10 +3,35 @@
 # ATmelo.py 
 #
 # ATmelo. lexical and syntax analizer for ATmelo language
+# with semantic actions
 # Authors. Homero Marin    A00810150
 #		   Jonathan Frias  A00810797
 # Date. 2015-10-13 18:46 hrs
 # -----------------------------------------------------------------------------
+
+#################
+#definiciones
+###########
+##codigos de operacion
+# ORBIT = 1
+# XORBIT = 2
+# ANDBIT = 3
+# MULT = 4
+# DIV = 5
+# SUM = 6
+# SUB = 7
+# GT = 8
+# LT = 9
+# DIFERENTEDE = 10
+# MAYORIGUALQUE = 11
+# MENORIGUALQUE = 12
+# ESCRIBEPUERTO = 13
+# LEEPUERTO = 14
+# IMPRIMECONSOLA = 15
+# REGRESA = 16
+# GOTO = 17
+# GOTOF = 18
+# GOTOT = 19
 
 ###########################################
 #global variables
@@ -15,41 +40,170 @@ globalVars = {}
 funcName = ""
 localVars = {}
 cuadruplos = []
+
+##global Counts 0
+##local Counts 1
+##temp Counts 2
+##cte Counts 3
+## 0 - entero  1 - flotante
+## 2 - cadena  3 - caracter
+## 4 - byte
+counts = [[0, 0, 0, 0, 0], #global Counts
+		[0, 0, 0, 0, 0], #local Counts
+		[0, 0, 0, 0, 0], #temp Counts
+		[0, 0, 0, 0, 0]] #cte Counts
+
+##############
+#Constants
+#############
+GLOBALBEGIN = 1000
+LOCALBEGIN = 20000
+TEMPBEGIN = 40000
+CTEBEGIN = 100000
+
+MAXGLOBALS = 3800
+MAXLOCALS = 4000
+MAXTEMPS = 4000
+MAXCTES = 4000
+
+GLOBALSCOPE = 0
+LOCALSCOPE = 1
+TEMPSCOPE = 2
+CTESCOPE = 3
+
+INTPOS = 0
+FLOATPOS = 1
+STRPOS = 2
+CHPOS = 3
+BYTEPOS = 4
+
+###############
 #utilities
 ################################################
 #utility imports
 import sys
 from cuboSemantico import cubo
 #utility functions
+
+##this function returns the operation code
+
+def opCode(operation):
+	opcode = 0
+	if operation == "orbit":
+		opcode = 1
+	elif operation == "xorbit":
+		opcode = 2
+	elif operation == "andbit":
+		opcode = 3
+	elif operation == "*":
+		opcode = 4
+	elif operation == "/":
+		opcode = 5
+	elif operation == "+":
+		opcode = 6
+	elif operation == "-":
+		opcode = 7
+	elif operation == ">":
+		opcode = 8
+	elif operation == "<":
+		opcode = 9
+	elif operation == "diferentede":
+		opcode = 10
+	elif operation == "mayorigualque":
+		opcode = 11
+	elif operation == "menorigualque":
+		opcode = 12
+	elif operation == "escribepuerto":
+		opcode = 13
+	elif operation == "leepuerto":
+		opcode = 14
+	elif operation == "imprimeconsola":
+		opcode = 15
+	elif operation == "regresa":
+		opcode = 16
+	elif operation == "goto":
+		opcode = 17
+	elif operation == "gotof":
+		opcode = 18
+	elif operation == "gotot":
+		opcode = 19
+
+	return opcode
+##this function returns the vars virtual Address
+def virtAddr(varID):
+	addr = 0
+	if not IDexist(varID, localVars):
+		if IDexist(varID, globalVars):
+			addr = globalVars[varID][1]
+	else:
+		addr = localVars[varID][1]
+	return addr
+
+###this function adds a row to the variable table
 def addVar(var, varList):
-	varList[var[0]] = var[1]
+	varProperties = [var[1], var[2]]
+	varList[var[0]] = varProperties
 
 #this function validates if a variable is already declared
 #if yes, it ends the program and returns an error message
 #if no, it adds the variable to the variables table
-def varDeclSemValid(varID, varType, varList):
+def varDeclSemValid(varID, varType, varDir, varList):
 	global funcName
-
-	var = [varID, varType]
+	var = [varID, varType, varDir]
 	funcName = 'factorial'
-	if varExist(var, varList):
+	if IDexist(varID, varList):
 		sys.exit("Error!, var " + varID + ": " + varType + " already declared")
 	else:
 		addVar(var, varList)
 
-def varExist(var, varList):
-	if (var[0] in varList.keys()):
-		if(var[1] in varList[var[0]]):
-			return True
-	return False
-
+##this function returns true if a var Exist in the given variable table, false otherwise
 def IDexist(ID, varList):
 	return ID in varList.keys()
+##this function returns the memDir that the new variable would take
+##it returns 0 if datatype segment is full
+def dataTypeDist(datatype, scope):
+	begin = 0
+	maxLimit = 0
+	scopepos = 0
+	typepos = 0
+	memDir = 0
+	if scope == "GLOBAL":
+		begin = GLOBALBEGIN
+		maxLimit = MAXGLOBALS
+		scopepos = GLOBALSCOPE
+	elif scope == "LOCAL":
+		begin = LOCALBEGIN
+		maxLimit = MAXLOCALS
+		scopepos = LOCALSCOPE
+	elif scope == "TEMP":
+		begin = TEMPBEGIN
+		maxLimit = MAXTEMPS
+		scopepos = TEMPSCOPE
+	elif scope == "CTE":
+		begin = CTEBEGIN
+		maxLimit = MAXCTES
+		scopepos = CTESCOPE
 
+	if datatype == "entero": 
+		typepos = INTPOS
+	elif datatype == "flotante":
+		typepos = FLOATPOS
+	elif datatype == "cadena":
+		typepos = STRPOS
+	elif datatype == "caracter":
+		typepos = CHPOS
+	elif datatype == "byte":
+		typepos = BYTEPOS
+
+	count = Counts[scopepos][typepos]
+	typeSectionSize = maxLimit
+	if count < maxLimit:
+		memDir = begin + typepos*typeSectionSize + count
+	return memDir
 ##################################################
 #utility classes
 ###################################################
-class cuadruplo:
+class Cuadruplo:
 	def __init__(self, operacion, operando1, operando2, resultado):
 		self.operacion = operacion
 		self.operando1 = operando1
@@ -72,10 +226,10 @@ reserved = {
 	'programa': 'PROGRAMA',
 	'funcion' : 'FUNCION',
 	'sino' : 'SINO',
-	'escribePuerto' : 'ESCRIBEPUERTO', 
+	'escribepuerto' : 'ESCRIBEPUERTO', 
 	'si' : 'SI',
 	'ciclo' : 'CICLO',
-	'leePuerto' : 'LEEPUERTO',
+	'leepuerto' : 'LEEPUERTO',
 	'orbit':'ORBIT',
 	'andbit':'ANDBIT',
 	'xorbit':'XORBIT',
@@ -89,8 +243,6 @@ reserved = {
 	'caracter' : 'CARACTER',
 	'byte' : 'BYTE',
 	'diferentede' : 'DIFERENTEDE',
-	'mayorque' : 'MAYORQUE',
-	'menorque' : 'MENORQUE',
 	'mayorigualque' : 'MAYORIGUALQUE',
 	'menorigualque' : 'MENORIGUALQUE',
 	'and' : 'AND',
@@ -307,13 +459,14 @@ def p_EstatutoAsignacion(p):
 			sys.exit("var " + p[1] + " does not exist. Aborting..")
 	typeMismatch = False
 	if not (IDexist(p[1], localVars):
-		if(globalVars[p[1] != p[3]):
+		if(globalVars[p[1][0] != p[3]):
 			typeMismatch = True
-		elif(localVars[p[1]] != p[3]):
+		elif(localVars[p[1]][0] != p[3]):
 				typeMismatch = True
 				
 	if typeMismatch:
 		sys.exit("Error!, type mismatch..")
+
 def p_AssignOption(p):
 	'''AssignOption : Expresion SEMICOLON
 					| LlamadaFuncion
@@ -334,17 +487,39 @@ def p_DeclaracionDeVariables(p):
 		if (p[6] == 'x'):
 			typeMismatch = True
 		elif not (IDexist(p[3], localVars):
-			if(globalVars[p[3]] != p[6]):
+			if(globalVars[p[3]][0] != p[6]):
 				typeMismatch = True
-		elif(localVars[p[3]] != p[6]):
+		elif(localVars[p[3]][0] != p[6]):
 				typeMismatch = True
 	if typeMismatch:
 		sys.exit("Error!, type mismatch..")
 
 def p_seenIDdeclVar(p):
 	'''seenIDdeclVar : '''
+
 	global localVars
-	varDeclSemValid(p[-1], p[-3], localVars)
+	global Counts
+	typepos = 0
+	datatype = p[-3]
+	ID = p[-1]
+	if datatype == "entero": 
+		typepos = INTPOS
+	elif datatype == "flotante":
+		typepos = FLOATPOS
+	elif datatype == "cadena":
+		typepos = STRPOS
+	elif datatype == "caracter":
+		typepos = CHPOS
+	elif datatype == "byte":
+		typepos = BYTEPOS
+
+	counts = Counts[LOCALSCOPE][typepos]
+	if counts < MAXLOCALS:
+		varDeclSemValid(ID, datatype, dataTypeDist(datatype, "LOCAL"), localVars)
+		counts = counts + 1
+		Counts[LOCALSCOPE][typepos] = counts
+	else:
+		sys.exit("Error, demasiadas variables globales!")
 
 def p_EstatutoCondicion(p):
 	'''Estatuto_Condicion : SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE'''
@@ -362,11 +537,12 @@ def p_ARG(p):
 			
 def p_EstatutoEscrituraDePuerto(p):
 	'''Estatuto_Escritura_de_puerto : ESCRIBEPUERTO PUERTO argPuerto SEMICOLON'''
-
+	
+	
 def p_ArgPuerto(p):
 	'''argPuerto : ID
 				| ConstanteByte'''
-
+	p[0] = p[1]
 def p_EstatutoLecturaDePuerto(p):
 	'''Estatuto_Lectura_de_puerto : LEEPUERTO PUERTO ID SEMICOLON'''
 	
@@ -385,6 +561,12 @@ def p_Expresion(p):
 def p_superExp(p):
 	'''superExp : EX logica EX
 				| EX'''
+	global cuadruplos
+	if len(p) == 4:
+		p[0] = cubo(p[1], p[3], p[2])
+		cuadruplo = Cuadruplo(opCode(p[2]), virtAddr(p[1]), virtAddr(p[3]))
+	else:
+		p[0] = p[1]
 
 def p_logica(p):
 	'''logica : AND
@@ -393,8 +575,10 @@ def p_logica(p):
 def p_EX(p):
 	'''EX : Exp Compara Exp
 			| Exp'''
+	global cuadruplos
 	if len(p) == 4:
 		p[0] = cubo(p[1], p[3], p[2])
+		cuadruplo = Cuadruplo(opCode(p[2]), virtAddr(p[1]), virAddr(p[3]))
 	else:
 		p[0] = p[1]
 	
@@ -402,8 +586,6 @@ def p_Compara(p):
 	'''Compara : 	  GT
 					| LT
 					| DIFERENTEDE
-					| MAYORQUE
-					| MENORQUE
 					| MAYORIGUALQUE
 					| MENORIGUALQUE'''
 	p[0] = p[1]
@@ -414,6 +596,12 @@ def bitOp(p):
 			| bitOp XORBIT Factor
 			| bitOp ANDBIT Factor
 			| Factor'''
+	global cuadruplos
+	if len(p) == 4:
+		cuadruplo = Cuadruplo(opCode(p[2]), virtAddr(p[1]), virtAddr(p[3]))
+		cuadruplos.append(cuadruplo)
+	else:
+		p[0] = p[1]
 
 def p_Exp(p):
 	'''Exp : Exp PLUS Termino
@@ -448,8 +636,9 @@ def p_IDoperand(p):
 		if not IDexist(p[1], globalVars):
 			sys.exit("Error!, trying to operate with " + p[1] + " but it does note exist..")
 		else:
-			p[0] = globalVars[p[1]]
-	p[0] = localVars[p[1]]
+			p[0] = globalVars[p[1]][0]
+	else:
+		p[0] = localVars[p[1]][0]
 
 def p_CTE(p):
 	'''CTE : Entero
@@ -504,8 +693,28 @@ def p_globDeclOption(p):
 def p_seenIDglobVar(p):
 	'''seenIDglobVar : '''
 	global globalVars
-	varDeclSemValid(p[-1], p[-3], globalVars)			
-	
+	global Counts
+	typepos = 0
+	datatype = p[-3]
+	ID = p[-1]
+	if datatype == "entero": 
+		typepos = INTPOS
+	elif datatype == "flotante":
+		typepos = FLOATPOS
+	elif datatype == "cadena":
+		typepos = STRPOS
+	elif datatype == "caracter":
+		typepos = CHPOS
+	elif datatype == "byte":
+		typepos = BYTEPOS
+
+	counts = Counts[GLOBALSCOPE][typepos]
+	if counts < MAXGLOBALS:
+		varDeclSemValid(ID, datatype, dataTypeDist(datatype, "GLOBAL"), globalVars)
+		counts = counts + 1
+		Counts[GLOBALSCOPE][typepos] = counts
+	else:
+		sys.exit("Error, demasiadas variables globales!")
 
 def p_TIPO(p):
 	'''TIPO : ENTERO
