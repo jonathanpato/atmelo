@@ -379,7 +379,7 @@ lexer.lineno = 1  #reiniciar lineno
 #parsing grammar rules
 #starting rule: program structure
 def p_ESTRUCTURA(p):
-	'''ESTRUCTURA : Funciones PROGRAMA ID seenIDprograma SEMICOLON Variables_Globales LCBRACE Declaracion_de_variables Contenido RCBRACE programExit'''
+	'''Estructura : Funciones PROGRAMA ID seenIDprograma SEMICOLON Variables_Globales LCBRACE Declaracion_de_variables Contenido RCBRACE programExit'''
 	p[0] = "Analisis de Sintaxis completado!"
 	print(p[0])
 
@@ -401,12 +401,11 @@ def p_programExit(p):
 
 def p_Funciones(p):
 	'''Funciones : NULL
-					| EstructuraFuncion
 					| EstructuraFuncion Funciones'''
 					
 #next grammar rules are components of the program
 def p_EstructuraFuncion(p):
-	'''EstructuraFuncion : FUNCION ID seenIDfunc LPAREN Parametros RPAREN COLON TIPO SEMICOLON LCBRACE Declaracion_de_variables Contenido RCBRACE funcExit'''
+	'''EstructuraFuncion : FUNCION ID seenIDfunc LPAREN Parametros RPAREN COLON TIPO SEMICOLON LCBRACE Declaracion_de_variables Contenido REGRESA Expresion RCBRACE funcExit'''
 
 def p_seenIDfunc(p):
 	'''seenIDfunc : '''
@@ -423,30 +422,27 @@ def p_funcExit(p):
 	funcName = ""
 
 def p_Parametros(p):
-	'''Parametros : Para'''
+	'''Parametros : Para
+				| NULL'''
 
 def p_Para(p):
-	'''Para : NULL 
-			| TIPO ID seenIDparam
+	'''Para : TIPO ID seenIDparam
 			| TIPO ID seenIDparam COMMA Para'''
 
 def p_seenIDparam(p):
 	'''seenIDparam : '''
-	global localVars
-	varDeclSemValid(p[-1], p[-2], localVars)
+	# global localVars
+	# varDeclSemValid(p[-1], p[-2], localVars)
 
 def p_Estatuto(p):
 	'''Estatuto :  Estatuto_Asignacion
 				| Estatuto_Condicion
 				| Estatuto_Escritura_de_puerto
-				| Estatuto_Ciclo 
 				| Estatuto_Lectura_de_puerto
+				| Estatuto_Ciclo 
 				| Imprimir
-				| LlamadaFuncion
-				| regresaDeFuncion'''
+				| LlamadaFuncion'''
 
-def p_regresaDeFuncion(p):
-	'''regresaDeFuncion : REGRESA Expresion SEMICOLON'''
 
 def p_LlamadaFuncion(p):
 	'''LlamadaFuncion : ID LPAREN MULTIARG RPAREN SEMICOLON
@@ -454,86 +450,86 @@ def p_LlamadaFuncion(p):
 	
 def p_EstatutoAsignacion(p):
 	'''Estatuto_Asignacion : ID EQUALS AssignOption'''
-	if not IDexist(p[1], localVars):
-		if not IDexist(p[1], globalVars):
-			sys.exit("var " + p[1] + " does not exist. Aborting..")
-	typeMismatch = False
-	if not (IDexist(p[1], localVars):
-		if(globalVars[p[1][0] != p[3]):
-			typeMismatch = True
-		elif(localVars[p[1]][0] != p[3]):
-				typeMismatch = True
+	# if not IDexist(p[1], localVars):
+	# 	if not IDexist(p[1], globalVars):
+	# 		sys.exit("var " + p[1] + " does not exist. Aborting..")
+	# typeMismatch = False
+	# if not (IDexist(p[1], localVars)):
+	# 	if(globalVars[p[1][0]] != p[3]):
+	# 		typeMismatch = True
+	# 	elif(localVars[p[1]][0]] != p[3]):
+	# 			typeMismatch = True
 				
-	if typeMismatch:
-		sys.exit("Error!, type mismatch..")
+	# if typeMismatch:
+	# 	sys.exit("Error!, type mismatch..")
 
 def p_AssignOption(p):
 	'''AssignOption : Expresion SEMICOLON
-					| LlamadaFuncion
-					| TIPO LPAREN ARG RPAREN SEMICOLON''' #casting
-	typeMismatch = False
-	if len(p) == 3:
-		if (p[1] == 'x'):
-			typeMismatch = True
-		p[0] = p[1]
-	if typeMismatch:
-		sys.exit("Error!, type mismatch..")
+					| TIPO LPAREN Expresion RPAREN SEMICOLON''' #casting
+	# typeMismatch = False
+	# if len(p) == 3:
+	# 	if (p[1] == 'x'):
+	# 		typeMismatch = True
+	# 	p[0] = p[1]
+	# if typeMismatch:
+	# 	sys.exit("Error!, type mismatch..")
 
 def p_DeclaracionDeVariables(p):
 	'''Declaracion_de_variables : TIPO COLON ID seenIDdeclVar SEMICOLON
 									| TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON'''
-	typeMismatch = False
-	if len(p) == 8:
-		if (p[6] == 'x'):
-			typeMismatch = True
-		elif not (IDexist(p[3], localVars):
-			if(globalVars[p[3]][0] != p[6]):
-				typeMismatch = True
-		elif(localVars[p[3]][0] != p[6]):
-				typeMismatch = True
-	if typeMismatch:
-		sys.exit("Error!, type mismatch..")
+	# typeMismatch = False
+	# if len(p) == 8:
+	# 	if (p[6] == 'x'):
+	# 		typeMismatch = True
+	# 	elif not (IDexist(p[3], localVars):
+	# 		if(globalVars[p[3]][0] != p[6]):
+	# 			typeMismatch = True
+	# 	elif(localVars[p[3]][0] != p[6]):
+	# 			typeMismatch = True
+	# if typeMismatch:
+	# 	sys.exit("Error!, type mismatch..")
 
 def p_seenIDdeclVar(p):
 	'''seenIDdeclVar : '''
 
-	global localVars
-	global Counts
-	typepos = 0
-	datatype = p[-3]
-	ID = p[-1]
-	if datatype == "entero": 
-		typepos = INTPOS
-	elif datatype == "flotante":
-		typepos = FLOATPOS
-	elif datatype == "cadena":
-		typepos = STRPOS
-	elif datatype == "caracter":
-		typepos = CHPOS
-	elif datatype == "byte":
-		typepos = BYTEPOS
+	# global localVars
+	# global Counts
+	# typepos = 0
+	# datatype = p[-3]
+	# ID = p[-1]
+	# if datatype == "entero": 
+	# 	typepos = INTPOS
+	# elif datatype == "flotante":
+	# 	typepos = FLOATPOS
+	# elif datatype == "cadena":
+	# 	typepos = STRPOS
+	# elif datatype == "caracter":
+	# 	typepos = CHPOS
+	# elif datatype == "byte":
+	# 	typepos = BYTEPOS
 
-	counts = Counts[LOCALSCOPE][typepos]
-	if counts < MAXLOCALS:
-		varDeclSemValid(ID, datatype, dataTypeDist(datatype, "LOCAL"), localVars)
-		counts = counts + 1
-		Counts[LOCALSCOPE][typepos] = counts
-	else:
-		sys.exit("Error, demasiadas variables globales!")
+	# counts = Counts[LOCALSCOPE][typepos]
+	# if counts < MAXLOCALS:
+	# 	varDeclSemValid(ID, datatype, dataTypeDist(datatype, "LOCAL"), localVars)
+	# 	counts = counts + 1
+	# 	Counts[LOCALSCOPE][typepos] = counts
+	# else:
+	# 	sys.exit("Error, demasiadas variables globales!")
 
 def p_EstatutoCondicion(p):
-	'''Estatuto_Condicion : SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE SINO LCBRACE Contenido RCBRACE'''
+	'''Estatuto_Condicion : SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE OptionalElse'''
+
+def p_OptionalElse(p):
+	'''OptionalElse : SINO LCBRACE Contenido RCBRACE
+					| NULL'''
 							
 def p_EstatutoImprimirconsola(p):
 	'''Imprimir : IMPRIMECONSOLA MULTIARG SEMICOLON'''
 	
 def p_MULTIARG(p):
-	'''MULTIARG : ARG COMMA MULTIARG
-				| ARG'''
+	'''MULTIARG : Expresion COMMA MULTIARG
+				| Expresion'''
 				
-def p_ARG(p):
-	'''ARG : ID
-			| CTE'''
 			
 def p_EstatutoEscrituraDePuerto(p):
 	'''Estatuto_Escritura_de_puerto : ESCRIBEPUERTO PUERTO argPuerto SEMICOLON'''
@@ -555,18 +551,19 @@ def p_EstatutoCiclo(p):
 	'''Estatuto_Ciclo : CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE'''
 	
 def p_Expresion(p):
-	'''Expresion : superExp'''
+	'''Expresion : superExp
+				| NOT superExp'''
 	p[0] = p[1]
 
 def p_superExp(p):
 	'''superExp : EX logica EX
 				| EX'''
-	global cuadruplos
-	if len(p) == 4:
-		p[0] = cubo(p[1], p[3], p[2])
-		cuadruplo = Cuadruplo(opCode(p[2]), virtAddr(p[1]), virtAddr(p[3]))
-	else:
-		p[0] = p[1]
+	# global cuadruplos
+	# if len(p) == 4:
+	# 	p[0] = cubo(p[1], p[3], p[2])
+	# 	cuadruplo = Cuadruplo(opCode(p[2]), virtAddr(p[1]), virtAddr(p[3]))
+	# else:
+	# 	p[0] = p[1]
 
 def p_logica(p):
 	'''logica : AND
@@ -575,12 +572,12 @@ def p_logica(p):
 def p_EX(p):
 	'''EX : Exp Compara Exp
 			| Exp'''
-	global cuadruplos
-	if len(p) == 4:
-		p[0] = cubo(p[1], p[3], p[2])
-		cuadruplo = Cuadruplo(opCode(p[2]), virtAddr(p[1]), virAddr(p[3]))
-	else:
-		p[0] = p[1]
+	# global cuadruplos
+	# if len(p) == 4:
+	# 	p[0] = cubo(p[1], p[3], p[2])
+	# 	cuadruplo = Cuadruplo(opCode(p[2]), virtAddr(p[1]), virAddr(p[3]))
+	# else:
+	# 	p[0] = p[1]
 	
 def p_Compara(p):
 	'''Compara : 	  GT
@@ -591,54 +588,54 @@ def p_Compara(p):
 	p[0] = p[1]
 
 
-def bitOp(p):
+def p_bitOp(p):
 	'''bitOp : bitOp ORBIT Factor
 			| bitOp XORBIT Factor
 			| bitOp ANDBIT Factor
 			| Factor'''
-	global cuadruplos
-	if len(p) == 4:
-		cuadruplo = Cuadruplo(opCode(p[2]), virtAddr(p[1]), virtAddr(p[3]))
-		cuadruplos.append(cuadruplo)
-	else:
-		p[0] = p[1]
+	# global cuadruplos
+	# if len(p) == 4:
+	# 	cuadruplo = Cuadruplo(opCode(p[2]), virtAddr(p[1]), virtAddr(p[3]))
+	# 	cuadruplos.append(cuadruplo)
+	# else:
+	# 	p[0] = p[1]
 
 def p_Exp(p):
 	'''Exp : Exp PLUS Termino
 			| Exp MINUS Termino
 			| Termino'''
-	if len(p) == 4:
-		p[0] = cubo(p[1], p[3], p[2])
-	else:
-		p[0] = p[1]
+	# if len(p) == 4:
+	# 	p[0] = cubo(p[1], p[3], p[2])
+	# else:
+	# 	p[0] = p[1]
 
 def p_Termino(p):
 	'''Termino : Termino TIMES bitOp
 			| Termino DIVIDE bitOp
 			| bitOp'''
-	if len(p) == 4:
-		p[0] = cubo(p[1], p[3], p[2])
-	else:
-		p[0] = p[1]
+	# if len(p) == 4:
+	# 	p[0] = cubo(p[1], p[3], p[2])
+	# else:
+	# 	p[0] = p[1]
 
 def p_Factor(p):
-	'''Factor : LPAREN Expresion RPAREN
+	'''Factor : LPAREN MULTIARG RPAREN
 			| CTE
 			| IDoperand'''
-	if len(p) == 4:
-		p[0] = p[2]
-	else:
-		p[0] = p[1]
+	# if len(p) == 4:
+	# 	p[0] = p[2]
+	# else:
+	# 	p[0] = p[1]
 
 def p_IDoperand(p):
 	'''IDoperand : ID'''
-	if not IDexist(p[1], localVars):
-		if not IDexist(p[1], globalVars):
-			sys.exit("Error!, trying to operate with " + p[1] + " but it does note exist..")
-		else:
-			p[0] = globalVars[p[1]][0]
-	else:
-		p[0] = localVars[p[1]][0]
+	# if not IDexist(p[1], localVars):
+	# 	if not IDexist(p[1], globalVars):
+	# 		sys.exit("Error!, trying to operate with " + p[1] + " but it does note exist..")
+	# 	else:
+	# 		p[0] = globalVars[p[1]][0]
+	# else:
+	# 	p[0] = localVars[p[1]][0]
 
 def p_CTE(p):
 	'''CTE : Entero
@@ -678,6 +675,7 @@ def p_NULL(p):
 def p_Contenido(p):
 	'''Contenido : Estatuto Contenido
 					| NULL'''
+
 def p_Variables_Globales(p):
 	'''Variables_Globales : R'''
 	
@@ -686,35 +684,35 @@ def p_R(p):
 			| NULL'''
 
 def p_globDeclOption(p):
-	'''globDeclOption : NULL
+	'''globDeclOption : NULL 
 		| Expresion'''
 
 			
 def p_seenIDglobVar(p):
 	'''seenIDglobVar : '''
-	global globalVars
-	global Counts
-	typepos = 0
-	datatype = p[-3]
-	ID = p[-1]
-	if datatype == "entero": 
-		typepos = INTPOS
-	elif datatype == "flotante":
-		typepos = FLOATPOS
-	elif datatype == "cadena":
-		typepos = STRPOS
-	elif datatype == "caracter":
-		typepos = CHPOS
-	elif datatype == "byte":
-		typepos = BYTEPOS
+	# global globalVars
+	# global Counts
+	# typepos = 0
+	# datatype = p[-3]
+	# ID = p[-1]
+	# if datatype == "entero": 
+	# 	typepos = INTPOS
+	# elif datatype == "flotante":
+	# 	typepos = FLOATPOS
+	# elif datatype == "cadena":
+	# 	typepos = STRPOS
+	# elif datatype == "caracter":
+	# 	typepos = CHPOS
+	# elif datatype == "byte":
+	# 	typepos = BYTEPOS
 
-	counts = Counts[GLOBALSCOPE][typepos]
-	if counts < MAXGLOBALS:
-		varDeclSemValid(ID, datatype, dataTypeDist(datatype, "GLOBAL"), globalVars)
-		counts = counts + 1
-		Counts[GLOBALSCOPE][typepos] = counts
-	else:
-		sys.exit("Error, demasiadas variables globales!")
+	# counts = Counts[GLOBALSCOPE][typepos]
+	# if counts < MAXGLOBALS:
+	# 	varDeclSemValid(ID, datatype, dataTypeDist(datatype, "GLOBAL"), globalVars)
+	# 	counts = counts + 1
+	# 	Counts[GLOBALSCOPE][typepos] = counts
+	# else:
+	# 	sys.exit("Error, demasiadas variables globales!")
 
 def p_TIPO(p):
 	'''TIPO : ENTERO
