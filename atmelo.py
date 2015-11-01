@@ -210,6 +210,24 @@ class Cuadruplo:
 		self.operando2 = operando2
 		selft.resultado = resultado
 
+class Stack:
+     def __init__(self):
+         self.items = []
+
+     def isEmpty(self):
+         return self.items == []
+
+     def push(self, item):
+         self.items.append(item)
+
+     def pop(self):
+         return self.items.pop()
+
+     def peek(self):
+         return self.items[len(self.items)-1]
+
+     def size(self):
+         return len(self.items)
 
 ###################################################
 
@@ -405,7 +423,9 @@ def p_Funciones(p):
 					
 #next grammar rules are components of the program
 def p_EstructuraFuncion(p):
-	'''EstructuraFuncion : FUNCION ID seenIDfunc LPAREN Parametros RPAREN COLON TIPO SEMICOLON LCBRACE Declaracion_de_variables Contenido REGRESA Expresion RCBRACE funcExit'''
+	'''EstructuraFuncion : FUNCION ID seenIDfunc LPAREN Parametros \
+	RPAREN COLON TIPO SEMICOLON LCBRACE Declaracion_de_variables \
+	Contenido REGRESA Expresion SEMICOLON RCBRACE funcExit'''
 
 def p_seenIDfunc(p):
 	'''seenIDfunc : '''
@@ -476,7 +496,8 @@ def p_AssignOption(p):
 
 def p_DeclaracionDeVariables(p):
 	'''Declaracion_de_variables : TIPO COLON ID seenIDdeclVar SEMICOLON
-									| TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON'''
+									| TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON
+									| NULL'''
 	# typeMismatch = False
 	# if len(p) == 8:
 	# 	if (p[6] == 'x'):
@@ -517,7 +538,8 @@ def p_seenIDdeclVar(p):
 	# 	sys.exit("Error, demasiadas variables globales!")
 
 def p_EstatutoCondicion(p):
-	'''Estatuto_Condicion : SI LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE OptionalElse'''
+	'''Estatuto_Condicion : SI LPAREN Expresion RPAREN \
+	LCBRACE Contenido RCBRACE OptionalElse'''
 
 def p_OptionalElse(p):
 	'''OptionalElse : SINO LCBRACE Contenido RCBRACE
@@ -548,7 +570,8 @@ def p_PUERTO(p):
 				| D'''
 	
 def p_EstatutoCiclo(p):
-	'''Estatuto_Ciclo : CICLO LPAREN Expresion RPAREN LCBRACE Contenido RCBRACE'''
+	'''Estatuto_Ciclo : CICLO LPAREN Expresion RPAREN \
+	LCBRACE Contenido RCBRACE'''
 	
 def p_Expresion(p):
 	'''Expresion : superExp
@@ -620,6 +643,7 @@ def p_Termino(p):
 
 def p_Factor(p):
 	'''Factor : LPAREN MULTIARG RPAREN
+			| ID LPAREN MULTIARG RPAREN
 			| CTE
 			| IDoperand'''
 	# if len(p) == 4:
