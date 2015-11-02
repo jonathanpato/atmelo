@@ -214,7 +214,7 @@ lexer.lineno = 1  #reiniciar lineno
 #parsing grammar rules
 #starting rule: program structure
 def p_ESTRUCTURA(p):
-	'''ESTRUCTURA : Funciones PROGRAMA ID seenIDprograma SEMICOLON Variables_Globales LCBRACE Contenido RCBRACE programExit'''
+	'''ESTRUCTURA : Funciones PROGRAMA ID seenIDprograma SEMICOLON Variables_Globales LCBRACE Declaracion_de_variables Contenido RCBRACE programExit'''
 	p[0] = "Analisis de Sintaxis completado!"
 	print(p[0])
 
@@ -241,7 +241,7 @@ def p_Funciones(p):
 					
 #next grammar rules are components of the program
 def p_EstructuraFuncion(p):
-	'''EstructuraFuncion : FUNCION ID seenIDfunc LPAREN Parametros RPAREN COLON TIPO SEMICOLON LCBRACE Contenido RCBRACE funcExit'''
+	'''EstructuraFuncion : FUNCION ID seenIDfunc LPAREN Parametros RPAREN COLON TIPO SEMICOLON LCBRACE Contenido REGRESA Expresion SEMICOLON RCBRACE funcExit'''
 
 def p_seenIDfunc(p):
 	'''seenIDfunc : '''
@@ -277,9 +277,7 @@ def p_Estatuto(p):
 				| Estatuto_Ciclo 
 				| Estatuto_Lectura_de_puerto
 				| Imprimir
-				| Declaracion_de_variables
-				| LlamadaFuncion
-				| regresaDeFuncion'''
+				| LlamadaFuncion'''
 
 def p_regresaDeFuncion(p):
 	'''regresaDeFuncion : REGRESA Expresion SEMICOLON'''
@@ -301,7 +299,8 @@ def p_AssignOption(p):
 	
 def p_DeclaracionDeVariables(p):
 	'''Declaracion_de_variables : TIPO COLON ID seenIDdeclVar SEMICOLON
-									| TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON'''
+									| TIPO COLON ID seenIDdeclVar EQUALS Expresion SEMICOLON
+									| NULL'''
 
 def p_seenIDdeclVar(p):
 	'''seenIDdeclVar : '''
@@ -428,7 +427,7 @@ def p_TIPO(p):
 def p_error(p):
 	print("Syntax error at '%s' lineno: '%d' column: '%d'" %\
 	(p.value, p.lineno, p.lexpos - offset))
-
+	exit("Error =)")
 #Build the parser
 import ply.yacc as yacc
 parser = yacc.yacc()
