@@ -41,16 +41,16 @@ class Stack:
          
 class variableRecord:
  	def __init__(self, nombre, tipo, dirVirtual):
-		self.nombre = nombre
-		self.tipo = tipo
-		self.dirVirtual = dirVirtual
+ 		self.nombre = nombre
+ 		self.tipo = tipo
+ 		self.dirVirtual = dirVirtual
 
 class processRecord:
  	def __init__(self, nombre, tipoRetorno, tablaVars, paramList):
-		self.nombre = nombre
-		self.tipoRetorno = tipoRetorno
-		self.tablaVars = tablaVars
-		self.paramList = paramList
+ 		self.nombre = nombre
+ 		self.tipoRetorno = tipoRetorno
+ 		self.tablaVars = tablaVars
+ 		self.paramList = paramList
 
 ###################################################
 
@@ -847,6 +847,7 @@ def p_TIPO(p):
 def p_error(p):
 	print("Syntax error at '%s' lineno: '%d' column: '%d'" %\
 	(p.value, p.lineno, p.lexpos - offset))
+	exit(-1)
 
 #Build the parser
 import ply.yacc as yacc
