@@ -9,6 +9,51 @@
 # Date. 2015-10-13 18:46 hrs
 # -----------------------------------------------------------------------------
 
+
+##################################################
+#utility classes
+###################################################
+class Cuadruplo:
+	def __init__(self, operacion, operando1, operando2, resultado):
+		self.operacion = operacion
+		self.operando1 = operando1
+		self.operando2 = operando2
+		self.resultado = resultado
+
+class Stack:
+     def __init__(self):
+         self.items = []
+
+     def isEmpty(self):
+         return self.items == []
+
+     def push(self, item):
+         self.items.append(item)
+
+     def pop(self):
+         return self.items.pop()
+
+     def peek(self):
+         return self.items[len(self.items)-1]
+
+     def size(self):
+         return len(self.items)
+         
+class variableRecord:
+ 	def __init__(self, nombre, tipo, dirVirtual):
+		self.nombre = nombre
+		self.tipo = tipo
+		self.dirVirtual = dirVirtual
+
+class processRecord:
+ 	def __init__(self, nombre, tipoRetorno, tablaVars, paramList):
+		self.nombre = nombre
+		self.tipoRetorno = tipoRetorno
+		self.tablaVars = tablaVars
+		self.paramList = paramList
+
+###################################################
+
 #################
 #definiciones
 ###########
@@ -36,22 +81,28 @@
 ###########################################
 #global variables
 fileName = "programa1"
-globalVars = {}
-funcName = ""
-localVars = {}
+globalVars = []
+localVars = []
+processDir = []
 cuadruplos = []
+contCuadruplos = 1;
+pilaSaltos = Stack();
+pilaTipos = Stack();
+pilaResultados = Stack();
 
-##global Counts 0
-##local Counts 1
-##temp Counts 2
-##cte Counts 3
-## 0 - entero  1 - flotante
-## 2 - cadena  3 - caracter
-## 4 - byte
-counts = [[0, 0, 0, 0, 0], #global Counts
-		[0, 0, 0, 0, 0], #local Counts
-		[0, 0, 0, 0, 0], #temp Counts
-		[0, 0, 0, 0, 0]] #cte Counts
+#r for rows
+#c for columns
+##global Counts r0
+##local Counts r1
+##temp Counts r2
+##cte Counts r3
+## c0 - entero  c1 - flotante
+## c2 - cadena  c3 - caracter
+## c4 - byte
+counts = [[0, 0, 0, 0, 0, 0], #global Counts  <entero, flotante, cadena, caracter, byte, booleano>
+		[0, 0, 0, 0, 0, 0], #local Counts <entero, flotante, cadena, caracter, byte, booleano>
+		[0, 0, 0, 0, 0, 0], #temp Counts <entero, flotante, cadena, caracter, byte, booleano>
+		[0, 0, 0, 0, 0, 0]] #cte Counts <entero, flotante, cadena, caracter, byte, booleano>
 
 ##############
 #Constants
@@ -237,7 +288,7 @@ tokens = ['PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'EQUALS', 'COLON',
 	'LPAREN', 'RPAREN', 'ID', 'EnteroDecimal', 
 	'EnteroHexadecimal', 'EnteroBinario',
 	'ConstanteFlotante', 'ConstanteCadena', 
-	'ConstanteCaracter', 'ConstanteByte',
+	'ConstanteCaracter', 'ConstanteByte', 'ConstanteBooleano'
 	]
 
 reserved = {
@@ -260,6 +311,7 @@ reserved = {
 	'cadena' : 'CADENA',
 	'caracter' : 'CARACTER',
 	'byte' : 'BYTE',
+	'booleano' : 'BOOLEANO',
 	'diferentede' : 'DIFERENTEDE',
 	'mayorigualque' : 'MAYORIGUALQUE',
 	'menorigualque' : 'MENORIGUALQUE',
@@ -334,6 +386,10 @@ def t_ConstanteCaracter(t):
 	r'\'(\\?.)?\''
 	return t
 	
+def t_ConstanteBooleano(t):
+	r'True|False'
+	return t
+
 #ignored characters
 t_ignore = " \t\r"
 
@@ -570,8 +626,38 @@ def p_PUERTO(p):
 				| D'''
 	
 def p_EstatutoCiclo(p):
-	'''Estatuto_Ciclo : CICLO LPAREN Expresion RPAREN \
-	LCBRACE Contenido RCBRACE'''
+	'''Estatuto_Ciclo : CICLO whileMpsaltos LPAREN Expresion RPAREN whileSpsaltos\
+	LCBRACE Contenido RCBRACE whilefin'''
+
+def p_whilefin(p):
+    '''whilefin : '''
+    global cuadruplos
+    falso = pilaSaltos.pop()
+    retorno = pilaSaltos.pop()
+    cuadruplo = Cuadruplo("GOTO", "", "", retorno);
+    cuadruplos[contCuadruplos] = cuadruplos;
+    contCuadruplos = contCuadruplos + 1;
+    #arreglo de objetos
+    #rellenar falso
+    cuadruplos[falso].resultado = contCuadruplos;
+    
+def p_whileMpsaltos(p): 
+	'''whileMpsaltos : '''
+	pilaSaltos.push(contCuadruplos);
+	
+		
+def p_whileSpsaltos(p):	
+	'''whileSpsaltos : '''
+	global cuadruplos
+	tipo = pilaTipos.pop();
+	if tipo != "booleano":
+	    exit("Error type Mismatch! :(");
+	else:
+	    resultadoExp = pilaResultados.pop();
+	    cuadruplo = Cuadruplo("GOTOF", resultadoExp, "", "");
+	    cuadruplos[contCuadruplos] = cuadruplo;
+	    contCuadruplos = contCuadruplos + 1;
+	    pilaSaltos.push(contCuadruplos-1);
 	
 def p_Expresion(p):
 	'''Expresion : superExp
@@ -666,7 +752,8 @@ def p_CTE(p):
 				| CteFlotante
 				| CteCadena
 				| CteCaracter
-				| CteByte'''
+				| CteByte
+				| CteBooleano'''
 	p[0] = p[1]
 
 def p_CteByte(p):
@@ -684,6 +771,10 @@ def p_CteCadena(p):
 def p_CteFlotante(p):
 	'''CteFlotante : ConstanteFlotante'''
 	p[0] = 'float'
+
+def p_CteBooleano(p):
+	'''CteBooleano : ConstanteBooleano'''
+	p[0] = 'bool'
 
 def p_Entero(p):
 	'''Entero : EnteroDecimal
@@ -743,7 +834,8 @@ def p_TIPO(p):
 			| FLOTANTE
 			| CADENA
 			| CARACTER
-			| BYTE'''
+			| BYTE
+			| BOOLEANO'''
 	p[0]=p[1];
 	
 
