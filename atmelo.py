@@ -99,7 +99,7 @@ pilaResultados = Stack();
 ## c0 - entero  c1 - flotante
 ## c2 - cadena  c3 - caracter
 ## c4 - byte
-counts = [[0, 0, 0, 0, 0, 0], #global Counts  <entero, flotante, cadena, caracter, byte, booleano>
+Counts = [[0, 0, 0, 0, 0, 0], #global Counts  <entero, flotante, cadena, caracter, byte, booleano>
 		[0, 0, 0, 0, 0, 0], #local Counts <entero, flotante, cadena, caracter, byte, booleano>
 		[0, 0, 0, 0, 0, 0], #temp Counts <entero, flotante, cadena, caracter, byte, booleano>
 		[0, 0, 0, 0, 0, 0]] #cte Counts <entero, flotante, cadena, caracter, byte, booleano>
@@ -251,36 +251,7 @@ def dataTypeDist(datatype, scope):
 	if count < maxLimit:
 		memDir = begin + typepos*typeSectionSize + count
 	return memDir
-##################################################
-#utility classes
-###################################################
-class Cuadruplo:
-	def __init__(self, operacion, operando1, operando2, resultado):
-		self.operacion = operacion
-		self.operando1 = operando1
-		self.operando2 = operando2
-		selft.resultado = resultado
 
-class Stack:
-     def __init__(self):
-         self.items = []
-
-     def isEmpty(self):
-         return self.items == []
-
-     def push(self, item):
-         self.items.append(item)
-
-     def pop(self):
-         return self.items.pop()
-
-     def peek(self):
-         return self.items[len(self.items)-1]
-
-     def size(self):
-         return len(self.items)
-
-###################################################
 
 #list of tokens
 tokens = ['PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'EQUALS', 'COLON', 
