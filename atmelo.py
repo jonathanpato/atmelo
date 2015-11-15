@@ -8,8 +8,6 @@
 #		   Jonathan Frias  A00810797
 # Date. 2015-10-13 18:46 hrs
 # -----------------------------------------------------------------------------
-
-
 ##################################################
 #utility classes
 ###################################################
@@ -133,11 +131,28 @@ BYTEPOS = 4
 ################################################
 #utility imports
 import sys
-from cuboSemantico import cubo
+import re
 #utility functions
 
 ##this function returns the operation code
-
+def getType(dato):
+	dato = str(dato);
+	tipo = ""
+	if re.search(r'[0-1]{8}B', dato):
+		tipo = "byte"
+	elif re.search(r'\'(\\?.)?\'', dato):
+		tipo = "caracter"
+	elif re.search(r'\"[^\"]*\"', dato):
+		tipo = "cadena"
+	elif re.search(r'[0-9]+\.[0-9]+', dato):
+		tipo = "flotante"
+	elif re.search(r'True|False', dato):
+		tipo = "booleano"
+	elif re.search('[0-9a-fA-F]+H', dato) or re.search('[0-9]+', dato):
+		tipo = "entero"
+		
+	return tipo
+    
 def opCode(operation):
 	opcode = 0
 	if operation == "orbit":
@@ -565,13 +580,45 @@ def p_seenIDdeclVar(p):
 	# 	sys.exit("Error, demasiadas variables globales!")
 
 def p_EstatutoCondicion(p):
-	'''Estatuto_Condicion : SI LPAREN Expresion RPAREN \
-	LCBRACE Contenido RCBRACE OptionalElse'''
-
+	'''Estatuto_Condicion : SI LPAREN Expresion Rparen \
+	LCBRACE Contenido RCBRACE OptionalElse FINCOND'''
+	
+def p_Rparen(p):
+	'''Rparen : RPAREN'''
+	global pilaSaltos
+	global cuadruplos
+	global contCuadruplos
+	expresion = pilaResultados.pop();
+	tipo = pilaTipos.pop()
+	if tipo != "booleano":
+		exit("Error type Mismatch! :(");
+	else:
+	    cuadruplo = Cuadruplo("GOTOF", expresion, "", "");
+	    cuadruplos[contCuadruplos] = cuadruplo;
+	    contCuadruplos = contCuadruplos + 1;
+	    pilaSaltos.push(contCuadruplos-1);
+	    
 def p_OptionalElse(p):
-	'''OptionalElse : SINO LCBRACE Contenido RCBRACE
+	'''OptionalElse : Sino LCBRACE Contenido RCBRACE
 					| NULL'''
-							
+def p_Sino(p):
+	'''Sino : SINO'''
+	global contCuadruplos
+	global cuadruplos
+	global pilaSaltos
+	falso = pilaSaltos.pop()
+	cuadruplo = Cuadruplo("GOTOF","","","");
+	cuadruplos[contCuadruplos].append(cuadruplo);
+	contCuadruplos = contCuadruplos + 1;
+	pilaSaltos.push(contCuadruplos-1);
+	cuadruplos[falso].resultado = contCuadruplos;
+	
+def p_FINCOND(p):
+	'''FINCOND :'''
+	global cuadruplos
+	salida = pilaSaltos.pop();
+	cuadruplos[salida].resultado = contCuadruplos;
+	
 def p_EstatutoImprimirconsola(p):
 	'''Imprimir : IMPRIMECONSOLA MULTIARG SEMICOLON'''
 	
@@ -603,6 +650,7 @@ def p_EstatutoCiclo(p):
 def p_whilefin(p):
     '''whilefin : '''
     global cuadruplos
+    global contCuadruplos
     falso = pilaSaltos.pop()
     retorno = pilaSaltos.pop()
     cuadruplo = Cuadruplo("GOTO", "", "", retorno);
@@ -614,12 +662,15 @@ def p_whilefin(p):
     
 def p_whileMpsaltos(p): 
 	'''whileMpsaltos : '''
+	global pilaSaltos
 	pilaSaltos.push(contCuadruplos);
 	
 		
 def p_whileSpsaltos(p):	
 	'''whileSpsaltos : '''
 	global cuadruplos
+	global pilaSaltos
+	global contCuadruplos
 	tipo = pilaTipos.pop();
 	if tipo != "booleano":
 	    exit("Error type Mismatch! :(");
@@ -638,27 +689,53 @@ def p_Expresion(p):
 def p_superExp(p):
 	'''superExp : EX logica EX
 				| EX'''
-	# global cuadruplos
-	# if len(p) == 4:
-	# 	p[0] = cubo(p[1], p[3], p[2])
-	# 	cuadruplo = Cuadruplo(opCode(p[2]), virtAddr(p[1]), virtAddr(p[3]))
-	# else:
-	# 	p[0] = p[1]
-
+	global cuadruplos
+	global contCuadruplos
+	global pilaTipos
+	
+	if len(p) == 4:
+		tipoOP1 = pilaTipos.pop()
+		tipoOP2 = pilaTipos.pop()
+		# print "tipoOperador1: " + tipoOP1
+		# print "tipoOperador2: " + tipoOP2
+		if tipoOP1 != "booleano" or tipoOP2 != "booleano":
+			exit("error: type mismatch! operation not permitted");
+		cuadruplo = Cuadruplo(p[2], p[1], p[3], "")
+	 	cuadruplos.append(cuadruplo)
+	 	contCuadruplos = contCuadruplos + 1;
+	else:
+		p[0] = p[1]
+		tipo = getType(p[1])
+		if(tipo != ""):
+			pilaTipos.push(tipo); 
+			print pilaTipos.peek();
 def p_logica(p):
 	'''logica : AND
 			| OR'''
-
+	p[0] = p[1]
+	
 def p_EX(p):
 	'''EX : Exp Compara Exp
 			| Exp'''
-	# global cuadruplos
-	# if len(p) == 4:
-	# 	p[0] = cubo(p[1], p[3], p[2])
-	# 	cuadruplo = Cuadruplo(opCode(p[2]), virtAddr(p[1]), virAddr(p[3]))
-	# else:
-	# 	p[0] = p[1]
-	
+	global cuadruplos
+	global contCuadruplos
+	global pilaTipos
+	if len(p) == 4:
+		tipoOP1 = pilaTipos.pop()
+		tipoOP2 = pilaTipos.pop()
+		# print "tipoOperador1: " + tipoOP1
+		# print "tipoOperador2: " + tipoOP2
+		if tipoOP1 != "booleano" or tipoOP2 != "booleano":
+			exit("error: type mismatch! operation not permitted");
+		cuadruplo = Cuadruplo(p[2], p[1], p[3], "")
+	 	cuadruplos.append(cuadruplo)
+	 	contCuadruplos = contCuadruplos + 1;
+	else:
+		p[0] = p[1]
+		tipo = getType(p[1])
+		if(tipo != ""):
+			pilaTipos.push(tipo); 
+			print pilaTipos.peek();
 def p_Compara(p):
 	'''Compara : 	  GT
 					| LT
@@ -673,38 +750,79 @@ def p_bitOp(p):
 			| bitOp XORBIT Factor
 			| bitOp ANDBIT Factor
 			| Factor'''
-	# global cuadruplos
-	# if len(p) == 4:
-	# 	cuadruplo = Cuadruplo(opCode(p[2]), virtAddr(p[1]), virtAddr(p[3]))
-	# 	cuadruplos.append(cuadruplo)
-	# else:
-	# 	p[0] = p[1]
-
+	global cuadruplos
+	global contCuadruplos
+	global pilaTipos
+	if len(p) == 4:
+		tipoOP1 = pilaTipos.pop()
+		tipoOP2 = pilaTipos.pop()
+		# print "tipoOperador1: " + tipoOP1
+		# print "tipoOperador2: " + tipoOP2
+		if tipoOP1 != "byte" or tipoOP2 != "byte":
+			exit("error: type mismatch! operation not permitted");
+		cuadruplo = Cuadruplo(p[2], p[1], p[3], "")
+	 	cuadruplos.append(cuadruplo)
+	 	contCuadruplos = contCuadruplos + 1;
+	else:
+	 	p[0] = p[1]
+		tipo = getType(p[1])
+		if(tipo != ""):
+			pilaTipos.push(tipo); 
+			print pilaTipos.peek();
 def p_Exp(p):
 	'''Exp : Exp PLUS Termino
 			| Exp MINUS Termino
 			| Termino'''
-	# if len(p) == 4:
-	# 	p[0] = cubo(p[1], p[3], p[2])
-	# else:
-	# 	p[0] = p[1]
-
+	global cuadruplos
+	global contCuadruplos
+	global pilaTipos
+	if len(p) == 4:
+		tipoOP1 = pilaTipos.pop()
+		tipoOP2 = pilaTipos.pop()
+		print "tipoOperador1: " + tipoOP1
+		print "tipoOperador2: " + tipoOP2
+		if tipoOP1 != tipoOP2:
+			exit("error: type mismatch! operation not permitted");
+		cuadruplo = Cuadruplo(p[2], p[1], p[3], "")	
+		cuadruplos.append(cuadruplo);
+		contCuadruplos = contCuadruplos + 1;
+	else:
+		p[0] = p[1]
+		tipo = getType(p[1])
+		if(tipo != ""):
+			pilaTipos.push(tipo); 
+			print pilaTipos.peek();
 def p_Termino(p):
 	'''Termino : Termino TIMES bitOp
 			| Termino DIVIDE bitOp
 			| bitOp'''
-	# if len(p) == 4:
-	# 	p[0] = cubo(p[1], p[3], p[2])
-	# else:
-	# 	p[0] = p[1]
-
+	global pilaTipos
+	global cuadruplos
+	global contCuadruplos
+	if len(p) == 4:
+		tipoOP1 = pilaTipos.pop()
+		tipoOP2 = pilaTipos.pop()
+		# print "tipoOperador1: " + tipoOP1
+		# print "tipoOperador2: " + tipoOP2
+		if tipoOP1 != tipoOP2:
+			exit("error: type mismatch! Invalid operation");	
+		cuadruplo = Cuadruplo(p[2], p[1], p[3], "")	
+		cuadruplos.append(cuadruplo);
+		contCuadruplos = contCuadruplos + 1;
+	else:
+		p[0] = p[1]
+		tipo = getType(p[1])
+		if(tipo != ""):
+			pilaTipos.push(tipo); 
+			print pilaTipos.peek();
+		# print p[1]
 def p_Factor(p):
 	'''Factor : LPAREN MULTIARG RPAREN
 			| ID LPAREN MULTIARG RPAREN
 			| CTE
 			| IDoperand'''
-	# if len(p) == 4:
-	# 	p[0] = p[2]
+	if len(p) == 2:
+		p[0] = p[1]
 	# else:
 	# 	p[0] = p[1]
 
@@ -717,7 +835,7 @@ def p_IDoperand(p):
 	# 		p[0] = globalVars[p[1]][0]
 	# else:
 	# 	p[0] = localVars[p[1]][0]
-
+	p[0] = p[1]
 def p_CTE(p):
 	'''CTE : Entero
 				| CteFlotante
@@ -729,30 +847,30 @@ def p_CTE(p):
 
 def p_CteByte(p):
 	'''CteByte : ConstanteByte'''
-	
-
+	# p[0] = 'byte'
+	p[0] = p[1]
 def p_CteCaracter(p):
 	'''CteCaracter : ConstanteCaracter'''
-	p[0] = 'char'
-
+	# p[0] = 'caracter'
+	p[0] = p[1]
 def p_CteCadena(p):
 	'''CteCadena : ConstanteCadena'''
-	p[0] = 'string'
-
+	# p[0] = 'cadena'
+	p[0] = p[1]
 def p_CteFlotante(p):
 	'''CteFlotante : ConstanteFlotante'''
-	p[0] = 'float'
-
+	# p[0] = 'flotante'
+	p[0] = p[1]
 def p_CteBooleano(p):
 	'''CteBooleano : ConstanteBooleano'''
-	p[0] = 'bool'
-
+	# p[0] = 'booleano'
+	p[0] = p[1]
 def p_Entero(p):
 	'''Entero : EnteroDecimal
 				| EnteroHexadecimal
 				| EnteroBinario'''
-	p[0] = 'int'
-
+	# p[0] = 'entero'
+	p[0] = p[1]
 
 
 def p_NULL(p):
@@ -818,7 +936,7 @@ def p_TIPO(p):
 def p_error(p):
 	print("Syntax error at '%s' lineno: '%d' column: '%d'" %\
 	(p.value, p.lineno, p.lexpos - offset))
-	exit("Error =(")
+	exit("Error aqui")
 
 #Build the parser
 import ply.yacc as yacc

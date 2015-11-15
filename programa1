@@ -1,0 +1,16 @@
+funcion mifuncion(entero numero):entero;
+{
+	#otro comentario
+	regresa 1;
+}
+
+programa imprimeNumero;
+#globales  este es un comentario
+entero:numero;
+flotante:pi;
+{
+	cadena:texto = "cadena de caracteres!";
+	pi = 3.1416;
+	numero = pi / 'A';
+	
+}
