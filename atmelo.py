@@ -37,13 +37,13 @@ class Stack:
      def size(self):
          return len(self.items)
          
-class variableRecord:
+class VariableRecord:
  	def __init__(self, nombre, tipo, dirVirtual):
  		self.nombre = nombre
  		self.tipo = tipo
  		self.dirVirtual = dirVirtual
 
-class processRecord:
+class ProcessRecord:
  	def __init__(self, nombre, tipoRetorno, tablaVars, paramList):
  		self.nombre = nombre
  		self.tipoRetorno = tipoRetorno
@@ -79,9 +79,9 @@ class processRecord:
 ###########################################
 #global variables
 fileName = "programa1"
-globalVars = []
-localVars = []
-processDir = []
+globalVars = {}
+localVars = {}
+processDir = {}
 cuadruplos = []
 contCuadruplos = 1;
 pilaSaltos = Stack();
@@ -120,11 +120,11 @@ LOCALSCOPE = 1
 TEMPSCOPE = 2
 CTESCOPE = 3
 
-INTPOS = 0
-FLOATPOS = 1
-STRPOS = 2
-CHPOS = 3
-BYTEPOS = 4
+INT = 0
+FLOAT = 1
+STR = 2
+CH = 3
+BYTE = 4
 
 ###############
 #utilities
@@ -132,9 +132,23 @@ BYTEPOS = 4
 #utility imports
 import sys
 import re
+from cuboSemantico import cubo
 #utility functions
 
 ##this function returns the operation code
+def scopeType(datatype):
+	if datatype == "entero": 
+		typep = INT
+	elif datatype == "flotante":
+		typep = FLOAT
+	elif datatype == "cadena":
+		typep = STR
+	elif datatype == "caracter":
+		typep = CH
+	elif datatype == "byte":
+		typep = BYTE
+	return typep
+
 def getType(dato):
 	dato = str(dato);
 	tipo = ""
@@ -187,11 +201,11 @@ def opCode(operation):
 		opcode = 15
 	elif operation == "regresa":
 		opcode = 16
-	elif operation == "goto":
+	elif operation == "GOTO":
 		opcode = 17
-	elif operation == "gotof":
+	elif operation == "GOTOF":
 		opcode = 18
-	elif operation == "gotot":
+	elif operation == "GOTOT":
 		opcode = 19
 
 	return opcode
@@ -200,15 +214,15 @@ def virtAddr(varID):
 	addr = 0
 	if not IDexist(varID, localVars):
 		if IDexist(varID, globalVars):
-			addr = globalVars[varID][1]
+			addr = globalVars[varID].dirVirtual;
 	else:
-		addr = localVars[varID][1]
+		addr = localVars[varID].dirVirtual;
 	return addr
 
 ###this function adds a row to the variable table
 def addVar(var, varList):
-	varProperties = [var[1], var[2]]
-	varList[var[0]] = varProperties
+	varRecord = VariableRecord(var[1], var[2], var[3]); #varID, varType, varVirtDir
+	varList[var[1]] = varRecord;
 
 #this function validates if a variable is already declared
 #if yes, it ends the program and returns an error message
@@ -230,41 +244,41 @@ def IDexist(ID, varList):
 def dataTypeDist(datatype, scope):
 	begin = 0
 	maxLimit = 0
-	scopepos = 0
-	typepos = 0
+	scopeIndex = 0
+	typeIndex = 0
 	memDir = 0
 	if scope == "GLOBAL":
 		begin = GLOBALBEGIN
 		maxLimit = MAXGLOBALS
-		scopepos = GLOBALSCOPE
+		scopeIndex = GLOBALSCOPE
 	elif scope == "LOCAL":
 		begin = LOCALBEGIN
 		maxLimit = MAXLOCALS
-		scopepos = LOCALSCOPE
+		scopeIndex = LOCALSCOPE
 	elif scope == "TEMP":
 		begin = TEMPBEGIN
 		maxLimit = MAXTEMPS
-		scopepos = TEMPSCOPE
+		scopeIndex = TEMPSCOPE
 	elif scope == "CTE":
 		begin = CTEBEGIN
 		maxLimit = MAXCTES
-		scopepos = CTESCOPE
+		scopeIndex = CTESCOPE
 
 	if datatype == "entero": 
-		typepos = INTPOS
+		typeIndex = INT
 	elif datatype == "flotante":
-		typepos = FLOATPOS
+		typeIndex = FLOAT
 	elif datatype == "cadena":
-		typepos = STRPOS
+		typeIndex = STR
 	elif datatype == "caracter":
-		typepos = CHPOS
+		typeIndex = CH
 	elif datatype == "byte":
-		typepos = BYTEPOS
+		typeIndex = BYTE
 
-	count = Counts[scopepos][typepos]
+	count = Counts[scopeIndex][typeIndex]
 	typeSectionSize = maxLimit
 	if count < maxLimit:
-		memDir = begin + typepos*typeSectionSize + count
+		memDir = begin + typeIndex*typeSectionSize + count
 	return memDir
 
 
@@ -272,7 +286,7 @@ def dataTypeDist(datatype, scope):
 tokens = ['PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'EQUALS', 'COLON', 
 'COMMA', 'SEMICOLON', 'GT', 'LT', 'LCBRACE', 'RCBRACE', 
 	'LPAREN', 'RPAREN', 'ID', 'EnteroDecimal', 
-	'EnteroHexadecimal', 'EnteroBinario',
+	'EnteroHexadecimal', 
 	'ConstanteFlotante', 'ConstanteCadena', 
 	'ConstanteCaracter', 'ConstanteByte', 'ConstanteBooleano'
 	]
@@ -301,6 +315,7 @@ reserved = {
 	'diferentede' : 'DIFERENTEDE',
 	'mayorigualque' : 'MAYORIGUALQUE',
 	'menorigualque' : 'MENORIGUALQUE',
+	'igualque' : 'IGUALQUE',
 	'and' : 'AND',
 	'or' : 'OR',
 	'not' : 'NOT',
@@ -512,9 +527,17 @@ def p_LlamadaFuncion(p):
 	
 def p_EstatutoAsignacion(p):
 	'''Estatuto_Asignacion : ID EQUALS AssignOption'''
-	# if not IDexist(p[1], localVars):
-	# 	if not IDexist(p[1], globalVars):
-	# 		sys.exit("var " + p[1] + " does not exist. Aborting..")
+	ID = p[1];
+	if not IDexist(ID, localVars):
+		if not IDexist(ID, globalVars):
+			sys.exit("var " + ID + " does not exist. Aborting..")
+		else:
+			IDType = globalVars[ID].tipo;
+	else:
+		IDType = localVars[ID].tipo;
+	ExpType = p[3];
+	if IDType != ExpType:
+		exit("Error!, type mismatch..");
 	# typeMismatch = False
 	# if not (IDexist(p[1], localVars)):
 	# 	if(globalVars[p[1][0]] != p[3]):
@@ -528,6 +551,8 @@ def p_EstatutoAsignacion(p):
 def p_AssignOption(p):
 	'''AssignOption : Expresion SEMICOLON
 					| TIPO LPAREN Expresion RPAREN SEMICOLON''' #casting
+	if len(p) == 3:
+		p[0] = p[1]
 	# typeMismatch = False
 	# if len(p) == 3:
 	# 	if (p[1] == 'x'):
@@ -554,30 +579,21 @@ def p_DeclaracionDeVariables(p):
 
 def p_seenIDdeclVar(p):
 	'''seenIDdeclVar : '''
-
-	# global localVars
-	# global Counts
-	# typepos = 0
-	# datatype = p[-3]
-	# ID = p[-1]
-	# if datatype == "entero": 
-	# 	typepos = INTPOS
-	# elif datatype == "flotante":
-	# 	typepos = FLOATPOS
-	# elif datatype == "cadena":
-	# 	typepos = STRPOS
-	# elif datatype == "caracter":
-	# 	typepos = CHPOS
-	# elif datatype == "byte":
-	# 	typepos = BYTEPOS
-
-	# counts = Counts[LOCALSCOPE][typepos]
-	# if counts < MAXLOCALS:
-	# 	varDeclSemValid(ID, datatype, dataTypeDist(datatype, "LOCAL"), localVars)
-	# 	counts = counts + 1
-	# 	Counts[LOCALSCOPE][typepos] = counts
-	# else:
-	# 	sys.exit("Error, demasiadas variables globales!")
+	global localVars
+	global Counts
+	typepos = 0
+	datatype = p[-3]
+	ID = p[-1]
+	typep = scopeType(datatype);
+	counts = Counts[LOCALSCOPE][typep]
+	if counts < MAXLOCALS:
+		# varDeclSemValid(ID, datatype, dataTypeDist(datatype, "LOCAL"), localVars)
+		varRecord = VariableRecord(ID, datatype, dataTypeDist(datatype, "LOCAL"));
+		globalVars[ID] = varRecord;
+		counts = counts + 1
+		Counts[LOCALSCOPE][typep] = counts
+	else:
+		sys.exit("Error, demasiadas variables globales!")
 
 def p_EstatutoCondicion(p):
 	'''Estatuto_Condicion : SI LPAREN Expresion Rparen \
@@ -684,31 +700,46 @@ def p_whileSpsaltos(p):
 def p_Expresion(p):
 	'''Expresion : superExp
 				| NOT superExp'''
-	p[0] = p[1]
+	if len(p) == 3:
+		p[0] = p[2]
+	else:
+		p[0] = p[1]
 
 def p_superExp(p):
 	'''superExp : EX logica EX
 				| EX'''
+	global pilaTipos
 	global cuadruplos
 	global contCuadruplos
-	global pilaTipos
-	
+	global Counts
+	resType = ""
 	if len(p) == 4:
-		tipoOP1 = pilaTipos.pop()
-		tipoOP2 = pilaTipos.pop()
+		# tipoOP1 = pilaTipos.pop()
+		# tipoOP2 = pilaTipos.pop()
 		# print "tipoOperador1: " + tipoOP1
 		# print "tipoOperador2: " + tipoOP2
-		if tipoOP1 != "booleano" or tipoOP2 != "booleano":
-			exit("error: type mismatch! operation not permitted");
-		cuadruplo = Cuadruplo(p[2], p[1], p[3], "")
-	 	cuadruplos.append(cuadruplo)
-	 	contCuadruplos = contCuadruplos + 1;
+
+		resType = cubo(p[2], p[1], p[3])
+		if resType == "x":
+			exit("error: type mismatch! Invalid operation");
+		pilaTipos.push(resType);
+		typep = scopeType(resType);	
+		counts = Counts[TEMPSCOPE][typep]
+		if counts < MAXTEMPS:
+		# varDeclSemValid(ID, datatype, dataTypeDist(datatype, "GLOBAL"), globalVars)
+			tempVirtAddress = dataTypeDist(resType, "TEMP");
+			cuadruplo = Cuadruplo(p[2], p[1], p[3], tempVirtAddress);	
+			cuadruplos.append(cuadruplo);
+			contCuadruplos = contCuadruplos + 1;
+			counts = counts + 1
+			Counts[TEMPSCOPE][typep] = counts
+		else:
+			sys.exit("Error, demasiadas variables temporales!")
+		p[0] = resType;
 	else:
 		p[0] = p[1]
-		tipo = getType(p[1])
-		if(tipo != ""):
-			pilaTipos.push(tipo); 
-			print pilaTipos.peek();
+
+
 def p_logica(p):
 	'''logica : AND
 			| OR'''
@@ -717,125 +748,172 @@ def p_logica(p):
 def p_EX(p):
 	'''EX : Exp Compara Exp
 			| Exp'''
+	#global pilaTipos
 	global cuadruplos
 	global contCuadruplos
-	global pilaTipos
+	global Counts
 	if len(p) == 4:
-		tipoOP1 = pilaTipos.pop()
-		tipoOP2 = pilaTipos.pop()
+		# tipoOP1 = pilaTipos.pop()
+		# tipoOP2 = pilaTipos.pop()
 		# print "tipoOperador1: " + tipoOP1
 		# print "tipoOperador2: " + tipoOP2
-		if tipoOP1 != "booleano" or tipoOP2 != "booleano":
-			exit("error: type mismatch! operation not permitted");
-		cuadruplo = Cuadruplo(p[2], p[1], p[3], "")
-	 	cuadruplos.append(cuadruplo)
-	 	contCuadruplos = contCuadruplos + 1;
+
+		resType = cubo(p[2], p[1], p[3])
+		if resType == "x":
+			exit("error: type mismatch! Invalid operation");
+		typep = scopeType(resType);	
+		counts = Counts[TEMPSCOPE][typep]
+		if counts < MAXTEMPS:
+		# varDeclSemValid(ID, datatype, dataTypeDist(datatype, "GLOBAL"), globalVars)
+			tempVirtAddress = dataTypeDist(resType, "TEMP");
+			cuadruplo = Cuadruplo(p[2], p[1], p[3], tempVirtAddress);	
+			cuadruplos.append(cuadruplo);
+			contCuadruplos = contCuadruplos + 1;
+			counts = counts + 1
+			Counts[TEMPSCOPE][typep] = counts
+		else:
+			sys.exit("Error, demasiadas variables temporales!")
+		p[0] = resType;
 	else:
 		p[0] = p[1]
-		tipo = getType(p[1])
-		if(tipo != ""):
-			pilaTipos.push(tipo); 
-			print pilaTipos.peek();
+
 def p_Compara(p):
 	'''Compara : 	  GT
 					| LT
 					| DIFERENTEDE
 					| MAYORIGUALQUE
-					| MENORIGUALQUE'''
+					| MENORIGUALQUE
+					| IGUALQUE'''
 	p[0] = p[1]
 
+			
+def p_Exp(p):
+	'''Exp : Exp PLUS Termino
+			| Exp MINUS Termino
+			| Termino'''
+	#global pilaTipos
+	global cuadruplos
+	global contCuadruplos
+	global Counts
+	if len(p) == 4:
+		# tipoOP1 = pilaTipos.pop()
+		# tipoOP2 = pilaTipos.pop()
+		# print "tipoOperador1: " + tipoOP1
+		# print "tipoOperador2: " + tipoOP2
+
+		resType = cubo(p[2], p[1], p[3])
+		if resType == "x":
+			exit("error: type mismatch! Invalid operation");
+		typep = scopeType(resType);	
+		counts = Counts[TEMPSCOPE][typep]
+		if counts < MAXTEMPS:
+		# varDeclSemValid(ID, datatype, dataTypeDist(datatype, "GLOBAL"), globalVars)
+			tempVirtAddress = dataTypeDist(resType, "TEMP");
+			cuadruplo = Cuadruplo(p[2], p[1], p[3], tempVirtAddress);	
+			cuadruplos.append(cuadruplo);
+			contCuadruplos = contCuadruplos + 1;
+			counts = counts + 1
+			Counts[TEMPSCOPE][typep] = counts
+		else:
+			sys.exit("Error, demasiadas variables temporales!")
+		p[0] = resType;
+	else:
+		p[0] = p[1]
+
+def p_Termino(p):
+	'''Termino : Termino TIMES bitOp
+			| Termino DIVIDE bitOp
+			| bitOp'''
+	#global pilaTipos
+	global cuadruplos
+	global contCuadruplos
+	global Counts
+	if len(p) == 4:
+		# tipoOP1 = pilaTipos.pop()
+		# tipoOP2 = pilaTipos.pop()
+		# print "tipoOperador1: " + tipoOP1
+		# print "tipoOperador2: " + tipoOP2
+
+		resType = cubo(p[2], p[1], p[3])
+		if resType == "x":
+			exit("error: type mismatch! Invalid operation");
+		typep = scopeType(resType);	
+		counts = Counts[TEMPSCOPE][typep]
+		if counts < MAXTEMPS:
+		# varDeclSemValid(ID, datatype, dataTypeDist(datatype, "GLOBAL"), globalVars)
+			tempVirtAddress = dataTypeDist(resType, "TEMP");
+			cuadruplo = Cuadruplo(p[2], p[1], p[3], tempVirtAddress);	
+			cuadruplos.append(cuadruplo);
+			contCuadruplos = contCuadruplos + 1;
+			counts = counts + 1
+			Counts[TEMPSCOPE][typep] = counts
+		else:
+			sys.exit("Error, demasiadas variables temporales!")
+		p[0] = resType;
+	else:
+		p[0] = p[1]
+	# else:
+	# 	p[0] = p[1]
+	# 	tipo = getType(p[1])
+	# 	if(tipo != ""):
+			# pilaTipos.push(tipo); 
+			# print pilaTipos.peek();
+		# print p[1]
 
 def p_bitOp(p):
 	'''bitOp : bitOp ORBIT Factor
 			| bitOp XORBIT Factor
 			| bitOp ANDBIT Factor
 			| Factor'''
+	#global pilaTipos
 	global cuadruplos
 	global contCuadruplos
-	global pilaTipos
+	global Counts
 	if len(p) == 4:
-		tipoOP1 = pilaTipos.pop()
-		tipoOP2 = pilaTipos.pop()
+		# tipoOP1 = pilaTipos.pop()
+		# tipoOP2 = pilaTipos.pop()
 		# print "tipoOperador1: " + tipoOP1
 		# print "tipoOperador2: " + tipoOP2
-		if tipoOP1 != "byte" or tipoOP2 != "byte":
-			exit("error: type mismatch! operation not permitted");
-		cuadruplo = Cuadruplo(p[2], p[1], p[3], "")
-	 	cuadruplos.append(cuadruplo)
-	 	contCuadruplos = contCuadruplos + 1;
-	else:
-	 	p[0] = p[1]
-		tipo = getType(p[1])
-		if(tipo != ""):
-			pilaTipos.push(tipo); 
-			print pilaTipos.peek();
-def p_Exp(p):
-	'''Exp : Exp PLUS Termino
-			| Exp MINUS Termino
-			| Termino'''
-	global cuadruplos
-	global contCuadruplos
-	global pilaTipos
-	if len(p) == 4:
-		tipoOP1 = pilaTipos.pop()
-		tipoOP2 = pilaTipos.pop()
-		print "tipoOperador1: " + tipoOP1
-		print "tipoOperador2: " + tipoOP2
-		if tipoOP1 != tipoOP2:
-			exit("error: type mismatch! operation not permitted");
-		cuadruplo = Cuadruplo(p[2], p[1], p[3], "")	
-		cuadruplos.append(cuadruplo);
-		contCuadruplos = contCuadruplos + 1;
+
+		resType = cubo(p[2], p[1], p[3])
+		if resType == "x":
+			exit("error: type mismatch! Invalid operation");
+		typep = scopeType(resType);	
+		counts = Counts[TEMPSCOPE][typep]
+		if counts < MAXTEMPS:
+		# varDeclSemValid(ID, datatype, dataTypeDist(datatype, "GLOBAL"), globalVars)
+			tempVirtAddress = dataTypeDist(resType, "TEMP");
+			cuadruplo = Cuadruplo(p[2], p[1], p[3], tempVirtAddress);	
+			cuadruplos.append(cuadruplo);
+			contCuadruplos = contCuadruplos + 1;
+			counts = counts + 1
+			Counts[TEMPSCOPE][typep] = counts
+		else:
+			sys.exit("Error, demasiadas variables temporales!")
+		p[0] = resType;
 	else:
 		p[0] = p[1]
-		tipo = getType(p[1])
-		if(tipo != ""):
-			pilaTipos.push(tipo); 
-			print pilaTipos.peek();
-def p_Termino(p):
-	'''Termino : Termino TIMES bitOp
-			| Termino DIVIDE bitOp
-			| bitOp'''
-	global pilaTipos
-	global cuadruplos
-	global contCuadruplos
-	if len(p) == 4:
-		tipoOP1 = pilaTipos.pop()
-		tipoOP2 = pilaTipos.pop()
-		# print "tipoOperador1: " + tipoOP1
-		# print "tipoOperador2: " + tipoOP2
-		if tipoOP1 != tipoOP2:
-			exit("error: type mismatch! Invalid operation");	
-		cuadruplo = Cuadruplo(p[2], p[1], p[3], "")	
-		cuadruplos.append(cuadruplo);
-		contCuadruplos = contCuadruplos + 1;
-	else:
-		p[0] = p[1]
-		tipo = getType(p[1])
-		if(tipo != ""):
-			pilaTipos.push(tipo); 
-			print pilaTipos.peek();
-		# print p[1]
 def p_Factor(p):
-	'''Factor : LPAREN MULTIARG RPAREN
+	'''Factor : LPAREN Expresion RPAREN
 			| ID LPAREN MULTIARG RPAREN
 			| CTE
 			| IDoperand'''
-	if len(p) == 2:
+	if len(p) == 4:
+		p[0] = p[2]
+	elif len(p) == 2:
 		p[0] = p[1]
-	# else:
-	# 	p[0] = p[1]
 
 def p_IDoperand(p):
 	'''IDoperand : ID'''
-	# if not IDexist(p[1], localVars):
-	# 	if not IDexist(p[1], globalVars):
-	# 		sys.exit("Error!, trying to operate with " + p[1] + " but it does note exist..")
-	# 	else:
-	# 		p[0] = globalVars[p[1]][0]
-	# else:
-	# 	p[0] = localVars[p[1]][0]
-	p[0] = p[1]
+	if not IDexist(p[1], localVars):
+		if not IDexist(p[1], globalVars):
+			sys.exit("Error!, trying to operate with " + p[1] + " but it does note exist..")
+	 	else:
+	 		p[0] = globalVars[p[1]].tipo;
+
+	else:
+		p[0] = localVars[p[1]].tipo;
+	#p[0] = p[1]
 def p_CTE(p):
 	'''CTE : Entero
 				| CteFlotante
@@ -867,8 +945,7 @@ def p_CteBooleano(p):
 	p[0] = p[1]
 def p_Entero(p):
 	'''Entero : EnteroDecimal
-				| EnteroHexadecimal
-				| EnteroBinario'''
+				| EnteroHexadecimal'''
 	# p[0] = 'entero'
 	p[0] = p[1]
 
@@ -894,29 +971,21 @@ def p_globDeclOption(p):
 			
 def p_seenIDglobVar(p):
 	'''seenIDglobVar : '''
-	# global globalVars
-	# global Counts
-	# typepos = 0
-	# datatype = p[-3]
-	# ID = p[-1]
-	# if datatype == "entero": 
-	# 	typepos = INTPOS
-	# elif datatype == "flotante":
-	# 	typepos = FLOATPOS
-	# elif datatype == "cadena":
-	# 	typepos = STRPOS
-	# elif datatype == "caracter":
-	# 	typepos = CHPOS
-	# elif datatype == "byte":
-	# 	typepos = BYTEPOS
-
-	# counts = Counts[GLOBALSCOPE][typepos]
-	# if counts < MAXGLOBALS:
-	# 	varDeclSemValid(ID, datatype, dataTypeDist(datatype, "GLOBAL"), globalVars)
-	# 	counts = counts + 1
-	# 	Counts[GLOBALSCOPE][typepos] = counts
-	# else:
-	# 	sys.exit("Error, demasiadas variables globales!")
+	global globalVars
+	global Counts
+	typep = 0
+	datatype = p[-3]
+	ID = p[-1]
+	typep = scopeType(datatype);
+	counts = Counts[GLOBALSCOPE][typep]
+	if counts < MAXGLOBALS:
+		# varDeclSemValid(ID, datatype, dataTypeDist(datatype, "GLOBAL"), globalVars)
+		varRecord = VariableRecord(ID, datatype, dataTypeDist(datatype, "GLOBAL"));
+		globalVars[ID] = varRecord;
+		counts = counts + 1
+		Counts[GLOBALSCOPE][typep] = counts
+	else:
+		sys.exit("Error, demasiadas variables globales!")
 
 def p_TIPO(p):
 	'''TIPO : ENTERO
